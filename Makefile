@@ -1,9 +1,3 @@
-#
-# Makefile for visiongl
-#
-# ddantas 5/7/2013
-#
-
 BINARY_NAME          = visiongl
 CUDA_NAME            = cuda
 FRACTAL_NAME         = fractal
@@ -42,30 +36,20 @@ OUTPUT_BINPATH     = $(OUTPUT_ROOTPATH)/bin
 OUTPUT_INCLUDEDIR  = -I $(OUTPUT_INCLUDEPATH)
 OUTPUT_LIBDIR      = -L $(OUTPUT_LIBPATH)
 
-
-
 WITH_CUDA = 0
 WITH_OPENCL = 1
 WITH_OPENCV = 0
 WITH_GDCM = 0
-WITH_DCMTK = 0
+WITH_DCMTK = 1
 WITH_TIFF = 1
 
-ifeq ($(WITH_OPENCL), 1)
-	OPENCL_DEF        = -D__OPENCL__
-endif
-
 ifeq ($(WITH_OPENCV), 1)
-	OPENCV_DEF        = -D__OPENCV__
-	OPENCV_PATH        = /usr/local/opencv
-	OPENCV_PATH        = /home/ddantas/bin/opencv_2.4.9_without_cuda_opencl/
-	OPENCV_INCLUDEPATH = $(OPENCV_PATH)/include/
-	OPENCV_LIBPATH     = $(OPENCV_PATH)/lib
+	OPENCV_DEF         = -D__OPENCV__
+	OPENCV_INCLUDEPATH = /usr/include/opencv4/
+	OPENCV_LIBPATH     = /usr/lib64/
 	OPENCV_INCLUDEDIR  = -I $(OPENCV_INCLUDEPATH)
 	OPENCV_LIBDIR      = -L $(OPENCV_LIBPATH)
 	OPENCV_LIBRARIES   = -lopencv_highgui -lopencv_core -lopencv_imgproc -lopencv_legacy
-else
-	#OPENCV_FILES       = src/vglOpencv.cpp
 endif
 
 ifeq ($(WITH_CUDA), 1)
@@ -76,33 +60,33 @@ ifeq ($(WITH_CUDA), 1)
 	CUDA_INCLUDEDIR  = -I $(CUDA_INCLUDEPATH)
 	CUDA_LIBDIR      = -L $(CUDA_LIBPATH)
 	CUDA_LIBRARIES   = -lcudart
-	CUDA_OPTIONS     = 
-	CUDA_FILES       = src/*.cu     
-	CC               = $(CUDA_PATH)/bin/nvcc 
-	FPIC             = -Xcompiler -fPIC 
+	CUDA_OPTIONS     =
+	CUDA_FILES       = src/*.cu
+	CC               = $(CUDA_PATH)/bin/nvcc
+	FPIC             = -Xcompiler -fPIC
 else
-	CC               = g++
-	FPIC             = -fPIC 
+	CC               = clang++
+	FPIC             = -fPIC
 endif
 
 ifeq ($(WITH_OPENCL), 1)
-        OPENCL_PATH        = /opt/intel/opencl-1.2-4.4.0.117/lib64/
-        OPENCL_PATH        = /opt/AMDAPPSDK-2.9-1/
-        #OPENCL_PATH        = /usr/local/cuda/
-        OPENCL_INCLUDEPATH = $(OPENCL_PATH)/include/
-        OPENCL_LIBPATH     = $(OPENCL_PATH)/lib/x86_64
-        #OPENCL_LIBPATH     = $(OPENCL_PATH)/lib64
-        #OPENCL_LIBPATH     = /usr/lib/
-        OPENCL_INCLUDEDIR  = -I $(OPENCL_INCLUDEPATH)
-        OPENCL_LIBDIR      = -L $(OPENCL_LIBPATH)
-        OPENCL_LIBRARIES   = -lOpenCL
-        OPENCL_FILES = src/cl2cpp_shaders.cpp src/vglClFunctions.cpp src/vglClImage.cpp src/cl2cpp_MM.cpp src/cl2cpp_ND.cpp src/cl2cpp_BIN.cpp
+	OPENCL_DEF        = -D__OPENCL__
+	OPENCL_PATH        = /opt/intel/opencl-1.2-4.4.0.117/lib64/
+	#OPENCL_PATH        = /usr/local/cuda/
+	OPENCL_INCLUDEPATH = $(OPENCL_PATH)/include/
+	OPENCL_LIBPATH     = $(OPENCL_PATH)/lib/x86_64
+	OPENCL_LIBPATH     = $(OPENCL_PATH)/lib64
+	#OPENCL_LIBPATH     = /usr/lib/
+	OPENCL_INCLUDEDIR  = -I $(OPENCL_INCLUDEPATH)
+	OPENCL_LIBDIR      = -L $(OPENCL_LIBPATH)
+	OPENCL_LIBRARIES   = -lOpenCL
+	OPENCL_FILES = src/cl2cpp_shaders.cpp src/vglClFunctions.cpp src/vglClImage.cpp src/cl2cpp_MM.cpp src/cl2cpp_ND.cpp src/cl2cpp_BIN.cpp
 
-        OPENGL_INCLUDEPATH = $(OPENCL_INCLUDEPATH)
-        OPENGL_INCLUDEDIR  = $(OPENCL_INCLUDEDIR)
+	OPENGL_INCLUDEPATH = $(OPENCL_INCLUDEPATH)
+	OPENGL_INCLUDEDIR  = $(OPENCL_INCLUDEDIR)
 else
-        OPENGL_INCLUDEPATH = /usr/include/
-        OPENGL_INCLUDEDIR  = -I $(OPENGL_INCLUDEPATH)
+	OPENGL_INCLUDEPATH = /usr/include/
+	OPENGL_INCLUDEDIR  = -I $(OPENGL_INCLUDEPATH)
 endif
 
 ifeq ($(WITH_GDCM), 1)
@@ -122,8 +106,7 @@ ifeq ($(WITH_DCMTK), 1)
 	DCMTK_LIBPATH     = $(DCMTK_PATH)/lib
 	DCMTK_INCLUDEDIR  = -I $(DCMTK_INCLUDEPATH)
 	DCMTK_LIBDIR      = -L $(DCMTK_LIBPATH)
-	DCMTK_LIBRARIES   = -ldcmjpeg -lijg8 -lijg12  -lijg16 -ldcmimage -ldcmpstat -ldcmimgle -ldcmqrdb -ldcmnet -ldcmdata -loflog -lofstd -lz -lpthread 
-        #-ltiff -lpng
+	DCMTK_LIBRARIES   = -ldcmjpeg -lijg8 -lijg12  -lijg16 -ldcmimage -ldcmpstat -ldcmimgle -ldcmqrdb -ldcmnet -ldcmdata -loflog -lofstd -lz -lpthread
 endif
 
 ifeq ($(WITH_TIFF), 1)
@@ -135,13 +118,9 @@ ifeq ($(WITH_TIFF), 1)
 	TIFF_LIBRARIES   = -ltiff
 endif
 
+VGL_FILES = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
 
-
-
-VGL_FILES = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp 
-
-
-INSTALL_PATH        = $(HOME)/script
+INSTALL_PATH        = $(HOME)/.local/$(BINARY_NAME)
 INSTALL_INCLUDEPATH = $(INSTALL_PATH)/include
 INSTALL_LIBPATH     = $(INSTALL_PATH)/lib
 
@@ -149,10 +128,8 @@ OPENGL_LIBDIR = -L /usr/X11R6/lib
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(CUDA_LIBPATH):$(OPENCV_LIBPATH):$(INSTALL_LIBPATH):$(GDCM_LIBPATH):$(DCMTK_LIBPATH):$(OPENCL_LIBPATH)
 
-
-COMPILER_FLAGS   = -g -pg -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES 
-OPENGL_LIBRARIES    = -lGLEW -lGLU -lGL -lglut 
-
+COMPILER_FLAGS = -g -pg -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES -Wno-narrowing
+OPENGL_LIBRARIES = -lGLEW -lGLU -lGL -lglut
 
 LINUXAMD64_DIRS_LIBS =  $(INCLUDE_DIR) \
                         $(OUTPUT_LIBDIR) \
@@ -174,21 +151,20 @@ LINUXAMD64_DIRS_LIBS =  $(INCLUDE_DIR) \
                         $(GDCM_INCLUDEDIR) \
                         $(GDCM_LIBDIR) \
                         $(GDCM_LIBRARIES) \
-			$(DCMTK_DEF) \
+						$(DCMTK_DEF) \
                         $(DCMTK_INCLUDEDIR) \
-			$(DCMTK_LIBDIR) \
+						$(DCMTK_LIBDIR) \
                         $(DCMTK_LIBRARIES) \
-			$(TIFF_DEF) \
+						$(TIFF_DEF) \
                         $(TIFF_INCLUDEDIR) \
                         $(TIFF_LIBDIR) \
                         $(TIFF_LIBRARIES) \
-
 
 LINUXAMD64_LIB = $(CC) $(COMPILER_FLAGS) \
                         -shared $(CUDA_OPTIONS) $(FPIC) \
                         -o $(OUTPUT_LIBPATH)/lib$(BINARY_NAME).so \
                           $(CUDA_FILES) $(VGL_FILES) $(OPENCL_FILES) \
-                         $(LINUXAMD64_DIRS_LIBS) $(CUDA_DIRS_LIBS) 
+                         $(LINUXAMD64_DIRS_LIBS) $(CUDA_DIRS_LIBS)
 
 LINUXAMD64_TEST_CORE = $(CC) $(COMPILER_FLAGS) \
                         -o $(OUTPUT_BINPATH)/test_$(CORE_NAME) \
@@ -275,7 +251,6 @@ LINUXAMD64_DEMO_KEY = $(CC) $(COMPILER_FLAGS) \
                          -I $(ROOTPATH)/src/demo/$(KEY_NAME)/ \
                          $(OPENCV_INCLUDEDIR) \
                          $(LINUXAMD64_DIRS_LIBS)
-
 
 ifeq ($(WITH_OPENCL), 1)
         LINUXAMD64_DEMO_BENCHMARK_CL = $(CC) $(COMPILER_FLAGS) \
@@ -605,7 +580,7 @@ bkp:
 CLOUD_DIRS   := src/cloud
 CLOUD_SOURCE := $(foreach dir, $(CLOUD_DIRS), $(wildcard $(dir)/*))
 CLOUD_BIN     = $(CLOUD_SOURCE:%.cpp=%)
-CLOUD_BASE    = $(notdir $(basename $(CLOUD_SOURCE) ) ) 
+CLOUD_BASE    = $(notdir $(basename $(CLOUD_SOURCE) ) )
 
 
 cloud: $(CLOUD_BASE)
@@ -632,7 +607,7 @@ lala:
 	export LINUXAMD64_CLOUD="$(CC) $(COMPILER_FLAGS) \
                         -o $(OUTPUT_BINPATH)/cloud/$(CLOUD_NAME) \
                          src/cloud/$(CLOUD_NAME).cpp \
-                         -lvisiongl" 
+                         -lvisiongl"
 	$(LINUXAMD64_CLOUD)
 
 
@@ -653,4 +628,3 @@ utils:
 
 runutils:
 	./src/demo/image_info images/lena_std.tif -p
-
