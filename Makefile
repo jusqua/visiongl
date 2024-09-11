@@ -535,34 +535,34 @@ rundemocolordeconv:
 	cd $(OUTPUT_BINPATH); ./demo_$(COLORDECONV_NAME) ../images/Emphysema_H_and_E.jpg 1 /tmp/image.%d.pgm 0.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0
 
 cuda:
-	./perlModules/kernel2cu.pl -o src/kernel2cu_shaders src/CUDA/*.kernel
+	./scripts/kernel2cu.pl -o src/kernel2cu_shaders src/CUDA/*.kernel
 
 frag:
-	./perlModules/glsl2cpp.pl -o src/glsl2cpp_shaders -p FS src/FS/*.frag
+	./scripts/glsl2cpp.pl -o src/glsl2cpp_shaders -p FS src/FS/*.frag
 
 frag_bg:
-	./perlModules/glsl2cpp.pl -o src/glsl2cpp_BG -p FS_BG src/FS_BG/*.frag
+	./scripts/glsl2cpp.pl -o src/glsl2cpp_BG -p FS_BG src/FS_BG/*.frag
 
 frag_stereo:
-	./perlModules/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo src/FS_Stereo/*.frag
+	./scripts/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo src/FS_Stereo/*.frag
 
 frag_diffeq:
-	./perlModules/glsl2cpp.pl -o src/glsl2cpp_DiffEq -p FS_DiffEq src/FS_DiffEq/*.frag
+	./scripts/glsl2cpp.pl -o src/glsl2cpp_DiffEq -p FS_DiffEq src/FS_DiffEq/*.frag
 
 cl:
-	./perlModules/cl2cpp.pl -o src/cl2cpp_shaders -p CL src/CL/*.cl
+	./scripts/cl2cpp.pl -o src/cl2cpp_shaders -p CL src/CL/*.cl
 
 cl_nd:
-	./perlModules/cl2cpp.pl -o src/cl2cpp_ND -p CL_ND src/CL_ND/*.cl
+	./scripts/cl2cpp.pl -o src/cl2cpp_ND -p CL_ND src/CL_ND/*.cl
 
 cloud_cl:
-	./perlModules/cl2cloud.pl -o src/cloud_CL src/CL/*.cl
+	./scripts/cl2cloud.pl -o src/cloud_CL src/CL/*.cl
 
 cl_mm:
-	./perlModules/cl2cpp.pl -o src/cl2cpp_MM -p CL_MM src/CL_MM/*.cl
+	./scripts/cl2cpp.pl -o src/cl2cpp_MM -p CL_MM src/CL_MM/*.cl
 
 cl_bin:
-	./perlModules/cl2cpp.pl -o src/cl2cpp_BIN -p CL_BIN src/CL_BIN/*.cl
+	./scripts/cl2cpp.pl -o src/cl2cpp_BIN -p CL_BIN src/CL_BIN/*.cl
 
 run:
 	cd $(OUTPUT_BINPATH); ./$(BINARY_NAME)
