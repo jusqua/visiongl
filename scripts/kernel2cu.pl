@@ -1,9 +1,9 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env -S perl -w
 
 BEGIN {push @INC, '.'}
 
 use File::Basename;
-use perlModules::common qw( LineStartMultiLineComment
+use scripts::perlModules::common qw( LineStartMultiLineComment
                LineStartSingleLineComment
                LineStartCleanComments
                LineStartParenthesis
