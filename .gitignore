@@ -1,10 +1,7 @@
-images/
 src/AMDOpenCLDebug.log
 src/AMDOpenCLDebugAPIUsage.log
 src/OpenCL.dll
 src/OpenCL.pdb
-bin/
 *~
-dox/
-lib/*.so
-include/*.h
+build/
+images/
