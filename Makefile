@@ -326,15 +326,13 @@ LINUXAMD64_DEMO_COLORDECONV = $(CC) $(COMPILER_FLAGS) \
 GENERATE_HEADER = cat $(INCLUDE_PATH)/vglHead.h $(INCLUDE_PATH)/vglImage.h $(INCLUDE_PATH)/vglCudaImage.h $(INCLUDE_PATH)/vglClImage.h $(INCLUDE_PATH)/vglGdcmIo.h $(INCLUDE_PATH)/vglDcmtkIo.h $(INCLUDE_PATH)/vglTiffIo.h $(INCLUDE_PATH)/vglContext.h $(INCLUDE_PATH)/vglSimpleBGModel.h $(INCLUDE_PATH)/glsl2cpp*.h $(INCLUDE_PATH)/kernel2cu*.h $(INCLUDE_PATH)/cl2cpp*.h $(INCLUDE_PATH)/vglClFunctions*.h $(INCLUDE_PATH)/iplImage*.h $(INCLUDE_PATH)/vglOpencv*.h $(INCLUDE_PATH)/vglTail.h $(INCLUDE_PATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
 
 
-all:
+all: lib
 	mkdir -p $(OUTPUT_INCLUDEPATH)
+	$(GENERATE_HEADER)
+
+lib: cuda frag frag_bg frag_stereo cl cl_nd cl_mm cl_bin
 	mkdir -p $(OUTPUT_LIBPATH)
 	echo $(LD_LIBRARY_PATH)
-	$(GENERATE_HEADER)
-	$(LINUXAMD64_LIB)
-
-lib:
-	mkdir -p $(OUTPUT_LIBPATH)
 	$(LINUXAMD64_LIB)
 
 install: all
