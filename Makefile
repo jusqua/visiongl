@@ -546,9 +546,6 @@ frag_bg:
 frag_stereo:
 	./scripts/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo src/FS_Stereo/*.frag
 
-frag_diffeq:
-	./scripts/glsl2cpp.pl -o src/glsl2cpp_DiffEq -p FS_DiffEq src/FS_DiffEq/*.frag
-
 cl:
 	./scripts/cl2cpp.pl -o src/cl2cpp_shaders -p CL src/CL/*.cl
 
