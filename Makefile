@@ -1,29 +1,29 @@
-BINARY_NAME          = visiongl
-CUDA_NAME            = cuda
-FRACTAL_NAME         = fractal
-CAM_NAME             = cam
-GDCM_NAME            = gdcm
-DCMTK_NAME           = dcmtk
-CORE_NAME            = core
-CL_NAME              = cl
-CL3D_NAME            = cl3d
-CLND_NAME            = clnd
-TIFF_NAME            = tiff
-IO_NAME		     = io
-BIN_NAME	     = bin
-KEY_NAME             = key
-BENCHMARK_CV_NAME    = benchmark_cv
-BENCHMARK_CVOCL_NAME = benchmark_cvocl
-BENCHMARK_CL_NAME    = benchmark_cl
-BENCHMARK_CL3D_NAME  = benchmark_cl3d
-BENCHMARK_CLND_NAME  = benchmark_clnd
-BENCHMARK_MM_NAME    = benchmark_MM
-BENCHMARK_CLBIN_NAME = benchmark_clbin
-BENCHMARK_CL3DBIN_NAME = benchmark_cl3dbin
-BENCHMARK_CLNDBIN_NAME = benchmark_clndbin
+BINARY_NAME                   = visiongl
+CUDA_NAME                     = cuda
+FRACTAL_NAME                  = fractal
+CAM_NAME                      = cam
+GDCM_NAME                     = gdcm
+DCMTK_NAME                    = dcmtk
+CORE_NAME                     = core
+CL_NAME                       = cl
+CL3D_NAME                     = cl3d
+CLND_NAME                     = clnd
+TIFF_NAME                     = tiff
+IO_NAME                       = io
+BIN_NAME             	      = bin
+KEY_NAME                      = key
+BENCHMARK_CV_NAME             = benchmark_cv
+BENCHMARK_CVOCL_NAME          = benchmark_cvocl
+BENCHMARK_CL_NAME             = benchmark_cl
+BENCHMARK_CL3D_NAME           = benchmark_cl3d
+BENCHMARK_CLND_NAME           = benchmark_clnd
+BENCHMARK_MM_NAME             = benchmark_MM
+BENCHMARK_CLBIN_NAME          = benchmark_clbin
+BENCHMARK_CL3DBIN_NAME        = benchmark_cl3dbin
+BENCHMARK_CLNDBIN_NAME        = benchmark_clndbin
 BENCHMARK_FUZZYTOPHAT_NAME    = benchmark_FuzzyTophat
-BENCHMARK_MP_NAME    = benchmark_MP
-COLORDECONV_NAME     = colordeconv
+BENCHMARK_MP_NAME             = benchmark_MP
+COLORDECONV_NAME              = colordeconv
 
 ROOTPATH           = .
 INCLUDE_PATH       = $(ROOTPATH)/src
@@ -39,7 +39,7 @@ OUTPUT_LIBDIR      = -L $(OUTPUT_LIBPATH)
 WITH_CUDA = 0
 WITH_OPENCL = 1
 WITH_OPENCV = 0
-WITH_GDCM = 0
+WITH_GDCM = 1
 WITH_DCMTK = 1
 WITH_TIFF = 1
 
@@ -96,7 +96,7 @@ ifeq ($(WITH_GDCM), 1)
 	GDCM_LIBPATH     = $(GDCM_PATH)/lib
 	GDCM_INCLUDEDIR  = -I $(GDCM_INCLUDEPATH)
 	GDCM_LIBDIR      = -L $(GDCM_LIBPATH)
-	GDCM_LIBRARIES   = -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmexpat -lgdcmIOD -lgdcmjpeg8 -lgdcmjpeg12 -lgdcmjpeg16 -lgdcmMEXD -lgdcmMSFF -lgdcmopenjpeg -lgdcmuuid -lgdcmzlib -lsocketxx
+	GDCM_LIBRARIES   = -lgdcmCommon
 endif
 
 ifeq ($(WITH_DCMTK), 1)

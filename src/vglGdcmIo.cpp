@@ -2,15 +2,14 @@
 
 #include <vglGdcmIo.h>
 #include <vglContext.h>
-#include <gdcmImageReader.h>
-#include <gdcmImage.h>
-#include <gdcmWriter.h>
-#include <gdcmAttribute.h>
-#include <gdcmImageWriter.h>
-#include <gdcmImageChangeTransferSyntax.h>
-#include "gdcmImageChangeTransferSyntax.h"
-#include "gdcmImageChangePhotometricInterpretation.h"
-#include "gdcmPhotometricInterpretation.h"
+#include <gdcm/gdcmImageReader.h>
+#include <gdcm/gdcmImage.h>
+#include <gdcm/gdcmWriter.h>
+#include <gdcm/gdcmAttribute.h>
+#include <gdcm/gdcmImageWriter.h>
+#include <gdcm/gdcmImageChangeTransferSyntax.h>
+#include <gdcm/gdcmImageChangePhotometricInterpretation.h>
+#include <gdcm/gdcmPhotometricInterpretation.h>
 
 #include <iostream>
 #include <fstream>
