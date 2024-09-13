@@ -17,7 +17,7 @@ make all
 
 To build and install the library:
 ```shell
-make install
+sudo make install
 ```
 
 To build the library and documentation:

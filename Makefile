@@ -120,9 +120,8 @@ endif
 
 VGL_FILES = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
 
-INSTALL_PATH        = $(HOME)/.local/$(BINARY_NAME)
-INSTALL_INCLUDEPATH = $(INSTALL_PATH)/include
-INSTALL_LIBPATH     = $(INSTALL_PATH)/lib
+INSTALL_INCLUDEPATH = /usr/include/
+INSTALL_LIBPATH     = /usr/lib64/
 
 OPENGL_LIBDIR = -L /usr/X11R6/lib
 
@@ -336,10 +335,8 @@ lib: cuda frag frag_bg frag_stereo cl cl_nd cl_mm cl_bin
 	$(LINUXAMD64_LIB)
 
 install: all
-	mkdir -p $(INSTALL_INCLUDEPATH)
-	mkdir -p $(INSTALL_LIBPATH)
-	ln -s $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h $(INSTALL_INCLUDEPATH)
-	ln -s $(OUTPUT_LIBPATH)/lib$(BINARY_NAME).so $(INSTALL_LIBPATH)
+	cp -f $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h $(INSTALL_INCLUDEPATH)
+	cp -f $(OUTPUT_LIBPATH)/lib$(BINARY_NAME).so $(INSTALL_LIBPATH)
 
 dox: all
 	doxygen $(BINARY_NAME).dox
