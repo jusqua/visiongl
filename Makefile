@@ -342,46 +342,61 @@ dox: all
 	doxygen $(BINARY_NAME).dox
 	cd dox/latex; pwd; make; xdvi refman.dvi&
 
-demofrac:
+binfolder:
+	mkdir -p $(OUTPUT_BINPATH)
+	ln -sf $(ROOTPATH)/src/CL $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/CL_BIN $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/CL_MM $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/CL_ND $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/cloud $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/cloud_CL $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/CL_UTIL $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/CUDA $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/FS $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/FS_BG $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/FS_Stereo $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/src/VS $(OUTPUT_BINPATH)/
+
+demofrac: binfolder
 	$(LINUXAMD64_DEMO_FRACTAL)
 
-democam:
+democam: binfolder
 	$(LINUXAMD64_DEMO_CAM)
 
-democuda:
+democuda: binfolder
 	$(LINUXAMD64_DEMO_CUDA)
 
-demogdcm:
+demogdcm: binfolder
 	$(LINUXAMD64_DEMO_GDCM)
 
-demodcmtk:
+demodcmtk: binfolder
 	$(LINUXAMD64_DEMO_DCMTK)
 
-demotiff:
+demotiff: binfolder
 	$(LINUXAMD64_DEMO_TIFF)
 
-demoio:
+demoio: binfolder
 	$(LINUXAMD64_DEMO_IO)
 
-demobin:
+demobin: binfolder
 	$(LINUXAMD64_DEMO_BIN)
 
-demokey:
+demokey: binfolder
 	$(LINUXAMD64_DEMO_KEY)
 
-testcore:
+testcore: binfolder
 	$(LINUXAMD64_TEST_CORE)
 
-testcl:
+testcl: binfolder
 	$(LINUXAMD64_TEST_CL)
 
-democl3d:
+democl3d: binfolder
 	$(LINUXAMD64_DEMO_CL3D)
 
-democlnd:
+democlnd: binfolder
 	$(LINUXAMD64_DEMO_CLND)
 
-demobenchmark:
+demobenchmark: binfolder
 	#$(LINUXAMD64_DEMO_BENCHMARK_CV)
 	#$(LINUXAMD64_DEMO_BENCHMARK_CVOCL)
 	$(LINUXAMD64_DEMO_BENCHMARK_CL)
@@ -390,16 +405,16 @@ demobenchmark:
 	$(LINUXAMD64_DEMO_BENCHMARK_FUZZYTOPHAT)
 	rm -f /tmp/*.so
 
-demobenchmarkclbin:
+demobenchmarkclbin: binfolder
 	$(LINUXAMD64_DEMO_BENCHMARK_CLBIN)
 	$(LINUXAMD64_DEMO_BENCHMARK_CL3DBIN)
 	$(LINUXAMD64_DEMO_BENCHMARK_CLNDBIN)
 	rm -f /tmp/*.so
 
-demobenchmarkclnd:
+demobenchmarkclnd: binfolder
 	$(LINUXAMD64_DEMO_BENCHMARK_CLND)
 
-democolordeconv:
+democolordeconv: binfolder
 	$(LINUXAMD64_DEMO_COLORDECONV)
 
 .PHONY: lib
