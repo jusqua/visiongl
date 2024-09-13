@@ -25,7 +25,7 @@ BENCHMARK_FUZZYTOPHAT_NAME    = benchmark_FuzzyTophat
 BENCHMARK_MP_NAME             = benchmark_MP
 COLORDECONV_NAME              = colordeconv
 
-ROOTPATH           = .
+ROOTPATH           = $(PWD)
 INCLUDE_PATH       = $(ROOTPATH)/src
 INCLUDE_DIR        = -I $(INCLUDE_PATH)
 
