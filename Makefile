@@ -96,7 +96,7 @@ ifeq ($(WITH_GDCM), 1)
 	GDCM_LIBPATH     = $(GDCM_PATH)/lib
 	GDCM_INCLUDEDIR  = -I $(GDCM_INCLUDEPATH)
 	GDCM_LIBDIR      = -L $(GDCM_LIBPATH)
-	GDCM_LIBRARIES   = -lgdcmCommon
+	GDCM_LIBRARIES   = -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmjpeg8 -lgdcmjpeg12 -lgdcmjpeg16 -lgdcmMEXD -lgdcmMSFF -lsocketxx
 endif
 
 ifeq ($(WITH_DCMTK), 1)
