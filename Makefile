@@ -419,61 +419,60 @@ democolordeconv: binfolder
 
 .PHONY: lib
 
-
 runtestcore:
-	cd $(OUTPUT_BINPATH); ./test_$(CORE_NAME) ../images/dicom/0003.dcm.%d.PGM 0 16 /tmp
+	cd $(OUTPUT_BINPATH); ./test_$(CORE_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM 0 16 /tmp
 
 runtestcl:
-	cd $(OUTPUT_BINPATH); ./test_$(CL_NAME) ../images/lena_gray.tif
+	cd $(OUTPUT_BINPATH); ./test_$(CL_NAME) $(ROOTPATH)/samples/lena_gray.tif
 
 rundemocl3d:
-	cd $(OUTPUT_BINPATH); ./demo_$(CL3D_NAME) ../images/dicom/0003.dcm.%d.PGM 0 16 /tmp
+	cd $(OUTPUT_BINPATH); ./demo_$(CL3D_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM 0 16 /tmp
 
 rundemoclnd:
-	#cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 /tmp 256 86016 -1d
-	#cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 /tmp 256 86016
-	cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 /tmp 0 0 336
-	#cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 /tmp 0 0 2 168
-	#cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 /tmp 0 0 2 24 7
+	cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 /tmp
+	# cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) $(ROOTPATH)/samples/mitosis-5d%04d.tif 0 335 /tmp 256 86016 -1d
+	# cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) $(ROOTPATH)/samples/mitosis-5d%04d.tif 0 335 /tmp 256 86016
+	# cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 /tmp 0 0 336
+	# cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) $(ROOTPATH)/samples/mitosis-5d%04d.tif 0 335 /tmp 0 0 2 168
+	# cd $(OUTPUT_BINPATH); ./demo_$(CLND_NAME) $(ROOTPATH)/samples/mitosis-5d%04d.tif 0 335 /tmp 0 0 2 24 7
 
 rundemofrac:
-	cd $(OUTPUT_BINPATH); ./demo_$(FRACTAL_NAME)
+	cd $(OUTPUT_BINPATH); $(OUTPUT_BINPATH)/demo_$(FRACTAL_NAME)
 
 rundemocam:
-	cd $(OUTPUT_BINPATH); ./demo_$(CAM_NAME)
+	cd $(OUTPUT_BINPATH); $(OUTPUT_BINPATH)/demo_$(CAM_NAME)
 
 rundemocuda:
-	cd $(OUTPUT_BINPATH); ./demo_$(CUDA_NAME) ../images/lena_std.tif /tmp/outputcuda.pgm
+	cd $(OUTPUT_BINPATH); $(OUTPUT_BINPATH)/demo_$(CUDA_NAME) $(ROOTPATH)/samples/lena_std.tif /tmp/outputcuda.pgm
 
 rundemogdcm:
-	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) ../images/dicom/0003.dcm /tmp/outputgdcm.dcm
-	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) ../images/dicom/esopecho.dcm /tmp/outputgdcmrgb.dcm -c
-	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) ../images/dicom/I_000032.dcm /tmp/outputgdcmybr.dcm -c
-	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) ../images/dicom/0003.dcm.%d.PGM /tmp/outputgdcmheader.dcm 0 3
-	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) ../images/dicom/I_000003.dcm.%d.PGM /tmp/outputgdcmheadercor.dcm 0 3 -c
-	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) ../images/dicom/E1154S7I_16bit.dcm /tmp/outputgdcm16_compress.dcm -c
-	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) ../images/dicom/E1154S7I_16bit.dcm /tmp/outputgdcm16.dcm
+	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) $(ROOTPATH)/samples/dicom/0003.dcm /tmp/outputgdcm.dcm
+	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) $(ROOTPATH)/samples/dicom/esopecho.dcm /tmp/outputgdcmrgb.dcm -c
+	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) $(ROOTPATH)/samples/dicom/I_000032.dcm /tmp/outputgdcmybr.dcm -c
+	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM /tmp/outputgdcmheader.dcm 0 3
+	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) $(ROOTPATH)/samples/dicom/I_000003.dcm.%d.PGM /tmp/outputgdcmheadercor.dcm 0 3 -c
+	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) $(ROOTPATH)/samples/dicom/E1154S7I_16bit.dcm /tmp/outputgdcm16_compress.dcm -c
+	cd $(OUTPUT_BINPATH); ./demo_$(GDCM_NAME) $(ROOTPATH)/samples/dicom/E1154S7I_16bit.dcm /tmp/outputgdcm16.dcm
 
 rundemodcmtk:
-	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) ../images/dicom/0003.dcm /tmp/outputdcmtk.dcm -c
-	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) ../images/dicom/esopecho.dcm /tmp/outputdcmtkrgb.dcm -c
-	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) ../images/dicom/I_000032.dcm /tmp/outputdcmtkybr.dcm -c
-	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) ../images/dicom/0003.dcm.%d.PGM /tmp/outputdcmtkheader.dcm 0 3 -c
-	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) ../images/dicom/I_000003.dcm.%d.PGM /tmp/outputdcmtkheadercor.dcm 0 3 -c
-	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) ../images/dicom/E1154S7I_16bit.dcm /tmp/outputdcmtk16_compress.dcm -c
-	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) ../images/dicom/E1154S7I_16bit.dcm /tmp/outputdcmtk16.dcm
+	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) $(ROOTPATH)/samples/dicom/0003.dcm /tmp/outputdcmtk.dcm -c
+	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) $(ROOTPATH)/samples/dicom/esopecho.dcm /tmp/outputdcmtkrgb.dcm -c
+	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) $(ROOTPATH)/samples/dicom/I_000032.dcm /tmp/outputdcmtkybr.dcm -c
+	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM /tmp/outputdcmtkheader.dcm 0 3 -c
+	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) $(ROOTPATH)/samples/dicom/I_000003.dcm.%d.PGM /tmp/outputdcmtkheadercor.dcm 0 3 -c
+	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) $(ROOTPATH)/samples/dicom/E1154S7I_16bit.dcm /tmp/outputdcmtk16_compress.dcm -c
+	cd $(OUTPUT_BINPATH); ./demo_$(DCMTK_NAME) $(ROOTPATH)/samples/dicom/E1154S7I_16bit.dcm /tmp/outputdcmtk16.dcm
 
 rundemotiff:
-	cd $(OUTPUT_BINPATH); ./demo_$(TIFF_NAME) ../images/tif/E1154S7I_3d.tif /tmp/demo_tif_out.tif
+	cd $(OUTPUT_BINPATH); ./demo_$(TIFF_NAME) $(ROOTPATH)/samples/tif/E1154S7I_3d.tif /tmp/demo_tif_out.tif
 
 rundemoio:
-	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) ../images/lena_std.tif /tmp/lena_std.tif -1
-	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) ../images/lena_gray.tif /tmp/lena_gray.tif -1
-	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) ../images/tif/E1154S7I_001.tif /tmp/E1154S7I_001.tif -1
+	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) $(ROOTPATH)/samples/lena_std.tif /tmp/lena_std.tif -1
+	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) $(ROOTPATH)/samples/lena_gray.tif /tmp/lena_gray.tif -1
+	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) $(ROOTPATH)/samples/tif/E1154S7I_001.tif /tmp/E1154S7I_001.tif -1
 
-	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) ../images/lena_std.tif /tmp/lena_std.ppm -1
-	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) ../images/lena_gray.tif /tmp/lena_gray.pgm -1
+	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) $(ROOTPATH)/samples/lena_std.tif /tmp/lena_std.ppm -1
+	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) $(ROOTPATH)/samples/lena_gray.tif /tmp/lena_gray.pgm -1
 
 	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) /tmp/lena_std.ppm /tmp/lena_std_UNCHANGED.ppm -1
 	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) /tmp/lena_gray.pgm /tmp/lena_gray_UNCHANGED.pgm -1
@@ -485,11 +484,11 @@ rundemoio:
 	cd $(OUTPUT_BINPATH); ./demo_$(IO_NAME) /tmp/lena_gray.pgm /tmp/lena_gray_BGR.ppm 1
 
 rundemobin:
-	cd $(OUTPUT_BINPATH); ./demo_$(BIN_NAME) ../images/test_mm.pgm /tmp 0
-	#cd $(OUTPUT_BINPATH); ./demo_$(BIN_NAME) ../images/lena_std.ppm /tmp 0
+	cd $(OUTPUT_BINPATH); ./demo_$(BIN_NAME) $(ROOTPATH)/samples/test_mm.pgm /tmp 0
+	# cd $(OUTPUT_BINPATH); ./demo_$(BIN_NAME) $(ROOTPATH)/samples/lena_std.ppm /tmp 0
 
 rundemobinconway:
-	cd $(OUTPUT_BINPATH); ./demo_$(BIN_NAME) ../images/test_conway.pgm /tmp 40
+	cd $(OUTPUT_BINPATH); ./demo_$(BIN_NAME) $(ROOTPATH)/samples/test_conway.pgm /tmp 40
 	cd /tmp; convert -delay 1 -loop 0 demo_bin_conway*.pbm animation.gif
 	cd /tmp; convert animation.gif -filter box -resize 400% animation4x.gif
 
@@ -500,49 +499,49 @@ rundemokey:
 
 
 rundemobenchmark:
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CV_NAME) ../images/lena_std.tif 10 /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CVOCL_NAME) ../images/lena_std.tif 10 /tmp
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL_NAME) ../images/lena_std.tif 1 /tmp
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3D_NAME) ../images/dicom/0003.dcm.%d.PGM 0 16 1 /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_MM_NAME) ../images/01_test.tif 10 /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_FUZZYTOPHAT_NAME) ../images/01_test.tif 10 /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CV_NAME) $(ROOTPATH)/samples/lena_std.tif 10 /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CVOCL_NAME) $(ROOTPATH)/samples/lena_std.tif 10 /tmp
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL_NAME) $(ROOTPATH)/samples/lena_std.tif 1 /tmp
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3D_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM 0 16 1 /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_MM_NAME) $(ROOTPATH)/samples/01_test.tif 10 /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_FUZZYTOPHAT_NAME) $(ROOTPATH)/samples/01_test.tif 10 /tmp
 
 STEPS=100
 rundemobenchmarkclnd:
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 2048 10752
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 256 86016 -1d
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 256 86016
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 336
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 2 168
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 2 24 7
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 2048 10752
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 256 86016 -1d
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 256 86016
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 336
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 2 168
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLND_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 2 24 7
 
 rundemobenchmark16:
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CV_NAME) ../images/E1154S7I_001.tif $(STEPS) /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CVOCL_NAME) ../images/lena_std.tif $(STEPS) /tmp
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL_NAME) ../images/E1154S7I_001.tif $(STEPS)  /tmp
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3D_NAME) ../images/E1154S7I_00%d.tif 1 7 $(STEPS) /tmp
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_MM_NAME) ../images/E1154S7I_001.tif $(STEPS) /tmp
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_FUZZYTOPHAT_NAME) ../images/E1154S7I_001.tif $(STEPS) /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CV_NAME) $(ROOTPATH)/samples/E1154S7I_001.tif $(STEPS) /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CVOCL_NAME) $(ROOTPATH)/samples/lena_std.tif $(STEPS) /tmp
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL_NAME) $(ROOTPATH)/samples/E1154S7I_001.tif $(STEPS)  /tmp
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3D_NAME) $(ROOTPATH)/samples/E1154S7I_00%d.tif 1 7 $(STEPS) /tmp
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_MM_NAME) $(ROOTPATH)/samples/E1154S7I_001.tif $(STEPS) /tmp
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_FUZZYTOPHAT_NAME) $(ROOTPATH)/samples/E1154S7I_001.tif $(STEPS) /tmp
 
 rundemobenchmarkclbin:
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLBIN_NAME) ../images/lena_std.pgm $(STEPS) /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLBIN_NAME) $(ROOTPATH)/samples/lena_std.pgm $(STEPS) /tmp
 	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLBIN_NAME) ~/Dropbox/_UFS/_APAGAR/out_00000.pgm $(STEPS) /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLBIN_NAME) ../images/test_mm.pgm $(STEPS) /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3DBIN_NAME) ../images/dicom/0003.dcm.%d.PGM 0 16 $(STEPS) /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3DBIN_NAME) ../images/test_mm.pgm 0 1 $(STEPS) /tmp
-	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3DBIN_NAME) ../images/lena_std.pgm 0 1 $(STEPS) /tmp
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/lena_gray_500.pgm 0 0 $(STEPS) /tmp 500 512
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/lena_gray.tif 0 0 $(STEPS) /tmp 512 512
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/test_mm.pgm 0 0 $(STEPS) /tmp 0 0
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 2048 10752
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 256 86016 -1d
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 256 86016
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 336
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 2 168
-	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) ../images/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 2 24 7
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLBIN_NAME) $(ROOTPATH)/samples/test_mm.pgm $(STEPS) /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3DBIN_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM 0 16 $(STEPS) /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3DBIN_NAME) $(ROOTPATH)/samples/test_mm.pgm 0 1 $(STEPS) /tmp
+	cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CL3DBIN_NAME) $(ROOTPATH)/samples/lena_std.pgm 0 1 $(STEPS) /tmp
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/lena_gray_500.pgm 0 0 $(STEPS) /tmp 500 512
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/lena_gray.tif 0 0 $(STEPS) /tmp 512 512
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/test_mm.pgm 0 0 $(STEPS) /tmp 0 0
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 2048 10752
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 256 86016 -1d
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 256 86016
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 336
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 2 168
+	#cd $(OUTPUT_BINPATH); ./demo_$(BENCHMARK_CLNDBIN_NAME) $(ROOTPATH)/samples/mitosis/mitosis-5d%04d.tif 0 335 $(STEPS) /tmp 0 0 2 24 7
 
 rundemocolordeconv:
-	cd $(OUTPUT_BINPATH); ./demo_$(COLORDECONV_NAME) ../images/Emphysema_H_and_E.jpg 1 /tmp/image.%d.pgm 0.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0
+	cd $(OUTPUT_BINPATH); ./demo_$(COLORDECONV_NAME) $(ROOTPATH)/samples/Emphysema_H_and_E.jpg 1 /tmp/image.%d.pgm 0.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0
 
 cuda:
 	./scripts/kernel2cu.pl -o src/kernel2cu_shaders src/CUDA/*.kernel
@@ -602,7 +601,7 @@ cloud0:
 	$(CC) $*.cpp -o $* $(OPENCL_DEF) $(OUTPUT_INCLUDEDIR) $(OPENCV_INCLUDEDIR) $(OPENCL_INCLUDEDIR) $(OUTPUT_LIBDIR) $(OPENCV_LIBDIR) $(OPENCV_LIBRARIES) -lvisiongl
 
 runcloud:
-	cd src/cloud; ./template_for_cloud --input ../../images/lena_std.tif --output /tmp/lixo.tif --window_convolution "[.2, .2, .2, .2, .2]" --window_size_x 1 --window_size_y 5
+	cd src/cloud; ./template_for_cloud --input $(ROOTPATH)/samples/lena_std.tif --output /tmp/lixo.tif --window_convolution "[.2, .2, .2, .2, .2]" --window_size_x 1 --window_size_y 5
 
 #-L $(INSTALL_LIBPATH) -lvisiongl
 
