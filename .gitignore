@@ -4,3 +4,4 @@ src/cl2*
 src/kernel2*
 build/
 samples/
+compile_flags.txt

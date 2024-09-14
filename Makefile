@@ -19,9 +19,12 @@ INSTALL_SHAREPATH   = /usr/share/
 CC    = clang++
 FLAGS = -Wall -Wextra -pedantic -Wno-narrowing -I$(INCLUDEPATH)
 LD    = -lGLEW -lGLU -lGL -lglut
-DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES -DVGL_RUNTIME_PATH=\"$(INSTALL_SHAREPATH)$(PROJECT)/runtime\"
+DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES
 FPIC  = -fPIC
 SRC   = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
+
+COMPILE_FLAG_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(ROOTPATH)/runtime\"
+INSTALLATION_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(INSTALL_SHAREPATH)$(PROJECT)/runtime\"
 
 WITH_DEBUG = 0
 WITH_CUDA = 0
@@ -68,6 +71,16 @@ ifeq ($(WITH_TIFF), 1)
 	LD  += -ltiff
 endif
 
+setup:
+	rm -f /tmp/compile_flags.txt
+	echo $(LD) >> /tmp/compile_flags.txt
+	echo $(FLAGS) >> /tmp/compile_flags.txt
+	echo $(FPIC) >> /tmp/compile_flags.txt
+	echo $(DEF) >> /tmp/compile_flags.txt
+	echo $(COMPILE_FLAG_RUNTIME_DEFINITION) >> /tmp/compile_flags.txt
+	echo "# Generated compile_flags.txt from Makefile" > $(ROOTPATH)/compile_flags.txt
+	sed 's/ /\n/g' /tmp/compile_flags.txt >> $(ROOTPATH)/compile_flags.txt
+
 all: lib
 	mkdir -p $(OUTPUT_INCLUDEPATH)
 	cat $(INCLUDEPATH)/vglHead.h $(INCLUDEPATH)/vglImage.h $(INCLUDEPATH)/vglCudaImage.h $(INCLUDEPATH)/vglClImage.h $(INCLUDEPATH)/vglGdcmIo.h $(INCLUDEPATH)/vglDcmtkIo.h $(INCLUDEPATH)/vglTiffIo.h $(INCLUDEPATH)/vglContext.h $(INCLUDEPATH)/vglSimpleBGModel.h $(INCLUDEPATH)/glsl2cpp*.h $(INCLUDEPATH)/kernel2cu*.h $(INCLUDEPATH)/cl2cpp*.h $(INCLUDEPATH)/vglClFunctions*.h $(INCLUDEPATH)/iplImage*.h $(INCLUDEPATH)/vglOpencv*.h $(INCLUDEPATH)/vglTail.h $(INCLUDEPATH)/vglDeconv.h > /tmp/$(PROJECT).h; grep -v vglImage\.h /tmp/$(PROJECT).h > $(OUTPUT_INCLUDEPATH)/$(PROJECT).h
@@ -78,7 +91,7 @@ runtime: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrappe
 
 lib: runtime
 	mkdir -p $(OUTPUT_LIBPATH)
-	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) -shared -o $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(SRC)
+	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) $(INSTALLATION_RUNTIME_DEFINITION) -shared -o $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(SRC)
 
 install:
 	cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
