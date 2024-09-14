@@ -90,27 +90,15 @@ dox: all
 	cd dox/latex; pwd; make; xdvi refman.dvi&
 
 .PHONY: $(DEMOS)
-$(DEMOS): binfolder
+$(DEMOS):
+	mkdir -p $(OUTPUT_BINPATH)
 	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/demo_$@ src/demo/$@.cpp src/demo/timer.cpp
 
 .PHONY: $(TESTS)
-$(TESTS): binfolder
+$(TESTS):
+	mkdir -p $(OUTPUT_BINPATH)
 	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/test_$@ src/test/$@.cpp
 
-binfolder:
-	mkdir -p $(OUTPUT_BINPATH)
-	ln -sf $(ROOTPATH)/runtime/CL $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/CL_BIN $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/CL_MM $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/CL_ND $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/cloud $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/cloud_CL $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/CL_UTIL $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/CUDA $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/FS $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/FS_BG $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/FS_Stereo $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/runtime/VS $(OUTPUT_BINPATH)/
 
 # runtestcore:
 # 	cd $(OUTPUT_BINPATH); ./test_$(CORE_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM 0 16 /tmp
