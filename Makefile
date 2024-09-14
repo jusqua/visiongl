@@ -3,7 +3,7 @@ DEMOS = cuda fractal cam gdcm dcmtk cl3d clnd tiff io bin benchmark_cv benchmark
 TESTS = core cl
 
 CC    = clang++
-FLAGS = -Wno-narrowing -I./src
+FLAGS = -Wall -Wextra -pedantic -Wno-narrowing -I./src
 LD    = -lGLEW -lGLU -lGL -lglut
 DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES
 FPIC  = -fPIC
