@@ -86,11 +86,11 @@ dox: all
 	cd dox/latex; pwd; make; xdvi refman.dvi&
 
 .PHONY: $(DEMOS)
-$(DEMOS):
+$(DEMOS): binfolder
 	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/demo_$@ src/demo/$@.cpp src/demo/timer.cpp
 
 .PHONY: $(TESTS)
-$(TESTS):
+$(TESTS): binfolder
 	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/test_$@ src/test/$@.cpp
 
 binfolder:
