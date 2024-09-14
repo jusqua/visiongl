@@ -400,7 +400,8 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   static GLuint _f = 0;
   if (_f == 0){
     printf(\"FRAGMENT SHADER\\n====================\\n\");
-    _f = vglShaderLoad(GL_FRAGMENT_SHADER, (char*) \"$cpp_read_path$basename\.frag\");
+    char *_file_path = (char *)(VGL_RUNTIME_PATH\"\/$cpp_read_path$basename\.frag\");
+    _f = vglShaderLoad(GL_FRAGMENT_SHADER, _file_path);
     if (!_f){
       printf(\"%s: %s: Error loading fragment shader.\\n\", __FILE__, __FUNCTION__);
       exit(1);

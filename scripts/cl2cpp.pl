@@ -744,7 +744,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   static cl_program _program = NULL;
   if (_program == NULL)
   {
-    char* _file_path = (char*) \"$cpp_read_path$basename\.cl\";
+    char *_file_path = (char *)(VGL_RUNTIME_PATH\"\/$cpp_read_path$basename\.cl\");
     printf(\"Compiling %s\\n\", _file_path);
     std::ifstream _file(_file_path);
     if(_file.fail())
