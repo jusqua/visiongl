@@ -2,26 +2,27 @@ PROJECT  = visiongl
 DEMOS = cuda fractal cam gdcm dcmtk cl3d clnd tiff io bin benchmark_cv benchmark_cvocl benchmark_cl benchmark_cl3d benchmark_clnd benchmark_MM benchmark_clbin benchmark_cl3dbin benchmark_clndbin benchmark_FuzzyTophat benchmark_MP colordeconv clinfo cltest image_info
 TESTS = core cl
 
-CC    = clang++
-FLAGS = -Wall -Wextra -pedantic -Wno-narrowing -I./src
-LD    = -lGLEW -lGLU -lGL -lglut
-DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES
-FPIC  = -fPIC
-SRC   = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
-
-INSTALL_INCLUDEPATH = /usr/include/
-INSTALL_LIBPATH     = /usr/lib64/
-
 ROOTPATH           = $(PWD)
-INCLUDE_PATH       = $(ROOTPATH)/src
-INCLUDE_DIR        = -I $(INCLUDE_PATH)
-
 BUILDPATH          = $(ROOTPATH)/build
+RUNTIMEPATH        = $(ROOTPATH)/runtime
+INCLUDEPATH        = $(ROOTPATH)/src
 OUTPUT_INCLUDEPATH = $(BUILDPATH)/include
 OUTPUT_LIBPATH     = $(BUILDPATH)/lib
 OUTPUT_BINPATH     = $(BUILDPATH)/bin
-OUTPUT_INCLUDEDIR  = -I $(OUTPUT_INCLUDEPATH)
-OUTPUT_LIBDIR      = -L $(OUTPUT_LIBPATH)
+OUTPUT_SHAREPATH   = $(BUILDPATH)/share/$(PROJECT)
+OUTPUT_RUNTIMEPATH = $(OUTPUT_SHAREPATH)/runtime
+
+INSTALL_INCLUDEPATH = /usr/include/
+INSTALL_LIBPATH     = /usr/lib64/
+INSTALL_SHAREPATH   = /usr/share/$(PROJECT)
+INSTALL_RUNTIMEPATH = $(INSTALL_SHAREPATH)/runtime
+
+CC    = clang++
+FLAGS = -Wall -Wextra -pedantic -Wno-narrowing -I$(INCLUDEPATH)
+LD    = -lGLEW -lGLU -lGL -lglut
+DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES -DVGL_RUNTIME_PATH=$(INSTALL_RUNTIMEPATH)
+FPIC  = -fPIC
+SRC   = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
 
 WITH_DEBUG = 0
 WITH_CUDA = 0
@@ -70,14 +71,18 @@ endif
 
 all: lib
 	mkdir -p $(OUTPUT_INCLUDEPATH)
-	cat $(INCLUDE_PATH)/vglHead.h $(INCLUDE_PATH)/vglImage.h $(INCLUDE_PATH)/vglCudaImage.h $(INCLUDE_PATH)/vglClImage.h $(INCLUDE_PATH)/vglGdcmIo.h $(INCLUDE_PATH)/vglDcmtkIo.h $(INCLUDE_PATH)/vglTiffIo.h $(INCLUDE_PATH)/vglContext.h $(INCLUDE_PATH)/vglSimpleBGModel.h $(INCLUDE_PATH)/glsl2cpp*.h $(INCLUDE_PATH)/kernel2cu*.h $(INCLUDE_PATH)/cl2cpp*.h $(INCLUDE_PATH)/vglClFunctions*.h $(INCLUDE_PATH)/iplImage*.h $(INCLUDE_PATH)/vglOpencv*.h $(INCLUDE_PATH)/vglTail.h $(INCLUDE_PATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
+	cat $(INCLUDEPATH)/vglHead.h $(INCLUDEPATH)/vglImage.h $(INCLUDEPATH)/vglCudaImage.h $(INCLUDEPATH)/vglClImage.h $(INCLUDEPATH)/vglGdcmIo.h $(INCLUDEPATH)/vglDcmtkIo.h $(INCLUDEPATH)/vglTiffIo.h $(INCLUDEPATH)/vglContext.h $(INCLUDEPATH)/vglSimpleBGModel.h $(INCLUDEPATH)/glsl2cpp*.h $(INCLUDEPATH)/kernel2cu*.h $(INCLUDEPATH)/cl2cpp*.h $(INCLUDEPATH)/vglClFunctions*.h $(INCLUDEPATH)/iplImage*.h $(INCLUDEPATH)/vglOpencv*.h $(INCLUDEPATH)/vglTail.h $(INCLUDEPATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
 
-lib: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrapper cl_nd_wrapper cl_mm_wrapper cl_bin_wrapper
+runtime: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrapper cl_nd_wrapper cl_mm_wrapper cl_bin_wrapper
+	mkdir -p $(OUTPUT_SHAREPATH)
+	cp -rf $(RUNTIMEPATH) $(OUTPUT_SHAREPATH)
+
+lib: runtime
 	mkdir -p $(OUTPUT_LIBPATH)
-	echo $(LD_LIBRARY_PATH)
 	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) -shared -o $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(SRC)
 
 install: all
+	cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
 	cp -f $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h $(INSTALL_INCLUDEPATH)
 	cp -f $(OUTPUT_LIBPATH)/lib$(BINARY_NAME).so $(INSTALL_LIBPATH)
 
