@@ -14,13 +14,12 @@ OUTPUT_RUNTIMEPATH = $(OUTPUT_SHAREPATH)/runtime
 
 INSTALL_INCLUDEPATH = /usr/include/
 INSTALL_LIBPATH     = /usr/lib64/
-INSTALL_SHAREPATH   = /usr/share/$(PROJECT)
-INSTALL_RUNTIMEPATH = $(INSTALL_SHAREPATH)/runtime
+INSTALL_SHAREPATH   = /usr/share/
 
 CC    = clang++
 FLAGS = -Wall -Wextra -pedantic -Wno-narrowing -I$(INCLUDEPATH)
 LD    = -lGLEW -lGLU -lGL -lglut
-DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES -DVGL_RUNTIME_PATH=$(INSTALL_RUNTIMEPATH)
+DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES -DVGL_RUNTIME_PATH=\"$(INSTALL_SHAREPATH)$(PROJECT)/runtime\"
 FPIC  = -fPIC
 SRC   = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
 
@@ -71,7 +70,7 @@ endif
 
 all: lib
 	mkdir -p $(OUTPUT_INCLUDEPATH)
-	cat $(INCLUDEPATH)/vglHead.h $(INCLUDEPATH)/vglImage.h $(INCLUDEPATH)/vglCudaImage.h $(INCLUDEPATH)/vglClImage.h $(INCLUDEPATH)/vglGdcmIo.h $(INCLUDEPATH)/vglDcmtkIo.h $(INCLUDEPATH)/vglTiffIo.h $(INCLUDEPATH)/vglContext.h $(INCLUDEPATH)/vglSimpleBGModel.h $(INCLUDEPATH)/glsl2cpp*.h $(INCLUDEPATH)/kernel2cu*.h $(INCLUDEPATH)/cl2cpp*.h $(INCLUDEPATH)/vglClFunctions*.h $(INCLUDEPATH)/iplImage*.h $(INCLUDEPATH)/vglOpencv*.h $(INCLUDEPATH)/vglTail.h $(INCLUDEPATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
+	cat $(INCLUDEPATH)/vglHead.h $(INCLUDEPATH)/vglImage.h $(INCLUDEPATH)/vglCudaImage.h $(INCLUDEPATH)/vglClImage.h $(INCLUDEPATH)/vglGdcmIo.h $(INCLUDEPATH)/vglDcmtkIo.h $(INCLUDEPATH)/vglTiffIo.h $(INCLUDEPATH)/vglContext.h $(INCLUDEPATH)/vglSimpleBGModel.h $(INCLUDEPATH)/glsl2cpp*.h $(INCLUDEPATH)/kernel2cu*.h $(INCLUDEPATH)/cl2cpp*.h $(INCLUDEPATH)/vglClFunctions*.h $(INCLUDEPATH)/iplImage*.h $(INCLUDEPATH)/vglOpencv*.h $(INCLUDEPATH)/vglTail.h $(INCLUDEPATH)/vglDeconv.h > /tmp/$(PROJECT).h; grep -v vglImage\.h /tmp/$(PROJECT).h > $(OUTPUT_INCLUDEPATH)/$(PROJECT).h
 
 runtime: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrapper cl_nd_wrapper cl_mm_wrapper cl_bin_wrapper
 	mkdir -p $(OUTPUT_SHAREPATH)
@@ -81,10 +80,10 @@ lib: runtime
 	mkdir -p $(OUTPUT_LIBPATH)
 	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) -shared -o $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(SRC)
 
-install: all
+install:
 	cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
-	cp -f $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h $(INSTALL_INCLUDEPATH)
-	cp -f $(OUTPUT_LIBPATH)/lib$(BINARY_NAME).so $(INSTALL_LIBPATH)
+	cp -f $(OUTPUT_INCLUDEPATH)/$(PROJECT).h $(INSTALL_INCLUDEPATH)
+	cp -f $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(INSTALL_LIBPATH)
 
 dox: all
 	doxygen $(BINARY_NAME).dox
