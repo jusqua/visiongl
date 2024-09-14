@@ -1,7 +1,9 @@
 PROJECT  = visiongl
+DEMOS = cuda fractal cam gdcm dcmtk cl3d clnd tiff io bin benchmark_cv benchmark_cvocl benchmark_cl benchmark_cl3d benchmark_clnd benchmark_MM benchmark_clbin benchmark_cl3dbin benchmark_clndbin benchmark_FuzzyTophat benchmark_MP colordeconv
+TESTS = core cl
 
 CC    = clang++
-FLAGS = -shared -Wno-narrowing -I./src
+FLAGS = -Wno-narrowing -I./src
 LD    = -lGLEW -lGLU -lGL -lglut
 DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES
 FPIC  = -fPIC
@@ -66,170 +68,14 @@ ifeq ($(WITH_TIFF), 1)
 	LD  += -ltiff
 endif
 
-LINUXAMD64_TEST_CORE = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/test_$(CORE_NAME) \
-                         src/test/$(CORE_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_TEST_CL = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/test_$(CL_NAME) \
-                         src/test/$(CL_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_DEMO_CL3D = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(CL3D_NAME) \
-                         src/demo/$(CL3D_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_DEMO_CLND = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(CLND_NAME) \
-                         src/demo/$(CLND_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_DEMO_FRACTAL = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(FRACTAL_NAME) \
-                         src/demo/$(FRACTAL_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_DEMO_CAM = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(CAM_NAME) \
-                         src/demo/$(CAM_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_DEMO_CUDA = $(CC) $(COMPILER_FLAGS) -D__CUDA__ \
-                         -o $(OUTPUT_BINPATH)/demo_$(CUDA_NAME) \
-                          src/demo/$(CUDA_NAME).cpp \
-                         -lvisiongl \
-                          $(LINUXAMD64_DIRS_LIBS) \
-
-LINUXAMD64_DEMO_GDCM = $(CC) $(COMPILER_FLAGS) -D__GDCM__ \
-                         -o $(OUTPUT_BINPATH)/demo_$(GDCM_NAME) \
-                          src/demo/$(GDCM_NAME).cpp \
-                         -lvisiongl \
-                          $(LINUXAMD64_DIRS_LIBS) \
-
-LINUXAMD64_DEMO_DCMTK = $(CC) $(COMPILER_FLAGS) -D__DCMTK__ \
-                         -o $(OUTPUT_BINPATH)/demo_$(DCMTK_NAME) \
-                          src/demo/$(DCMTK_NAME).cpp \
-                         -lvisiongl \
-                          $(LINUXAMD64_DIRS_LIBS) \
-
-LINUXAMD64_DEMO_TIFF = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(TIFF_NAME) \
-                         src/demo/$(TIFF_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_DEMO_IO = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(IO_NAME) \
-                         src/demo/$(IO_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_DEMO_BIN = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BIN_NAME) \
-                         src/demo/$(BIN_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-LINUXAMD64_DEMO_KEY = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(KEY_NAME) \
-                         src/demo/$(KEY_NAME)/*.cpp \
-                         -I /usr/local/sgb/include/ \
-                         -L /usr/local/sgb/lib/ \
-                         -I $(INSTALL_INCLUDEPATH) \
-                         -L $(INSTALL_LIBPATH) \
-                         -L /usr/lib/x86_64-linux-gnu/ \
-                         -lvisiongl -lgb -ltimer -lcalibrate -lfftw3 -lhitmiss \
-                         -lopencv_calib3d -lopencv_video \
-                         -I $(ROOTPATH)/src/demo/$(KEY_NAME)/ \
-                         $(OPENCV_INCLUDEDIR) \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-ifeq ($(WITH_OPENCL), 1)
-        LINUXAMD64_DEMO_BENCHMARK_CL = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_CL_NAME) \
-                         src/demo/$(BENCHMARK_CL_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-        LINUXAMD64_DEMO_BENCHMARK_CL3D = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_CL3D_NAME) \
-                         src/demo/$(BENCHMARK_CL3D_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-        LINUXAMD64_DEMO_BENCHMARK_CLND = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_CLND_NAME) \
-                         src/demo/$(BENCHMARK_CLND_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-        LINUXAMD64_DEMO_BENCHMARK_MM = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_MM_NAME) \
-                         src/demo/$(BENCHMARK_MM_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-        LINUXAMD64_DEMO_BENCHMARK_FUZZYTOPHAT = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_FUZZYTOPHAT_NAME) \
-                         src/demo/$(BENCHMARK_FUZZYTOPHAT_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-        LINUXAMD64_DEMO_BENCHMARK_CLBIN = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_CLBIN_NAME) \
-                         src/demo/$(BENCHMARK_CLBIN_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-        LINUXAMD64_DEMO_BENCHMARK_CL3DBIN = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_CL3DBIN_NAME) \
-                         src/demo/$(BENCHMARK_CL3DBIN_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-        LINUXAMD64_DEMO_BENCHMARK_CLNDBIN = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_CLNDBIN_NAME) \
-                         src/demo/$(BENCHMARK_CLNDBIN_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-endif
-
-LINUXAMD64_DEMO_BENCHMARK_CV = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_CV_NAME) \
-                         src/demo/$(BENCHMARK_CV_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-LINUXAMD64_DEMO_BENCHMARK_CVOCL = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(BENCHMARK_CVOCL_NAME) \
-                         src/demo/$(BENCHMARK_CVOCL_NAME).cpp src/demo/timer.cpp \
-                         -lvisiongl -lopencv_ocl \
-                         $(LINUXAMD64_DIRS_LIBS) \
-
-LINUXAMD64_DEMO_COLORDECONV = $(CC) $(COMPILER_FLAGS) \
-                        -o $(OUTPUT_BINPATH)/demo_$(COLORDECONV_NAME) \
-                         src/demo/$(COLORDECONV_NAME).cpp \
-                         -lvisiongl \
-                         $(LINUXAMD64_DIRS_LIBS)
-
-
 all: lib
 	mkdir -p $(OUTPUT_INCLUDEPATH)
 	cat $(INCLUDE_PATH)/vglHead.h $(INCLUDE_PATH)/vglImage.h $(INCLUDE_PATH)/vglCudaImage.h $(INCLUDE_PATH)/vglClImage.h $(INCLUDE_PATH)/vglGdcmIo.h $(INCLUDE_PATH)/vglDcmtkIo.h $(INCLUDE_PATH)/vglTiffIo.h $(INCLUDE_PATH)/vglContext.h $(INCLUDE_PATH)/vglSimpleBGModel.h $(INCLUDE_PATH)/glsl2cpp*.h $(INCLUDE_PATH)/kernel2cu*.h $(INCLUDE_PATH)/cl2cpp*.h $(INCLUDE_PATH)/vglClFunctions*.h $(INCLUDE_PATH)/iplImage*.h $(INCLUDE_PATH)/vglOpencv*.h $(INCLUDE_PATH)/vglTail.h $(INCLUDE_PATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
 
-lib: cuda frag frag_bg frag_stereo cl cl_nd cl_mm cl_bin
+lib: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrapper cl_nd_wrapper cl_mm_wrapper cl_bin_wrapper
 	mkdir -p $(OUTPUT_LIBPATH)
 	echo $(LD_LIBRARY_PATH)
-	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) -o $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(SRC)
+	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) -shared -o $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(SRC)
 
 install: all
 	cp -f $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h $(INSTALL_INCLUDEPATH)
@@ -238,6 +84,14 @@ install: all
 dox: all
 	doxygen $(BINARY_NAME).dox
 	cd dox/latex; pwd; make; xdvi refman.dvi&
+
+.PHONY: $(DEMOS)
+$(DEMOS):
+	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/demo_$@ src/demo/$@.cpp src/demo/timer.cpp
+
+.PHONY: $(TESTS)
+$(TESTS):
+	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/test_$@ src/test/$@.cpp
 
 binfolder:
 	mkdir -p $(OUTPUT_BINPATH)
@@ -253,68 +107,6 @@ binfolder:
 	ln -sf $(ROOTPATH)/src/FS_BG $(OUTPUT_BINPATH)/
 	ln -sf $(ROOTPATH)/src/FS_Stereo $(OUTPUT_BINPATH)/
 	ln -sf $(ROOTPATH)/src/VS $(OUTPUT_BINPATH)/
-
-demofrac: binfolder
-	$(LINUXAMD64_DEMO_FRACTAL)
-
-democam: binfolder
-	$(LINUXAMD64_DEMO_CAM)
-
-democuda: binfolder
-	$(LINUXAMD64_DEMO_CUDA)
-
-demogdcm: binfolder
-	$(LINUXAMD64_DEMO_GDCM)
-
-demodcmtk: binfolder
-	$(LINUXAMD64_DEMO_DCMTK)
-
-demotiff: binfolder
-	$(LINUXAMD64_DEMO_TIFF)
-
-demoio: binfolder
-	$(LINUXAMD64_DEMO_IO)
-
-demobin: binfolder
-	$(LINUXAMD64_DEMO_BIN)
-
-demokey: binfolder
-	$(LINUXAMD64_DEMO_KEY)
-
-testcore: binfolder
-	$(LINUXAMD64_TEST_CORE)
-
-testcl: binfolder
-	$(LINUXAMD64_TEST_CL)
-
-democl3d: binfolder
-	$(LINUXAMD64_DEMO_CL3D)
-
-democlnd: binfolder
-	$(LINUXAMD64_DEMO_CLND)
-
-demobenchmark: binfolder
-	#$(LINUXAMD64_DEMO_BENCHMARK_CV)
-	#$(LINUXAMD64_DEMO_BENCHMARK_CVOCL)
-	$(LINUXAMD64_DEMO_BENCHMARK_CL)
-	$(LINUXAMD64_DEMO_BENCHMARK_CL3D)
-	$(LINUXAMD64_DEMO_BENCHMARK_MM)
-	$(LINUXAMD64_DEMO_BENCHMARK_FUZZYTOPHAT)
-	rm -f /tmp/*.so
-
-demobenchmarkclbin: binfolder
-	$(LINUXAMD64_DEMO_BENCHMARK_CLBIN)
-	$(LINUXAMD64_DEMO_BENCHMARK_CL3DBIN)
-	$(LINUXAMD64_DEMO_BENCHMARK_CLNDBIN)
-	rm -f /tmp/*.so
-
-demobenchmarkclnd: binfolder
-	$(LINUXAMD64_DEMO_BENCHMARK_CLND)
-
-democolordeconv: binfolder
-	$(LINUXAMD64_DEMO_COLORDECONV)
-
-.PHONY: lib
 
 runtestcore:
 	cd $(OUTPUT_BINPATH); ./test_$(CORE_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM 0 16 /tmp
@@ -440,31 +232,31 @@ rundemobenchmarkclbin:
 rundemocolordeconv:
 	cd $(OUTPUT_BINPATH); ./demo_$(COLORDECONV_NAME) $(ROOTPATH)/samples/Emphysema_H_and_E.jpg 1 /tmp/image.%d.pgm 0.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0
 
-cuda:
+cuda_wrapper:
 	./scripts/kernel2cu.pl -o src/kernel2cu_shaders src/CUDA/*.kernel
 
-frag:
+frag_wrapper:
 	./scripts/glsl2cpp.pl -o src/glsl2cpp_shaders -p FS src/FS/*.frag
 
-frag_bg:
+frag_bg_wrapper:
 	./scripts/glsl2cpp.pl -o src/glsl2cpp_BG -p FS_BG src/FS_BG/*.frag
 
-frag_stereo:
+frag_stereo_wrapper:
 	./scripts/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo src/FS_Stereo/*.frag
 
-cl:
+cl_wrapper:
 	./scripts/cl2cpp.pl -o src/cl2cpp_shaders -p CL src/CL/*.cl
 
-cl_nd:
+cl_nd_wrapper:
 	./scripts/cl2cpp.pl -o src/cl2cpp_ND -p CL_ND src/CL_ND/*.cl
 
-cloud_cl:
+cloud_cl_wrapper:
 	./scripts/cl2cloud.pl -o src/cloud_CL src/CL/*.cl
 
-cl_mm:
+cl_mm_wrapper:
 	./scripts/cl2cpp.pl -o src/cl2cpp_MM -p CL_MM src/CL_MM/*.cl
 
-cl_bin:
+cl_bin_wrapper:
 	./scripts/cl2cpp.pl -o src/cl2cpp_BIN -p CL_BIN src/CL_BIN/*.cl
 
 run:
