@@ -1,29 +1,14 @@
-BINARY_NAME                   = visiongl
-CUDA_NAME                     = cuda
-FRACTAL_NAME                  = fractal
-CAM_NAME                      = cam
-GDCM_NAME                     = gdcm
-DCMTK_NAME                    = dcmtk
-CORE_NAME                     = core
-CL_NAME                       = cl
-CL3D_NAME                     = cl3d
-CLND_NAME                     = clnd
-TIFF_NAME                     = tiff
-IO_NAME                       = io
-BIN_NAME             	      = bin
-KEY_NAME                      = key
-BENCHMARK_CV_NAME             = benchmark_cv
-BENCHMARK_CVOCL_NAME          = benchmark_cvocl
-BENCHMARK_CL_NAME             = benchmark_cl
-BENCHMARK_CL3D_NAME           = benchmark_cl3d
-BENCHMARK_CLND_NAME           = benchmark_clnd
-BENCHMARK_MM_NAME             = benchmark_MM
-BENCHMARK_CLBIN_NAME          = benchmark_clbin
-BENCHMARK_CL3DBIN_NAME        = benchmark_cl3dbin
-BENCHMARK_CLNDBIN_NAME        = benchmark_clndbin
-BENCHMARK_FUZZYTOPHAT_NAME    = benchmark_FuzzyTophat
-BENCHMARK_MP_NAME             = benchmark_MP
-COLORDECONV_NAME              = colordeconv
+PROJECT  = visiongl
+
+CC    = clang++
+FLAGS = -shared -Wno-narrowing -I./src
+LD    = -lGLEW -lGLU -lGL -lglut
+DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES
+FPIC  = -fPIC
+SRC   = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
+
+INSTALL_INCLUDEPATH = /usr/include/
+INSTALL_LIBPATH     = /usr/lib64/
 
 ROOTPATH           = $(PWD)
 INCLUDE_PATH       = $(ROOTPATH)/src
@@ -36,6 +21,7 @@ OUTPUT_BINPATH     = $(BUILDPATH)/bin
 OUTPUT_INCLUDEDIR  = -I $(OUTPUT_INCLUDEPATH)
 OUTPUT_LIBDIR      = -L $(OUTPUT_LIBPATH)
 
+WITH_DEBUG = 0
 WITH_CUDA = 0
 WITH_OPENCL = 1
 WITH_OPENCV = 0
@@ -43,127 +29,42 @@ WITH_GDCM = 1
 WITH_DCMTK = 1
 WITH_TIFF = 1
 
+ifeq ($(WITH_DEBUG), 1)
+	DEF   += -D__DEBUG__
+	FLAGS += -g -pg
+endif
+
 ifeq ($(WITH_OPENCV), 1)
-	OPENCV_DEF         = -D__OPENCV__
-	OPENCV_INCLUDEPATH = /usr/include/opencv4/
-	OPENCV_LIBPATH     = /usr/lib64/
-	OPENCV_INCLUDEDIR  = -I $(OPENCV_INCLUDEPATH)
-	OPENCV_LIBDIR      = -L $(OPENCV_LIBPATH)
-	OPENCV_LIBRARIES   = -lopencv_highgui -lopencv_core -lopencv_imgproc -lopencv_legacy
+	DEF += -D__OPENCV__
+	LD  += -lopencv_highgui -lopencv_core -lopencv_imgproc -lopencv_legacy
 endif
 
 ifeq ($(WITH_CUDA), 1)
-	CUDA_DEF         = -D__CUDA__
-	CUDA_PATH        = /usr/local/cuda
-	CUDA_INCLUDEPATH = $(CUDA_PATH)/include
-	CUDA_LIBPATH     = $(CUDA_PATH)/lib64
-	CUDA_INCLUDEDIR  = -I $(CUDA_INCLUDEPATH)
-	CUDA_LIBDIR      = -L $(CUDA_LIBPATH)
-	CUDA_LIBRARIES   = -lcudart
-	CUDA_OPTIONS     =
-	CUDA_FILES       = src/*.cu
-	CC               = $(CUDA_PATH)/bin/nvcc
-	FPIC             = -Xcompiler -fPIC
-else
-	CC               = clang++
-	FPIC             = -fPIC
+	DEF  += -D__CUDA__
+	SRC  += src/*.cu
+	FPIC += -Xcompiler -fPIC
 endif
 
 ifeq ($(WITH_OPENCL), 1)
-	OPENCL_DEF        = -D__OPENCL__
-	OPENCL_PATH        = /opt/intel/opencl-1.2-4.4.0.117/lib64/
-	#OPENCL_PATH        = /usr/local/cuda/
-	OPENCL_INCLUDEPATH = $(OPENCL_PATH)/include/
-	OPENCL_LIBPATH     = $(OPENCL_PATH)/lib/x86_64
-	OPENCL_LIBPATH     = $(OPENCL_PATH)/lib64
-	#OPENCL_LIBPATH     = /usr/lib/
-	OPENCL_INCLUDEDIR  = -I $(OPENCL_INCLUDEPATH)
-	OPENCL_LIBDIR      = -L $(OPENCL_LIBPATH)
-	OPENCL_LIBRARIES   = -lOpenCL
-	OPENCL_FILES = src/cl2cpp_shaders.cpp src/vglClFunctions.cpp src/vglClImage.cpp src/cl2cpp_MM.cpp src/cl2cpp_ND.cpp src/cl2cpp_BIN.cpp
-
-	OPENGL_INCLUDEPATH = $(OPENCL_INCLUDEPATH)
-	OPENGL_INCLUDEDIR  = $(OPENCL_INCLUDEDIR)
-else
-	OPENGL_INCLUDEPATH = /usr/include/
-	OPENGL_INCLUDEDIR  = -I $(OPENGL_INCLUDEPATH)
+	DEF += -D__OPENCL__
+	LD  += -lOpenCL
+	SRC += src/cl2cpp_shaders.cpp src/vglClFunctions.cpp src/vglClImage.cpp src/cl2cpp_MM.cpp src/cl2cpp_ND.cpp src/cl2cpp_BIN.cpp
 endif
 
 ifeq ($(WITH_GDCM), 1)
-	GDCM_DEF         = -D__GDCM__
-	GDCM_PATH        = /usr/local/gdcm
-	GDCM_INCLUDEPATH = $(GDCM_PATH)/include/gdcm-2.4
-	GDCM_LIBPATH     = $(GDCM_PATH)/lib
-	GDCM_INCLUDEDIR  = -I $(GDCM_INCLUDEPATH)
-	GDCM_LIBDIR      = -L $(GDCM_LIBPATH)
-	GDCM_LIBRARIES   = -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmjpeg8 -lgdcmjpeg12 -lgdcmjpeg16 -lgdcmMEXD -lgdcmMSFF -lsocketxx
+	DEF += -D__GDCM__
+	LD  += -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmIOD -lgdcmjpeg8 -lgdcmjpeg12 -lgdcmjpeg16 -lgdcmMEXD -lgdcmMSFF -lsocketxx
 endif
 
 ifeq ($(WITH_DCMTK), 1)
-	DCMTK_DEF         = -D__DCMTK__
-	DCMTK_PATH        = /usr/local/dcmtk
-	DCMTK_INCLUDEPATH = $(DCMTK_PATH)/include
-	DCMTK_LIBPATH     = $(DCMTK_PATH)/lib
-	DCMTK_INCLUDEDIR  = -I $(DCMTK_INCLUDEPATH)
-	DCMTK_LIBDIR      = -L $(DCMTK_LIBPATH)
-	DCMTK_LIBRARIES   = -ldcmjpeg -lijg8 -lijg12  -lijg16 -ldcmimage -ldcmpstat -ldcmimgle -ldcmqrdb -ldcmnet -ldcmdata -loflog -lofstd -lz -lpthread
+	DEF += -D__DCMTK__
+	LD  += -ldcmjpeg -lijg8 -lijg12  -lijg16 -ldcmimage -ldcmpstat -ldcmimgle -ldcmqrdb -ldcmnet -ldcmdata -loflog -lofstd -lz -lpthread
 endif
 
 ifeq ($(WITH_TIFF), 1)
-	TIFF_DEF        = -D__TIFF__
-	TIFF_INCLUDEPATH = /usr/include/x86_64-linux-gnu/
-	TIFF_LIBPATH     = /usr/lib/x86_64-linux-gnu/
-	TIFF_INCLUDEDIR  = -I $(TIFF_INCLUDEPATH)
-	TIFF_LIBDIR      = -L $(TIFF_LIBPATH)
-	TIFF_LIBRARIES   = -ltiff
+	DEF += -D__TIFF__
+	LD  += -ltiff
 endif
-
-VGL_FILES = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
-
-INSTALL_INCLUDEPATH = /usr/include/
-INSTALL_LIBPATH     = /usr/lib64/
-
-OPENGL_LIBDIR = -L /usr/X11R6/lib
-
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(CUDA_LIBPATH):$(OPENCV_LIBPATH):$(INSTALL_LIBPATH):$(GDCM_LIBPATH):$(DCMTK_LIBPATH):$(OPENCL_LIBPATH)
-
-COMPILER_FLAGS = -g -pg -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES -Wno-narrowing
-OPENGL_LIBRARIES = -lGLEW -lGLU -lGL -lglut
-
-LINUXAMD64_DIRS_LIBS =  $(INCLUDE_DIR) \
-                        $(OUTPUT_LIBDIR) \
-                        $(OPENGL_LIBDIR) \
-                        $(OPENGL_LIBRARIES) \
-                        $(OPENCV_DEF) \
-                        $(OPENCV_INCLUDEDIR) \
-                        $(OPENCV_LIBDIR) \
-                        $(OPENCV_LIBRARIES) \
-                        $(CUDA_DEF) \
-                        $(CUDA_INCLUDEDIR) \
-                        $(CUDA_LIBDIR) \
-                        $(CUDA_LIBRARIES)\
-                        $(OPENCL_DEF) \
-                        $(OPENCL_INCLUDEDIR) \
-                        $(OPENCL_LIBDIR) \
-                        $(OPENCL_LIBRARIES) \
-                        $(GDCM_DEF) \
-                        $(GDCM_INCLUDEDIR) \
-                        $(GDCM_LIBDIR) \
-                        $(GDCM_LIBRARIES) \
-						$(DCMTK_DEF) \
-                        $(DCMTK_INCLUDEDIR) \
-						$(DCMTK_LIBDIR) \
-                        $(DCMTK_LIBRARIES) \
-						$(TIFF_DEF) \
-                        $(TIFF_INCLUDEDIR) \
-                        $(TIFF_LIBDIR) \
-                        $(TIFF_LIBRARIES) \
-
-LINUXAMD64_LIB = $(CC) $(COMPILER_FLAGS) \
-                        -shared $(CUDA_OPTIONS) $(FPIC) \
-                        -o $(OUTPUT_LIBPATH)/lib$(BINARY_NAME).so \
-                          $(CUDA_FILES) $(VGL_FILES) $(OPENCL_FILES) \
-                         $(LINUXAMD64_DIRS_LIBS) $(CUDA_DIRS_LIBS)
 
 LINUXAMD64_TEST_CORE = $(CC) $(COMPILER_FLAGS) \
                         -o $(OUTPUT_BINPATH)/test_$(CORE_NAME) \
@@ -321,18 +222,14 @@ LINUXAMD64_DEMO_COLORDECONV = $(CC) $(COMPILER_FLAGS) \
                          $(LINUXAMD64_DIRS_LIBS)
 
 
-
-GENERATE_HEADER = cat $(INCLUDE_PATH)/vglHead.h $(INCLUDE_PATH)/vglImage.h $(INCLUDE_PATH)/vglCudaImage.h $(INCLUDE_PATH)/vglClImage.h $(INCLUDE_PATH)/vglGdcmIo.h $(INCLUDE_PATH)/vglDcmtkIo.h $(INCLUDE_PATH)/vglTiffIo.h $(INCLUDE_PATH)/vglContext.h $(INCLUDE_PATH)/vglSimpleBGModel.h $(INCLUDE_PATH)/glsl2cpp*.h $(INCLUDE_PATH)/kernel2cu*.h $(INCLUDE_PATH)/cl2cpp*.h $(INCLUDE_PATH)/vglClFunctions*.h $(INCLUDE_PATH)/iplImage*.h $(INCLUDE_PATH)/vglOpencv*.h $(INCLUDE_PATH)/vglTail.h $(INCLUDE_PATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
-
-
 all: lib
 	mkdir -p $(OUTPUT_INCLUDEPATH)
-	$(GENERATE_HEADER)
+	cat $(INCLUDE_PATH)/vglHead.h $(INCLUDE_PATH)/vglImage.h $(INCLUDE_PATH)/vglCudaImage.h $(INCLUDE_PATH)/vglClImage.h $(INCLUDE_PATH)/vglGdcmIo.h $(INCLUDE_PATH)/vglDcmtkIo.h $(INCLUDE_PATH)/vglTiffIo.h $(INCLUDE_PATH)/vglContext.h $(INCLUDE_PATH)/vglSimpleBGModel.h $(INCLUDE_PATH)/glsl2cpp*.h $(INCLUDE_PATH)/kernel2cu*.h $(INCLUDE_PATH)/cl2cpp*.h $(INCLUDE_PATH)/vglClFunctions*.h $(INCLUDE_PATH)/iplImage*.h $(INCLUDE_PATH)/vglOpencv*.h $(INCLUDE_PATH)/vglTail.h $(INCLUDE_PATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
 
 lib: cuda frag frag_bg frag_stereo cl cl_nd cl_mm cl_bin
 	mkdir -p $(OUTPUT_LIBPATH)
 	echo $(LD_LIBRARY_PATH)
-	$(LINUXAMD64_LIB)
+	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) -o $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(SRC)
 
 install: all
 	cp -f $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h $(INSTALL_INCLUDEPATH)
