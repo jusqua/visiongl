@@ -95,18 +95,18 @@ $(TESTS): binfolder
 
 binfolder:
 	mkdir -p $(OUTPUT_BINPATH)
-	ln -sf $(ROOTPATH)/src/CL $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/CL_BIN $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/CL_MM $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/CL_ND $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/cloud $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/cloud_CL $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/CL_UTIL $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/CUDA $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/FS $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/FS_BG $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/FS_Stereo $(OUTPUT_BINPATH)/
-	ln -sf $(ROOTPATH)/src/VS $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/CL $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/CL_BIN $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/CL_MM $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/CL_ND $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/cloud $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/cloud_CL $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/CL_UTIL $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/CUDA $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/FS $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/FS_BG $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/FS_Stereo $(OUTPUT_BINPATH)/
+	ln -sf $(ROOTPATH)/runtime/VS $(OUTPUT_BINPATH)/
 
 # runtestcore:
 # 	cd $(OUTPUT_BINPATH); ./test_$(CORE_NAME) $(ROOTPATH)/samples/dicom/0003.dcm.%d.PGM 0 16 /tmp
@@ -239,31 +239,31 @@ binfolder:
 # 	cd $(OUTPUT_BINPATH); ./$(TESTCAM_NAME)
 
 cuda_wrapper:
-	./scripts/kernel2cu.pl -o src/kernel2cu_shaders src/CUDA/*.kernel
+	./scripts/kernel2cu.pl -o src/kernel2cu_shaders runtime/CUDA/*.kernel
 
 frag_wrapper:
-	./scripts/glsl2cpp.pl -o src/glsl2cpp_shaders -p FS src/FS/*.frag
+	./scripts/glsl2cpp.pl -o src/glsl2cpp_shaders -p FS runtime/FS/*.frag
 
 frag_bg_wrapper:
-	./scripts/glsl2cpp.pl -o src/glsl2cpp_BG -p FS_BG src/FS_BG/*.frag
+	./scripts/glsl2cpp.pl -o src/glsl2cpp_BG -p FS_BG runtime/FS_BG/*.frag
 
 frag_stereo_wrapper:
-	./scripts/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo src/FS_Stereo/*.frag
+	./scripts/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo runtime/FS_Stereo/*.frag
 
 cl_wrapper:
-	./scripts/cl2cpp.pl -o src/cl2cpp_shaders -p CL src/CL/*.cl
+	./scripts/cl2cpp.pl -o src/cl2cpp_shaders -p CL runtime/CL/*.cl
 
 cl_nd_wrapper:
-	./scripts/cl2cpp.pl -o src/cl2cpp_ND -p CL_ND src/CL_ND/*.cl
+	./scripts/cl2cpp.pl -o src/cl2cpp_ND -p CL_ND runtime/CL_ND/*.cl
 
 cloud_cl_wrapper:
-	./scripts/cl2cloud.pl -o src/cloud_CL src/CL/*.cl
+	./scripts/cl2cloud.pl -o src/cloud_CL runtime/CL/*.cl
 
 cl_mm_wrapper:
-	./scripts/cl2cpp.pl -o src/cl2cpp_MM -p CL_MM src/CL_MM/*.cl
+	./scripts/cl2cpp.pl -o src/cl2cpp_MM -p CL_MM runtime/CL_MM/*.cl
 
 cl_bin_wrapper:
-	./scripts/cl2cpp.pl -o src/cl2cpp_BIN -p CL_BIN src/CL_BIN/*.cl
+	./scripts/cl2cpp.pl -o src/cl2cpp_BIN -p CL_BIN runtime/CL_BIN/*.cl
 
 # CLOUD_DIRS   := src/cloud
 # CLOUD_SOURCE := $(foreach dir, $(CLOUD_DIRS), $(wildcard $(dir)/*))
