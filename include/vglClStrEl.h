@@ -3,6 +3,7 @@
 #define __VGLCLSTREL_H__
 
 #include <vglConst.h>
+#include <CL/cl.h>
 
 
 // OpenCL

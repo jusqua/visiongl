@@ -2,6 +2,7 @@
 #define __VGLCLSHAPE_H__
 
 #include <vglConst.h>
+#include <CL/cl.h>
 
 // OpenCL
 #ifdef __OPENCL_VERSION__
