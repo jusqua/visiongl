@@ -16,9 +16,15 @@ OUTPUT_BINPATH     = $(BUILDPATH)/bin
 OUTPUT_SHAREPATH   = $(BUILDPATH)/share/$(PROJECT)
 OUTPUT_RUNTIMEPATH = $(OUTPUT_SHAREPATH)/runtime
 
-INSTALL_INCLUDEPATH = /usr/include/
-INSTALL_LIBPATH     = /usr/lib64/
-INSTALL_SHAREPATH   = /usr/share/
+ifndef INSTALLPATH
+INSTALLPATH = /usr/local
+endif
+INSTALL_INCLUDEPATH = $(INSTALLPATH)/include
+INSTALL_LIB64PATH   = $(INSTALLPATH)/lib64
+INSTALL_LIBPATH     = $(INSTALLPATH)/lib
+INSTALL_SHAREPATH   = $(INSTALLPATH)/share
+
+LIB_NAME = lib$(PROJECT).so
 
 CC    = clang++
 FLAGS = -Wall -Wextra -pedantic -Wno-narrowing -I$(INCLUDEPATH)
@@ -95,12 +101,13 @@ runtime: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrappe
 
 lib: runtime
 	mkdir -p $(OUTPUT_LIBPATH)
-	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) $(INSTALLATION_RUNTIME_DEFINITION) -shared -o $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(SRC)
-
+	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) $(INSTALLATION_RUNTIME_DEFINITION) -shared -o $(OUTPUT_LIBPATH)/$(LIB_NAME) $(SRC)
+	
 install:
 	cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
 	cp -f $(OUTPUT_INCLUDEPATH)/$(PROJECT).h $(INSTALL_INCLUDEPATH)
-	cp -f $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(INSTALL_LIBPATH)
+	cp -f $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(INSTALL_LIB64PATH)
+	ln -sf $(INSTALL_LIB64PATH)/$(LIB_NAME) $(INSTALL_LIBPATH)/
 
 dox: all
 	doxygen $(BINARY_NAME).dox
