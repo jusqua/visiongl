@@ -8,14 +8,8 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "timer.h"
-
 //fps, clock
-#ifdef __linux__
 #include <sys/time.h>
-#else
-#include <Windows.h>
-#endif
 
 //malloc
 #include <stdlib.h>
@@ -28,7 +22,6 @@
     If called with a non-zero parameter, works exaclty as TimerStart().
     
   */
-#ifdef __linux__
 long TimerElapsed(int start){
 
   static struct timeval *Tps = NULL;
@@ -46,40 +39,6 @@ long TimerElapsed(int start){
   retval = (Tpf->tv_sec-Tps->tv_sec)*1000000 + Tpf->tv_usec-Tps->tv_usec;
   return retval;
 }
-#else
-double TimerElapsed(int start){
-  /*static unsigned long Tps = -1;
-  static unsigned long Tpf = -1;
-  if (start || Tps == -1){
-	  Tps = GetTickCount64();
-	  Tpf = GetTickCount64();
-  }
-  else{
-	  Tpf = GetTickCount64();
-  }
-  
-  unsigned long retval = (Tpf - Tps);
-  return retval;*/
-  static LARGE_INTEGER *Tps = NULL;
-  static LARGE_INTEGER *Tpf = NULL;
-  static double freq = 0;
-  if (start || Tps == NULL){
-	  Tps = (LARGE_INTEGER*) malloc(sizeof(LARGE_INTEGER));
-	  Tpf = (LARGE_INTEGER*) malloc(sizeof(LARGE_INTEGER));
-	  QueryPerformanceFrequency((LARGE_INTEGER*)Tps);
-	  freq = double(Tps->QuadPart/1000000.0f);
-
-	  QueryPerformanceCounter(Tps);
-	  QueryPerformanceCounter(Tpf);
-  }
-  else
-  {
-	  QueryPerformanceCounter(Tpf);
-  }
-  return double((Tpf->QuadPart - Tps->QuadPart)/freq);
-}
-#endif
-
 
 /** \brief Timer start.
 
@@ -92,21 +51,13 @@ void TimerStart(){
 char* getTimeElapsed()
 {
 	char *ret = (char*) malloc(sizeof(char)*255);
-#ifdef __linux__
 	sprintf(ret,"%ld us", TimerElapsed());
-#else
-	sprintf(ret,"%.2f us", TimerElapsed());
-#endif
 	return ret;
 }
 
 char* getTimeElapsedInSeconds()
 {
 	char *ret = (char*) malloc(sizeof(char)*255);
-#ifdef __linux__
 	sprintf(ret,"%.6f s", TimerElapsed()/1000000.0f);
-#else
-	sprintf(ret,"%.6f s", TimerElapsed()/1000000.0f);
-#endif
 	return ret;
 }
