@@ -9,6 +9,7 @@ INCLUDEPATH        = $(ROOTPATH)/include
 SOURCEPATH         = $(ROOTPATH)/src
 SCRIPTSPATH        = $(ROOTPATH)/scripts
 DEMOSPATH          = $(ROOTPATH)/demo
+TESTSPATH          = $(ROOTPATH)/test
 
 OUTPUT_INCLUDEPATH = $(BUILDPATH)/include
 OUTPUT_LIBPATH     = $(BUILDPATH)/lib
@@ -121,7 +122,7 @@ $(DEMOS):
 .PHONY: $(TESTS)
 $(TESTS):
 	mkdir -p $(OUTPUT_BINPATH)
-	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/test_$@ src/test/$@.cpp
+	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/test_$@ $(TESTSPATH)/$@.cpp
 
 
 # runtestcore:

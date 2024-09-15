@@ -1,14 +1,13 @@
 
-#include "vglImage.h"
+#include <vglImage.h>
+#include <cl2cpp_shaders.h>
+#include <cl2cpp_BIN.h>
+#include <vglClImage.h>
+#include <vglClFunctions.h>
+#include <vglContext.h>
+#include <iplImage.h>
 
-#include "cl2cpp_shaders.h"
-#include "cl2cpp_BIN.h"
-#include "vglClImage.h"
-#include "vglClFunctions.h"
-#include "vglContext.h"
-#include "iplImage.h"
-
-#include "vglTest.h"
+#include "test.hpp"
 
 void testVglCl(VglImage* im2d, VglImage* im3d)
 {

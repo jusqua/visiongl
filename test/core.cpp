@@ -1,7 +1,7 @@
 
-#include "vglShape.h"
+#include <vglShape.h>
 
-#include "vglTest.h"
+#include "test.hpp"
 
 void testVglShape()
 {
