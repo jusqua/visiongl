@@ -11,7 +11,7 @@ SCRIPTSPATH        = $(ROOTPATH)/scripts
 DEMOSPATH          = $(ROOTPATH)/demo
 TESTSPATH          = $(ROOTPATH)/test
 
-OUTPUT_INCLUDEPATH = $(BUILDPATH)/include
+OUTPUT_INCLUDEPATH = $(BUILDPATH)/include/$(PROJECT)
 OUTPUT_LIBPATH     = $(BUILDPATH)/lib
 OUTPUT_BINPATH     = $(BUILDPATH)/bin
 OUTPUT_SHAREPATH   = $(BUILDPATH)/share/$(PROJECT)
@@ -92,11 +92,18 @@ setup:
 	echo "# Generated compile_flags.txt from Makefile" > $(ROOTPATH)/compile_flags.txt
 	sed 's/ /\n/g' /tmp/compile_flags.txt >> $(ROOTPATH)/compile_flags.txt
 
-all: lib
+
+all: header lib
+	@echo "Builds files are located at $(BUILDPATH)"
+
+header:
+	rm -rf $(OUTPUT_INCLUDEPATH)
 	mkdir -p $(OUTPUT_INCLUDEPATH)
-	cat $(INCLUDEPATH)/vglHead.h $(INCLUDEPATH)/vglImage.h $(INCLUDEPATH)/vglCudaImage.h $(INCLUDEPATH)/vglClImage.h $(INCLUDEPATH)/vglGdcmIo.h $(INCLUDEPATH)/vglDcmtkIo.h $(INCLUDEPATH)/vglTiffIo.h $(INCLUDEPATH)/vglContext.h $(INCLUDEPATH)/vglSimpleBGModel.h $(INCLUDEPATH)/glsl2cpp*.h $(INCLUDEPATH)/kernel2cu*.h $(INCLUDEPATH)/cl2cpp*.h $(INCLUDEPATH)/vglClFunctions*.h $(INCLUDEPATH)/iplImage*.h $(INCLUDEPATH)/vglOpencv*.h $(INCLUDEPATH)/vglTail.h $(INCLUDEPATH)/vglDeconv.h > /tmp/$(PROJECT).h; grep -v vglImage\.h /tmp/$(PROJECT).h > $(OUTPUT_INCLUDEPATH)/$(PROJECT).h
+	cp -rf $(INCLUDEPATH)/* $(OUTPUT_INCLUDEPATH)
+	unlink $(OUTPUT_INCLUDEPATH)/$(PROJECT)
 
 runtime: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrapper cl_nd_wrapper cl_mm_wrapper cl_bin_wrapper
+	rm -rf $(OUTPUT_SHAREPATH)
 	mkdir -p $(OUTPUT_SHAREPATH)
 	cp -rf $(RUNTIMEPATH) $(OUTPUT_SHAREPATH)
 
@@ -105,9 +112,11 @@ lib: runtime
 	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) $(INSTALLATION_RUNTIME_DEFINITION) -shared -o $(OUTPUT_LIBPATH)/$(LIB_NAME) $(SRC)
 	
 install:
+	rm -rf $(INSTALL_SHAREPATH)/$(PROJECT)
 	cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
-	cp -f $(OUTPUT_INCLUDEPATH)/$(PROJECT).h $(INSTALL_INCLUDEPATH)
-	cp -f $(OUTPUT_LIBPATH)/lib$(PROJECT).so $(INSTALL_LIB64PATH)
+	rm -rf $(INSTALL_INCLUDEPATH)/$(PROJECT)
+	cp -rf $(OUTPUT_INCLUDEPATH)/$(PROJECT) $(INSTALL_INCLUDEPATH)
+	cp -f  $(OUTPUT_LIBPATH)/$(LIB_NAME) $(INSTALL_LIB64PATH)
 	ln -sf $(INSTALL_LIB64PATH)/$(LIB_NAME) $(INSTALL_LIBPATH)/
 
 dox: all
