@@ -118,6 +118,7 @@ install:
 	cp -rf $(OUTPUT_INCLUDEPATH) $(INSTALL_INCLUDEPATH)
 	cp -f  $(OUTPUT_LIBPATH)/$(LIB_NAME) $(INSTALL_LIB64PATH)
 	ln -sf $(INSTALL_LIB64PATH)/$(LIB_NAME) $(INSTALL_LIBPATH)/
+	ldconfig
 
 dox: all
 	doxygen $(BINARY_NAME).dox
