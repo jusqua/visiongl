@@ -35,7 +35,7 @@ FPIC  = -fPIC
 SRC   = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
 
 COMPILE_FLAG_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(ROOTPATH)/runtime\"
-INSTALLATION_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(INSTALL_SHAREPATH)$(PROJECT)/runtime\"
+INSTALLATION_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(INSTALL_SHAREPATH)/$(PROJECT)/runtime\"
 
 WITH_DEBUG = 0
 WITH_CUDA = 0
