@@ -2,20 +2,18 @@
 #define __VGLCLSHAPE_H__
 
 #include <visiongl/vglConst.h>
-#include <CL/cl.h>
 
-// OpenCL
-#ifdef __OPENCL_VERSION__
+// OpenCL compiler definition
+#if defined(CL_VERSION_1_0)
 typedef struct VglClShape{ 
   int ndim;
   int shape[VGL_ARR_SHAPE_SIZE];
   int offset[VGL_ARR_SHAPE_SIZE];
   int size;
 } VglClShape;
-#endif
-
-// API
-#ifdef __OPENCL__
+// CXX compiler definition
+#elif defined(__OPENCL__)
+#include <CL/cl.h>
 typedef struct VglClShape{ 
   cl_int ndim;
   cl_int shape[VGL_ARR_SHAPE_SIZE];
