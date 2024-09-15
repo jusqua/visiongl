@@ -7,6 +7,8 @@
   */
 
 #define _CRT_SECURE_NO_WARNINGS
+#ifndef _DEMO_TIMER_HPP
+#define _DEMO_TIMER_HPP
 
 //fps, clock
 #include <sys/time.h>
@@ -22,7 +24,7 @@
     If called with a non-zero parameter, works exaclty as TimerStart().
     
   */
-long TimerElapsed(int start){
+inline long TimerElapsed(int start = 0){
 
   static struct timeval *Tps = NULL;
   static struct timeval *Tpf = NULL;
@@ -44,20 +46,22 @@ long TimerElapsed(int start){
 
     Starts counting time in microseconds.
   */
-void TimerStart(){
+inline void TimerStart(){
   TimerElapsed(1);
 }
 
-char* getTimeElapsed()
+inline char* getTimeElapshed()
 {
 	char *ret = (char*) malloc(sizeof(char)*255);
 	sprintf(ret,"%ld us", TimerElapsed());
 	return ret;
 }
 
-char* getTimeElapsedInSeconds()
+inline char* getTimeElapsedInSeconds()
 {
 	char *ret = (char*) malloc(sizeof(char)*255);
 	sprintf(ret,"%.6f s", TimerElapsed()/1000000.0f);
 	return ret;
 }
+
+#endif // _DEMO_TIMER_HPP
