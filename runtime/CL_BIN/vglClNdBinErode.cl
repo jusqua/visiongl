@@ -6,8 +6,8 @@
 
 //SHAPE img_shape (img_input->vglShape->asVglClShape())
 
-#include "vglClShape.h"
-#include "vglClStrEl.h"
+#include <vglClShape.h>
+#include <vglClStrEl.h>
 
 __kernel void vglClNdBinErode(__global VGL_PACK_CL_SHADER_TYPE* img_input, 
                             __global VGL_PACK_CL_SHADER_TYPE* img_output,  

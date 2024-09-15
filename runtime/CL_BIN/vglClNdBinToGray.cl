@@ -6,7 +6,7 @@
 // SHAPE in_shape  (img_input->vglShape->asVglClShape())
 // SHAPE out_shape (img_output->vglShape->asVglClShape())
 
-#include "vglClShape.h"
+#include <vglClShape.h>
 
 __kernel void vglClNdBinToGray(__global VGL_PACK_CL_SHADER_TYPE* img_input,
                                __global char* img_output,

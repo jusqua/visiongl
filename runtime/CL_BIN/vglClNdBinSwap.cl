@@ -2,7 +2,7 @@
 
   */
 
-#include "vglConst.h"
+#include <vglConst.h>
 
 __kernel void vglClNdBinSwap(__global VGL_PACK_CL_SHADER_TYPE*  img_input,
 		             __global VGL_PACK_CL_SHADER_TYPE*  img_output)

@@ -4,7 +4,7 @@
 
 // SHAPE img_shape (img_input->vglShape->asVglClShape())
 
-#include "vglClShape.h"
+#include <vglClShape.h>
 
 __kernel void vglClBinConway(__read_only image2d_t img_input,
                              __write_only image2d_t img_output,

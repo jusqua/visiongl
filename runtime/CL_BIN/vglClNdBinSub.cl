@@ -4,7 +4,7 @@
     saves in img_output.
   */
 
-#include "vglConst.h"
+#include <vglConst.h>
 
 __kernel void vglClNdBinSub(__global VGL_PACK_CL_SHADER_TYPE* img_input1,
                             __global VGL_PACK_CL_SHADER_TYPE* img_input2,
