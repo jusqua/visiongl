@@ -2,7 +2,7 @@
 
   */
 
-#include <vglConst.h>
+#include <visiongl/vglConst.h>
 
 __kernel void vglCl3dBinSwap(__read_only image3d_t img_input,
 			   __write_only image3d_t img_output)

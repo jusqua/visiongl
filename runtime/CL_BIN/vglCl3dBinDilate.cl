@@ -7,7 +7,7 @@
 // SCALAR window_size_x
 // SCALAR window_size_y
 
-#include <vglClShape.h>
+#include <visiongl/vglClShape.h>
 
 __kernel void vglCl3dBinDilate(__read_only image3d_t img_input,
                              __write_only image3d_t img_output,

@@ -4,7 +4,7 @@
     thresh is float between 0.0 and 1.0.
   */
 
-#include <vglConst.h>
+#include <visiongl/vglConst.h>
 
 __kernel void vglClBinThreshold(__read_only image2d_t img_input,
 			  __write_only image2d_t img_output,

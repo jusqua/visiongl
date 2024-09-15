@@ -2,7 +2,7 @@
 
   */
 
-#include <vglConst.h>
+#include <visiongl/vglConst.h>
 
 __kernel void vglClNdBinCopy(__global VGL_PACK_CL_SHADER_TYPE* img_input, __global VGL_PACK_CL_SHADER_TYPE* img_output)
 {

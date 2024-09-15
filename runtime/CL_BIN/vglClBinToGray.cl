@@ -6,8 +6,8 @@
 // SHAPE in_shape  (img_input->vglShape->asVglClShape())
 // SHAPE out_shape (img_output->vglShape->asVglClShape())
 
-#include <vglConst.h>
-#include <vglClShape.h>
+#include <visiongl/vglConst.h>
+#include <visiongl/vglClShape.h>
 
 __kernel void vglClBinToGray(__read_only image2d_t img_input,
                              __write_only image2d_t img_output,

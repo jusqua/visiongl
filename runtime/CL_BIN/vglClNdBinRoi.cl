@@ -9,7 +9,7 @@
 // ARRAY pf [VGL_ARR_SHAPE_SIZE]
 // SHAPE img_shape (img_output->vglShape->asVglClShape())
 
-#include <vglClShape.h>
+#include <visiongl/vglClShape.h>
 
 __kernel void vglClNdBinRoi(__global VGL_PACK_CL_SHADER_TYPE* img_output,
                             __constant int* p0,

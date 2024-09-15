@@ -5,7 +5,7 @@
 
   */
 
-#include <vglConst.h>
+#include <visiongl/vglConst.h>
 
 __kernel void vglClBinRoi(__write_only image2d_t img_output,
                           int x0, int y0, int xf, int yf)

@@ -4,7 +4,7 @@
 
   */
 
-#include "vglConst.h"
+#include <visiongl/vglConst.h>
 
 __kernel void vglClNdBinEqual(__global VGL_PACK_CL_SHADER_TYPE* img_input1,
 			      __global VGL_PACK_CL_SHADER_TYPE* img_input2,

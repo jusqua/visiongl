@@ -5,7 +5,7 @@
 
   */
 
-#include <vglConst.h>
+#include <visiongl/vglConst.h>
 
 __kernel void vglCl3dBinRoi(__write_only image3d_t img_output,
 			    int x0, int y0, int z0, int xf, int yf, int zf)
