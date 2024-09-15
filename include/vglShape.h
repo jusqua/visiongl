@@ -7,12 +7,12 @@
 #ifndef __VGLSHAPE_H__
 #define __VGLSHAPE_H__
 
-#include <vglConst.h>
+#include <visiongl/vglConst.h>
 
 //CL
 #ifdef __OPENCL__
 #include <CL/cl.h>
-#include <vglClShape.h>
+#include <visiongl/vglClShape.h>
 #endif
 
 // printf

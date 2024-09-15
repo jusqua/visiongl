@@ -11,7 +11,7 @@
 
 #ifdef __DCMTK__
 
-#include <vglImage.h>
+#include <visiongl/vglImage.h>
 #include <dcmtk/dcmdata/dctk.h>
 
 VglImage* vglDcmtkLoadDicom(char* inFilename);

@@ -9,13 +9,13 @@
 
 #ifdef __TIFF__
 
-#include <vglImage.h>
+#include <visiongl/vglImage.h>
 
 //IplImage
 #ifdef __OPENCV__
   #include <opencv2/core/types_c.h>
 #else
-  #include <vglOpencv.h>
+  #include <visiongl/vglOpencv.h>
 #endif
 
 VglImage* vglLoadTiff(char* inFilename);

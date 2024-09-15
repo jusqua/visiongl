@@ -14,7 +14,7 @@
 
 #include <CL/cl.h>
 
-#include <vglImage.h>
+#include <visiongl/vglImage.h>
 
 struct VglClContext
 {

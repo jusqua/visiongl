@@ -10,7 +10,7 @@
 #ifdef __OPENCV__
   #include <opencv2/core/types_c.h>
 #else
-  #include <vglOpencv.h>
+  #include <visiongl/vglOpencv.h>
 #endif
 
 

@@ -2,7 +2,7 @@
 #ifndef __VGLCLSTREL_H__
 #define __VGLCLSTREL_H__
 
-#include <vglConst.h>
+#include <visiongl/vglConst.h>
 #include <CL/cl.h>
 
 

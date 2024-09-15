@@ -7,7 +7,7 @@
 #ifndef __VGLCUDAIMAGE_H__
 #define __VGLCUDAIMAGE_H__
 
-#include <vglImage.h>
+#include <visiongl/vglImage.h>
 
 int vglCudaToGl(VglImage* img);
 int vglGlToCuda(VglImage* img);

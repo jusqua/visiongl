@@ -26,7 +26,7 @@
   #include <opencv2/imgproc/types_c.h>
   #include <opencv2/highgui/highgui_c.h>
 #else
-  #include <vglOpencv.h>
+  #include <visiongl/vglOpencv.h>
 #endif
 
 //GL
@@ -45,8 +45,8 @@
 
 
 //VisionGL
-#include <vglConst.h>
-#include <vglShape.h>
+#include <visiongl/vglConst.h>
+#include <visiongl/vglShape.h>
 
 ////////// VglImage
 

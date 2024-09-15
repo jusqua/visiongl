@@ -9,7 +9,7 @@
 #ifndef __VGLCONTEXT_H__
 #define __VGLCONTEXT_H__
 
-#include <vglImage.h>
+#include <visiongl/vglImage.h>
 
 #define VGL_BLANK_CONTEXT 0
 #define VGL_RAM_CONTEXT 1

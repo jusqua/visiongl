@@ -9,7 +9,7 @@
 
 #ifdef __GDCM__
 
-#include <vglImage.h>
+#include <visiongl/vglImage.h>
 
 VglImage* vglGdcmLoadDicom(char* inFilename);
 VglImage*  vglGdcmLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mipmap = 0);
