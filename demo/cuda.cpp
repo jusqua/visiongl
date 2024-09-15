@@ -1,7 +1,7 @@
 
-#include "vglImage.h"
-#include "vglContext.h"
-#include "kernel2cu_shaders.h"
+#include <vglImage.h>
+#include <vglContext.h>
+#include <kernel2cu_shaders.h>
 
 
 int main(int argc, char *argv[])

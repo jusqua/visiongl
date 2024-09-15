@@ -1,8 +1,8 @@
 
-#include "vglImage.h"
-#include "vglClImage.h"
-#include "cl2cpp_shaders.h"
-#include "glsl2cpp_shaders.h"
+#include <vglImage.h>
+#include <vglClImage.h>
+#include <cl2cpp_shaders.h>
+#include <glsl2cpp_shaders.h>
 
 #include <string.h>
 

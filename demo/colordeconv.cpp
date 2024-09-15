@@ -1,4 +1,4 @@
-#include "vglDeconv.h"
+#include <vglDeconv.h>
 
 int main(int argc, char *argv[])
 {

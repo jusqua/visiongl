@@ -3,7 +3,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/ocl/ocl.hpp>
 
-#include "demo/timer.h"
+#include "timer.hpp"
 
 #include <fstream>
 

@@ -1,17 +1,17 @@
 
-#include "vglImage.h"
-#include "vglClImage.h"
-#include "vglContext.h"
-#include "cl2cpp_shaders.h"
-#include "cl2cpp_ND.h"
-#include "cl2cpp_BIN.h"
-#include "glsl2cpp_shaders.h"
+#include <vglImage.h>
+#include <vglClImage.h>
+#include <vglContext.h>
+#include <cl2cpp_shaders.h>
+#include <cl2cpp_ND.h>
+#include <cl2cpp_BIN.h>
+#include <glsl2cpp_shaders.h>
 
-#include "vglConst.h"
-#include "vglShape.h"
-#include "vglStrEl.h"
+#include <vglConst.h>
+#include <vglShape.h>
+#include <vglStrEl.h>
 
-#include "demo/timer.h"
+#include "timer.hpp"
 
 // strcmp, strlen
 #include <string.h>

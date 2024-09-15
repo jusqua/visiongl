@@ -4,13 +4,13 @@
 #include <GL/freeglut.h>
 
 // visiongl
-#include "vglLoadShader.h"
-#include "glsl2cpp_shaders.h"
-#include "glsl2cpp_Stereo.h"
-#include "vglImage.h"
-#include "vglContext.h"
-#include "vglCudaImage.h"
-#include "vglSimpleBGModel.h"
+#include <vglLoadShader.h>
+#include <glsl2cpp_shaders.h>
+#include <glsl2cpp_Stereo.h>
+#include <vglImage.h>
+#include <vglContext.h>
+#include <vglCudaImage.h>
+#include <vglSimpleBGModel.h>
 
 //IplImage, cvLoadImage
 #include <opencv2/highgui/highgui_c.h>

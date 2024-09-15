@@ -1,11 +1,11 @@
-#include "vglImage.h"
-#include "vglClImage.h"
-#include "vglDcmtkIo.h"
-#include "vglClFunctions.h"
-#include "demo/timer.h"
+#include <vglImage.h>
+#include <vglClImage.h>
+#include <vglDcmtkIo.h>
+#include <vglClFunctions.h>
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/imgproc/imgproc_c.h>
 
+#include "timer.hpp"
 
 int main(int argc, char* argv[])
 {

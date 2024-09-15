@@ -1,14 +1,14 @@
-#include "vglImage.h"
-#include "vglClImage.h"
-#include "cl2cpp_shaders.h"
-#include "cl2cpp_MM.h"
-#include "vglContext.h"
+#include <vglImage.h>
+#include <vglClImage.h>
+#include <cl2cpp_shaders.h>
+#include <cl2cpp_MM.h>
+#include <vglContext.h>
 
 //#include <opencv2/highgui/highgui_c.h>
 //#include <opencv2/imgproc/imgproc_c.h>
 
+#include "timer.hpp"
 
-#include <demo/timer.h>
 #include <math.h>
 #include <fstream>
 #include <string.h>

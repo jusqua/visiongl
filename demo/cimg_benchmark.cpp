@@ -2,7 +2,8 @@
 //#define cimg_imagemagick_path "C:/Program Files/ImageMagick-6.8.9-Q16/convert.exe"
 #include <CImg.h>
 #include <fstream>
-#include "timer.h"
+
+#include "timer.hpp"
 
 using namespace cimg_library;
 

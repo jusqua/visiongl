@@ -1,7 +1,7 @@
 
-#include "vglImage.h"
-#include "vglGdcmIo.h"
-#include "glsl2cpp_shaders.h"
+#include <vglImage.h>
+#include <vglGdcmIo.h>
+#include <glsl2cpp_shaders.h>
 
 //toupper
 #include <ctype.h>

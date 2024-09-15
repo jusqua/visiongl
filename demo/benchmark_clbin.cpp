@@ -2,12 +2,12 @@
 #ifdef __OPENCL__
 //this program requires opencl
 
-#include "vglClImage.h"
-#include "vglContext.h"
-#include "cl2cpp_shaders.h"
-#include "glsl2cpp_shaders.h"
-#include "cl2cpp_BIN.h"
-#include "iplImage.h"
+#include <vglClImage.h>
+#include <vglContext.h>
+#include <cl2cpp_shaders.h>
+#include <glsl2cpp_shaders.h>
+#include <cl2cpp_BIN.h>
+#include <iplImage.h>
 
 #ifdef __OPENCV__
   #include <opencv2/imgproc/types_c.h>
@@ -17,7 +17,7 @@
   #include <vglOpencv.h>
 #endif
 
-#include "demo/timer.h"
+#include "timer.hpp"
 
 #include <fstream>
 #include <string.h>

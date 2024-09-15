@@ -18,7 +18,7 @@
 #include <getopt.h>
 #include <stdlib.h>
 
-#include "CL/cl.h"
+#include <CL/cl.h>
 
 #define Warning(...)    fprintf(stderr, __VA_ARGS__)
 

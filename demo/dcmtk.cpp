@@ -1,7 +1,7 @@
 
-#include "vglImage.h"
-#include "vglDcmtkIo.h"
-#include "glsl2cpp_shaders.h"
+#include <vglImage.h>
+#include <vglDcmtkIo.h>
+#include <glsl2cpp_shaders.h>
 
 
 int main(int argc, char *argv[])
