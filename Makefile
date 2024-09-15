@@ -8,6 +8,7 @@ RUNTIMEPATH        = $(ROOTPATH)/runtime
 INCLUDEPATH        = $(ROOTPATH)/include
 SOURCEPATH         = $(ROOTPATH)/src
 SCRIPTSPATH        = $(ROOTPATH)/scripts
+DEMOSPATH          = $(ROOTPATH)/demo
 
 OUTPUT_INCLUDEPATH = $(BUILDPATH)/include
 OUTPUT_LIBPATH     = $(BUILDPATH)/lib
@@ -108,7 +109,7 @@ dox: all
 .PHONY: $(DEMOS)
 $(DEMOS):
 	mkdir -p $(OUTPUT_BINPATH)
-	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/demo_$@ src/demo/$@.cpp src/demo/timer.cpp
+	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/demo_$@ $(DEMOSPATH)/$@.cpp
 
 .PHONY: $(TESTS)
 $(TESTS):
