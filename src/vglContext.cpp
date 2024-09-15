@@ -6,15 +6,15 @@
 #include <iostream>
 
 #ifdef __CUDA__
-#include "vglCudaImage.h"
+#include <vglCudaImage.h>
 #endif
 
 #ifdef __OPENCL__
-#include "vglClImage.h"
+#include <vglClImage.h>
 #endif
 
-#include "vglContext.h"
-#include "vglImage.h"
+#include <vglContext.h>
+#include <vglImage.h>
 
 #define DEBUG_VGLCONTEXT 0
 

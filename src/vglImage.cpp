@@ -26,13 +26,13 @@
   #include <vglOpencv.h>
 #endif
 
-#include "vglContext.h"
-#include "vglImage.h"
-#include "vglLoadShader.h"
-#include "iplImage.h"
+#include <vglContext.h>
+#include <vglImage.h>
+#include <vglLoadShader.h>
+#include <iplImage.h>
 
 //vglDilateSq3, vglErodeSq3
-#include "glsl2cpp_shaders.h"
+#include <glsl2cpp_shaders.h>
 
 
   /** \brief Refresh all output images.

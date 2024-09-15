@@ -11,7 +11,7 @@
 //O_RDONLY
 #include <fcntl.h>
 
-#include "vglLoadShader.h"
+#include <vglLoadShader.h>
 
 
 GLuint vglShaderTypeIsOk(GLuint type){

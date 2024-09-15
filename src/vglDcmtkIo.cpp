@@ -2,7 +2,7 @@
 
 #include <vglDcmtkIo.h>
 #include <vglContext.h>
-#include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
+#include <dcmtk/config/osconfig.h>    /* make sure OS specific configuration is included first */
 
 #define INCLUDE_CSTDLIB
 #define INCLUDE_CSTDIO
@@ -12,17 +12,17 @@
 #include <GUSI.h>
 #endif
 
-#include "dcmtk/dcmdata/dctk.h"          /* for various dcmdata headers */
-#include "dcmtk/dcmdata/dcrledrg.h"      /* for DcmRLEDecoderRegistration */
-#include "dcmtk/dcmimgle/dcmimage.h"     /* for DicomImage */
-#include "dcmtk/dcmimage/diregist.h"     /* include to support color images */
+#include <dcmtk/dcmdata/dctk.h>          /* for various dcmdata headers */
+#include <dcmtk/dcmdata/dcrledrg.h>      /* for DcmRLEDecoderRegistration */
+#include <dcmtk/dcmimgle/dcmimage.h>     /* for DicomImage */
+#include <dcmtk/dcmimage/diregist.h>     /* include to support color images */
 
-#include "dcmtk/dcmjpeg/djdecode.h"      /* for dcmjpeg decoders */
-#include "dcmtk/dcmjpeg/djencode.h"      /* for dcmjpeg encoders */
-#include "dcmtk/dcmjpeg/djrplol.h"       /* for DJ_RPLossless */
-#include "dcmtk/dcmjpeg/djrploss.h"      /* for DJ_RPLossy */
-#include "dcmtk/dcmjpeg/dipijpeg.h"      /* for dcmimage JPEG plugin */
-#include "dcmtk/ofstd/ofcmdln.h"         /* for OFCmdUnsignedInt */
+#include <dcmtk/dcmjpeg/djdecode.h>      /* for dcmjpeg decoders */
+#include <dcmtk/dcmjpeg/djencode.h>      /* for dcmjpeg encoders */
+#include <dcmtk/dcmjpeg/djrplol.h>       /* for DJ_RPLossless */
+#include <dcmtk/dcmjpeg/djrploss.h>      /* for DJ_RPLossy */
+#include <dcmtk/dcmjpeg/dipijpeg.h>      /* for dcmimage JPEG plugin */
+#include <dcmtk/ofstd/ofcmdln.h>         /* for OFCmdUnsignedInt */
 
 
 /** \brief Convert depth from dcm's format to vgl's format.

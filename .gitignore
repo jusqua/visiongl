@@ -2,6 +2,9 @@
 src/glsl2*
 src/cl2*
 src/kernel2*
+include/glsl2*
+include/cl2*
+include/kernel2*
 build/
 samples/
 compile_flags.txt

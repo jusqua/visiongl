@@ -11,12 +11,12 @@
 //opencv CvCamera
 //#include <cvaux.h>
 
-#include "vglSimpleBGModel.h"
-#include "glsl2cpp_shaders.h"
-#include "vglContext.h"
+#include <vglSimpleBGModel.h>
+#include <glsl2cpp_shaders.h>
+#include <vglContext.h>
 
 //Shaders
-#include "glsl2cpp_BG.h"
+#include <glsl2cpp_BG.h>
 
 //opencv IplImage
 #ifdef __OPENCV__

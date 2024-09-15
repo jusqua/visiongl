@@ -646,14 +646,14 @@ $topMsg = "
 ";
 open HEAD, ">>", "$output.h";
 print HEAD $topMsg;
-print HEAD "#include \"vglImage.h\"\n";
+print HEAD "#include <vglImage.h>\n";
 close HEAD;
 open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
-#include \"vglImage.h\"
-#include \"vglLoadShader.h\"
-#include \"vglContext.h\"\n
+#include <vglImage.h>
+#include <vglLoadShader.h>
+#include <vglContext.h>\n
 #include <iostream>
 ";
 close HEAD;

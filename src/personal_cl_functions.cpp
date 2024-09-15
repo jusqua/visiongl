@@ -1,6 +1,6 @@
-#include "vglImage.h"
-#include "vglClImage.h"
-#include "vglContext.h"
+#include <vglImage.h>
+#include <vglClImage.h>
+#include <vglContext.h>
 
 
 #include <fstream>

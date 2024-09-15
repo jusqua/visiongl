@@ -1,10 +1,10 @@
 
 #ifdef __OPENCL__
 
-#include "vglClImage.h"
-#include "vglContext.h"
-#include "cl2cpp_shaders.h"
-#include "vglConst.h"
+#include <vglClImage.h>
+#include <vglContext.h>
+#include <cl2cpp_shaders.h>
+#include <vglConst.h>
 
 
 //ifstream

@@ -12,7 +12,7 @@
 #ifdef __DCMTK__
 
 #include <vglImage.h>
-#include "dcmtk/dcmdata/dctk.h"
+#include <dcmtk/dcmdata/dctk.h>
 
 VglImage* vglDcmtkLoadDicom(char* inFilename);
 VglImage*  vglDcmtkLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mipmap = 0);

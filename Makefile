@@ -5,7 +5,10 @@ TESTS = core cl
 ROOTPATH           = $(shell pwd)
 BUILDPATH          = $(ROOTPATH)/build
 RUNTIMEPATH        = $(ROOTPATH)/runtime
-INCLUDEPATH        = $(ROOTPATH)/src
+INCLUDEPATH        = $(ROOTPATH)/include
+SOURCEPATH         = $(ROOTPATH)/src
+SCRIPTSPATH        = $(ROOTPATH)/scripts
+
 OUTPUT_INCLUDEPATH = $(BUILDPATH)/include
 OUTPUT_LIBPATH     = $(BUILDPATH)/lib
 OUTPUT_BINPATH     = $(BUILDPATH)/bin
@@ -244,31 +247,40 @@ $(TESTS):
 # 	cd $(OUTPUT_BINPATH); ./$(TESTCAM_NAME)
 
 cuda_wrapper:
-	./scripts/kernel2cu.pl -o src/kernel2cu_shaders runtime/CUDA/*.kernel
+	$(SCRIPTSPATH)/kernel2cu.pl -o $(SOURCEPATH)/kernel2cu_shaders $(RUNTIMEPATH)/CUDA/*.kernel
+	mv $(SOURCEPATH)/kernel2cu_shaders.h $(INCLUDEPATH)
 
 frag_wrapper:
-	./scripts/glsl2cpp.pl -o src/glsl2cpp_shaders -p FS runtime/FS/*.frag
+	$(SCRIPTSPATH)/glsl2cpp.pl -o $(SOURCEPATH)/glsl2cpp_shaders -p FS $(RUNTIMEPATH)/FS/*.frag
+	mv $(SOURCEPATH)/glsl2cpp_shaders.h $(INCLUDEPATH)
 
 frag_bg_wrapper:
-	./scripts/glsl2cpp.pl -o src/glsl2cpp_BG -p FS_BG runtime/FS_BG/*.frag
+	$(SCRIPTSPATH)/glsl2cpp.pl -o $(SOURCEPATH)/glsl2cpp_BG -p FS_BG $(RUNTIMEPATH)/FS_BG/*.frag
+	mv $(SOURCEPATH)/glsl2cpp_BG.h $(INCLUDEPATH)
 
 frag_stereo_wrapper:
-	./scripts/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo runtime/FS_Stereo/*.frag
+	$(SCRIPTSPATH)/glsl2cpp.pl -o $(SOURCEPATH)/glsl2cpp_Stereo -p FS_Stereo $(RUNTIMEPATH)/FS_Stereo/*.frag
+	mv $(SOURCEPATH)/glsl2cpp_Stereo.h $(INCLUDEPATH)
 
 cl_wrapper:
-	./scripts/cl2cpp.pl -o src/cl2cpp_shaders -p CL runtime/CL/*.cl
+	$(SCRIPTSPATH)/cl2cpp.pl -o $(SOURCEPATH)/cl2cpp_shaders -p CL $(RUNTIMEPATH)/CL/*.cl
+	mv $(SOURCEPATH)/cl2cpp_shaders.h $(INCLUDEPATH)
 
 cl_nd_wrapper:
-	./scripts/cl2cpp.pl -o src/cl2cpp_ND -p CL_ND runtime/CL_ND/*.cl
-
-cloud_cl_wrapper:
-	./scripts/cl2cloud.pl -o src/cloud_CL runtime/CL/*.cl
+	$(SCRIPTSPATH)/cl2cpp.pl -o $(SOURCEPATH)/cl2cpp_ND -p CL_ND $(RUNTIMEPATH)/CL_ND/*.cl
+	mv $(SOURCEPATH)/cl2cpp_ND.h $(INCLUDEPATH)
 
 cl_mm_wrapper:
-	./scripts/cl2cpp.pl -o src/cl2cpp_MM -p CL_MM runtime/CL_MM/*.cl
+	$(SCRIPTSPATH)/cl2cpp.pl -o $(SOURCEPATH)/cl2cpp_MM -p CL_MM $(RUNTIMEPATH)/CL_MM/*.cl
+	mv $(SOURCEPATH)/cl2cpp_MM.h $(INCLUDEPATH)
 
 cl_bin_wrapper:
-	./scripts/cl2cpp.pl -o src/cl2cpp_BIN -p CL_BIN runtime/CL_BIN/*.cl
+	$(SCRIPTSPATH)/cl2cpp.pl -o $(SOURCEPATH)/cl2cpp_BIN -p CL_BIN $(RUNTIMEPATH)/CL_BIN/*.cl
+	mv $(SOURCEPATH)/cl2cpp_BIN.h $(INCLUDEPATH)
+
+# cloud_cl_wrapper:
+# 	$(SCRIPTSPATH)/cl2cloud.pl -o $(SOURCEPATH)/cloud_CL $(RUNTIMEPATH)/CL/*.cl
+# 	mv $(SOURCEPATH)/kernel2cu_shaders.h $(INCLUDEPATH)
 
 # CLOUD_DIRS   := src/cloud
 # CLOUD_SOURCE := $(foreach dir, $(CLOUD_DIRS), $(wildcard $(dir)/*))
