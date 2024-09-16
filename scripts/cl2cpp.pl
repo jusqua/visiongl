@@ -759,7 +759,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
 #endif
     _program = clCreateProgramWithSource(cl.context, 1, (const char **) &_source_str, 0, &_err );
     vglClCheckError(_err, (char*) \"clCreateProgramWithSource\" );
-    _err = clBuildProgram(_program, 1, cl.deviceId, \"-I $cpp_read_path\", NULL, NULL );
+    _err = clBuildProgram(_program, 1, cl.deviceId, NULL, NULL, NULL );
     vglClBuildDebug(_err, _program);
   }
 
