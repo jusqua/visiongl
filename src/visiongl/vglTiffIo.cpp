@@ -1,6 +1,6 @@
 #ifdef __TIFF__
 
-#include <tiffio.h> 
+#include <tiffio.hxx>
 #include <visiongl/vglTiffIo.h>
 #include <visiongl/vglContext.h>
 
@@ -83,32 +83,32 @@ void printbin(char* val, int size)
 #define macro_RasterPos2d/*(w,iw,ih)*/          \
     (ih*w + iw)
 
-uint32 tif_Width(TIFF* tif)
+uint32_t tif_Width(TIFF* tif)
 {
-  uint32 w; 
+  uint32_t w; 
   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
   return w;
 }
 
-uint32 tif_Height(TIFF* tif)
+uint32_t tif_Height(TIFF* tif)
 {
-  uint32 h; 
+  uint32_t h; 
   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
   return h;
 }
 
-uint32 tif_Is3d(TIFF* tif)
+uint32_t tif_Is3d(TIFF* tif)
 {
-  uint32 subfileType;
+  uint32_t subfileType;
   TIFFGetField(tif, TIFFTAG_SUBFILETYPE, &subfileType);
   if (subfileType)
     return 1;
   return 0;
 }
 
-uint16 tif_Layers(TIFF* tif)
+uint16_t tif_Layers(TIFF* tif)
 {
-  uint16 pageNumber, numberPages;
+  uint16_t pageNumber, numberPages;
   TIFFGetField(tif, TIFFTAG_PAGENUMBER, &pageNumber, &numberPages);
   return numberPages;
 }
@@ -127,9 +127,9 @@ tdir_t tif_DirCount(TIFF* tif)
 }
 
 
-uint16 tif_nChannels(TIFF* tif) // nChannels
+uint16_t tif_nChannels(TIFF* tif) // nChannels
 {
-  uint16 spp; 
+  uint16_t spp; 
   TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
   return spp;
 }
@@ -137,7 +137,7 @@ uint16 tif_nChannels(TIFF* tif) // nChannels
 tsize_t tif_BytesPerPixel(TIFF* tif) // depth
 {
   tsize_t pixelSize; 
-  uint16 bps;
+  uint16_t bps;
 
   TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
   switch(bps){
@@ -159,15 +159,15 @@ int tif_PrintAsc(TIFF* tif, tdata_t raster, char* filename)
 
   FILE* outfile;
 
-  char min;
-  char max;
-  char val;
-  char pixel;
+  unsigned char min;
+  unsigned char max;
+  unsigned char val;
+  unsigned char pixel;
 
-  uint32 iw, ih, ic;
-  uint32 w = tif_Width(tif);
-  uint32 h = tif_Height(tif);
-  uint32 c = tif_nChannels(tif);
+  uint32_t iw, ih, ic;
+  uint32_t w = tif_Width(tif);
+  uint32_t h = tif_Height(tif);
+  uint32_t c = tif_nChannels(tif);
   tsize_t pixelSize = tif_BytesPerPixel(tif);
 
   char* rasterc;
@@ -217,9 +217,9 @@ int tif_PrintAsc(TIFF* tif, tdata_t raster, char* filename)
 
 tsize_t tif_NecessaryMem(TIFF* tif)
 {
-  uint32 w = tif_Width(tif);
-  uint32 h = tif_Height(tif);
-  uint32 c = tif_nChannels(tif);
+  uint32_t w = tif_Width(tif);
+  uint32_t h = tif_Height(tif);
+  uint32_t c = tif_nChannels(tif);
   tsize_t pixelSize = tif_BytesPerPixel(tif);
   int layers = tif_Layers(tif);
   if (!tif_Is3d(tif))
@@ -228,7 +228,7 @@ tsize_t tif_NecessaryMem(TIFF* tif)
     return 0;
   if (c == 1)
     return w*h*pixelSize*layers;
-  return w*h*pixelSize*layers*sizeof(uint32);
+  return w*h*pixelSize*layers*sizeof(uint32_t);
 }
 
 tdata_t tif_Malloc(TIFF* tif)
@@ -279,18 +279,18 @@ tdata_t tif_ReadRGBData(TIFF* tif)
   int rgba;
 
   tsize_t  result;
-  uint16 c = tif_nChannels(tif);
-  uint32 w = tif_Width(tif);
-  uint32 h = tif_Height(tif);
-  uint16 ic;
-  uint32 iw, ih;
+  uint16_t c = tif_nChannels(tif);
+  uint32_t w = tif_Width(tif);
+  uint32_t h = tif_Height(tif);
+  uint16_t ic;
+  uint32_t iw, ih;
 
   if (tif == NULL)
     return NULL;
 
   if (buffer != NULL) { 
-    printf("Reading raster rgba: w = %d, h = %d, c = %d, tif = %p, buffer = %p, raster = %p\n", w, h, c, tif, buffer, raster);
-      result = TIFFReadRGBAImage(tif, w, h, (uint32*)buffer, 0);
+    printf("Reading raster rgba: w = %d, h = %d, c = %d, tif = %p, buffer = %p, raster = %p\n", w, h, c, (void *) tif, (void *) buffer, (void *) raster);
+      result = TIFFReadRGBAImage(tif, w, h, (uint32_t*)buffer, 0);
       printf("Result = %ld\n", result);
       if (result == 0) {
           printf("Read error on input rgba image.\n");
@@ -318,8 +318,8 @@ tdata_t tif_ReadRGBData(TIFF* tif)
 
 tdata_t tif_ReadData(TIFF* tif)
 {
-  uint16 config;
-  uint16 c = tif_nChannels(tif);
+  uint16_t config;
+  uint16_t c = tif_nChannels(tif);
   
 
   if (tif == NULL)
@@ -355,7 +355,6 @@ VglImage* vglLoadTiff(char* inFilename)
 {  
   TIFF* tif;
   VglImage* img;
-  uint16 pageNumber, numberPages, subfileType;
 
   tif = TIFFOpen(inFilename, "r");
   if (tif == NULL){
@@ -408,7 +407,6 @@ IplImage* iplLoadTiff(char* inFilename)
 {  
   TIFF* tif;
   IplImage* img;
-  uint16 pageNumber, numberPages, subfileType;
 
   tif = TIFFOpen(inFilename, "r");
   if (tif == NULL){
@@ -419,7 +417,6 @@ IplImage* iplLoadTiff(char* inFilename)
   int width  = tif_Width(tif);
   int height = tif_Height(tif);
   int is3d = tif_Is3d(tif);
-  int layers = tif_Layers(tif);
   int depth  = tif_BytesPerPixel(tif);          // bytes per pixel
   int iplDepth = convertDepthTiffToVgl(depth);  // depth \in {IPL_DEPTH_8U, ...}
   int nChannels = tif_nChannels(tif);           // number of channels
@@ -460,7 +457,6 @@ VglImage* vglLoadTiffAlt(char* inFilename)
 {  
   TIFF* tif;
   VglImage* img;
-  uint16 pageNumber, numberPages, subfileType;
 
   tif = TIFFOpen(inFilename, "r");
   if (tif == NULL){
@@ -489,9 +485,6 @@ VglImage* vglLoadTiffAlt(char* inFilename)
   int widthStep = img->getWidthStep();
   char* buffer = (char*) tif_Malloc(tif);
 
-  int pixelsPerLine = img->getWidth()*img->getNChannels();
-  int bytesPerLine = pixelsPerLine*depth;
-  int i = 0;
   int offset = 0;
   do
   {
@@ -504,7 +497,7 @@ VglImage* vglLoadTiffAlt(char* inFilename)
       offset += widthStep;
     }
     */
-    TIFFReadRGBAImage(tif, width, height, (uint32*) buffer, 0);
+    TIFFReadRGBAImage(tif, width, height, (uint32_t*) buffer, 0);
     memcpy(imageData + offset, buffer, widthStep*height);
     offset += widthStep + height;
   }
@@ -533,25 +526,16 @@ int vglPrintTiffInfo(char* inFilename, char* msg){
     return 1;
   }
   if (tif) { 
-    uint32 w, h; 
-    uint16 bps, spp, photo, config, pageNumber, numberPages;
-    uint32 subfileType;
+    uint32_t w, h; 
+    uint16_t bps, spp, photo, config, pageNumber, numberPages;
+    uint32_t subfileType;
 
     tdir_t dirCount;
 
     tstrip_t stripMax;
-    tstrip_t istrip; 
     tsize_t stripSize;
 
-    tsize_t npixels; 
     tsize_t pixelSize; 
-    
-    tdata_t raster; 
-    tsize_t result, offset;
-    char* rasterc;
-
-    uint32    iw, ih; 
-    int i;
 
     do{
       TIFFPrintDirectory(tif, stdout, 255);
@@ -576,8 +560,6 @@ int vglPrintTiffInfo(char* inFilename, char* msg){
     printf("TIFFIsTiled = %d\n", TIFFIsTiled(tif));
     printf("TIFFIsByteSwapped = %d\n", TIFFIsByteSwapped(tif));
     printf("TIFFRGBAImageOK = %d\n", TIFFRGBAImageOK(tif, (char*)"TIFFRGBAImageOK mesg\n"));
-
-
 
     TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w); 
     TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h); 
@@ -612,13 +594,6 @@ int vglPrintTiffInfo(char* inFilename, char* msg){
     printf("Number of directories = %d\n", dirCount);
     printf("Subfile type = %d\n", subfileType);
 
-    //printbin((char*)&w, sizeof(w));
-    //printbin((char*)&h, sizeof(h));
-
-
-    //raster = tif_ReadData(tif);
-    //tif_PrintAsc(tif, raster, (char*)"ascimg.txt");
-
     TIFFClose(tif); 
   } 
   return 0;
@@ -626,7 +601,7 @@ int vglPrintTiffInfo(char* inFilename, char* msg){
 
 /** Function for loading a stack of 3d TIFF images
   */
-VglImage* vglLoad4dTiff(char* filename, int lStart, int lEnd, bool has_mipmap /*=0*/)
+VglImage* vglLoad4dTiff(char* filename, int lStart, int lEnd)
 {
   char* tempFilename = (char*)malloc(strlen(filename) + 256);
   sprintf(tempFilename, filename, lStart);
@@ -641,7 +616,6 @@ VglImage* vglLoad4dTiff(char* filename, int lStart, int lEnd, bool has_mipmap /*
   shape[4] = n;
 
   VglImage* img = vglCreateNdImage(4, shape, tmp->depth);
-  //vglPrintImageInfo(img, "4D image");
 
   int delta = tmp->getTotalSizeInBytes();
   int offset = 0;
@@ -669,8 +643,6 @@ int vglSaveTiff(char* outFilename, VglImage* image)
   TIFF *out = TIFFOpen(outFilename, "w");
   char* buff = image->getImageData();
 
-  //int b = image->getBitsPerSample();
-  int c = image->getNChannels();
   int widthStep = image->getWidthStep();
 
   for(int z = 0; z < image->getLength(); z++)
@@ -698,6 +670,8 @@ int vglSaveTiff(char* outFilename, VglImage* image)
   }
  
   TIFFClose(out);
+
+  return 0;
 }
 
 /** Function for saving 2D TIFF images
