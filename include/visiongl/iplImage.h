@@ -9,6 +9,7 @@
 
 #ifdef __OPENCV__
   #include <opencv2/core/types_c.h>
+  #include <opencv2/imgcodecs/legacy/constants_c.h>
 #else
   #include <visiongl/vglOpencv.h>
 #endif

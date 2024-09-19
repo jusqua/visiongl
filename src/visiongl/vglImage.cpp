@@ -663,11 +663,7 @@ void vglSaveIplImage(char* filename, IplImage* ipl, int* params /*= 0*/)
   }
   else
   {
-#ifdef __OPENCV__
-    cvSaveImage(filename, ipl);
-#else
     iplSaveImage(filename, ipl);
-#endif
   }
 }
 
@@ -1318,11 +1314,7 @@ void vglDownloadPGM(VglImage* image){
  */
 VglImage* vglLoadImage(char* filename, int iscolor /*= -1*/, int has_mipmap /*= 0*/)
 {
-#ifdef __OPENCV__
-  IplImage* ipl = cvLoadImage(filename, iscolor);
-#else
   IplImage* ipl = iplLoadImage(filename, iscolor);
-#endif
 
   VglImage* img;
 
@@ -1370,11 +1362,7 @@ VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap /
   char* tempFilename = (char*)malloc(strlen(filename) + 256);
   sprintf(tempFilename, filename, lStart);
 
-#ifdef __OPENCV__
-  IplImage* ipl = cvLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#else
   IplImage* ipl = iplLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#endif
 
   if (!ipl){
     fprintf(stderr, "%s: %s: Error loading image %s\n", __FILE__, __FUNCTION__, tempFilename);
@@ -1418,11 +1406,7 @@ VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap /
   {
     sprintf(tempFilename,filename,i);
 
-#ifdef __OPENCV__
-    ipl = cvLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#else
     ipl = iplLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#endif
 
     if (!ipl){
       fprintf(stderr, "%s: %s: Error loading image %s\n", __FILE__, __FUNCTION__, tempFilename);
@@ -1451,11 +1435,7 @@ VglImage* vglLoadNdImage(char* filename, int lStart, int lEnd, int* shape, int n
   char* tempFilename = (char*)malloc(strlen(filename) + 256);
   sprintf(tempFilename, filename, lStart);
 
-#ifdef __OPENCV__
-  IplImage* ipl = cvLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#else
   IplImage* ipl = iplLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#endif
 
   if (!ipl){
     fprintf(stderr, "%s: %s: Error loading image %s\n", __FILE__, __FUNCTION__, tempFilename);
@@ -1509,11 +1489,7 @@ VglImage* vglLoadNdImage(char* filename, int lStart, int lEnd, int* shape, int n
   {
     sprintf(tempFilename,filename,i);
 
-#ifdef __OPENCV__
-    ipl = cvLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#else
     ipl = iplLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#endif
 
     if (!ipl){
       fprintf(stderr, "%s: %s: Error loading image %s\n", __FILE__, __FUNCTION__, tempFilename);

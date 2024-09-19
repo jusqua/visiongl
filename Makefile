@@ -42,7 +42,7 @@ INSTALLATION_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(INSTALL_SHAREPATH)/$(PR
 WITH_DEBUG = 0
 WITH_CUDA = 0
 WITH_OPENCL = 1
-WITH_OPENCV = 0
+WITH_OPENCV = 1
 WITH_GDCM = 1
 WITH_DCMTK = 1
 WITH_TIFF = 1
@@ -54,7 +54,7 @@ endif
 
 ifeq ($(WITH_OPENCV), 1)
 	DEF += -D__OPENCV__
-	LD  += -lopencv_highgui -lopencv_core -lopencv_imgproc -lopencv_legacy
+	LD  += -lopencv_highgui -lopencv_core -lopencv_imgproc -lopencv_imgcodecs
 endif
 
 ifeq ($(WITH_CUDA), 1)
