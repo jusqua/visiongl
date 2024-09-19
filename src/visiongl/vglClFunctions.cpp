@@ -1,3 +1,5 @@
+#include <fstream>
+#include <tuple>
 #include <visiongl/vglImage.h>
 #include <visiongl/vglClImage.h>
 #include <visiongl/vglContext.h>
@@ -7,24 +9,25 @@
 #include <visiongl/cl2cpp_BIN.h>
 #include <math.h>
 
-#include <fstream>
-
+#if defined(__OPENCL_VERSION__) || defined(__OPENCL_C_VERSION__)|| defined(__OPENCL_CPP_VERSION__)
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics : require
+#endif
 
 extern VglClContext cl;
 
 int* vglClHistogram(VglImage* img_input){
   cl_mem partial_hist;
 
-  if (img_input->ndim == 2)
-  {
+  if (img_input->ndim == 2) {
     partial_hist = vglClPartialHistogram(img_input);
   }
-
-  else if (img_input->ndim == 3)
-  {
+  else if (img_input->ndim == 3) {
     partial_hist = vglCl3dPartialHistogram(img_input);
   }
+  else {
+    return NULL;
+  }
+
 
   int* hist = vglClSumPartialHistogram(partial_hist,img_input->getWidth(), img_input->nChannels);
 
@@ -628,16 +631,6 @@ void vglCl3dDistTransform5(VglImage* src, VglImage* dst, VglImage* buf, VglImage
 
   vglCl3dThreshold(src, buf, 0.0, 1.0f/256.0f);
   vglCl3dCopy(buf, dst);
-  float square_strel[27] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-  float cross_strel[27] = {0,0,0,
-                          0,1,0,
-                          0,0,0,
-                          0,1,0,
-                          1,1,1,
-                          0,1,0,
-                          0,0,0,
-                          0,1,0,
-                          0,0,0};
 
   float strel1[3] = {0,1,1};
   float strel2[3] = {1,1,0};
@@ -891,7 +884,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2, const char* kernel_name)
   cl_mem mobj_equal = NULL;
   mobj_equal = clCreateBuffer(cl.context, CL_MEM_READ_WRITE, sizeof(char), NULL, &err);
   vglClCheckError( err, (char*) "clCreateBuffer histogram" );
-  char e = 200;
+  char e = static_cast<char>(200);
   err = clEnqueueWriteBuffer(cl.commandQueue,mobj_equal,CL_TRUE,0,sizeof(char),&e,0,NULL,NULL);
   vglClCheckError(err, (char*) "clEnqueueWriteBuffer mobj_arr");
 
@@ -1651,6 +1644,8 @@ void vglClBinConditionalErode(VglImage* src, VglImage* mask, VglImage* dst, VglS
 */
 void vglClBinOpening(VglImage* src, VglImage* dst, VglImage* buff, VglImage* buff2, VglStrEl* strel, int times)
 {
+  std::ignore = times;
+
   vglClBinNErode(src, buff2, buff, strel, 1);
   vglClBinNDilate(buff2, dst, buff, strel, 1);
 }
@@ -1731,18 +1726,12 @@ bool vglClXdBinEqual(VglImage* input1, VglImage* input2)
   if (!input1->clForceAsBuf)
   {
     if (input1->ndim == 2)
-    {
       return vglClBinEqual(input1, input2);
-    }
     else if (input1->ndim == 3)
-    {
       return vglCl3dBinEqual(input1, input2);
-    }
   }
-  else
-  {
-    return vglClNdBinEqual(input1, input2);
-  }
+
+  return vglClNdBinEqual(input1, input2);
 }
 
 /** Binary reconstruction by dilation by structuring element.
