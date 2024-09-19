@@ -145,9 +145,8 @@ int invertMatrix3x3(double *mNorm, double *mInv)
 int rightInverseMatrix2x3(double *mNorm, double *mInv)
 {
   
-  double mNormal[3][3], mInverse[3][3], mNormalT[3][3], mAux[3][3];
-  double value[3];
-  double detmNormal, detmAux;
+  double mNormal[3][3], mNormalT[3][3], mAux[3][3];
+  double detmAux;
   
   // Composition of the Normal Matrix
   int i = 0;
@@ -194,7 +193,7 @@ int rightInverseMatrix2x3(double *mNorm, double *mInv)
   mAdjAux[1][0] = (-1) * mAux[0][1];
   
   // Composition of the Inverse Aux Matrix 2x2
-  double mAuxInv[2][2];
+  double mAuxInv[3][3];
   for(int row = 0; row < 2; row++)
     for(int col = 0; col <2; col++)
        mAuxInv[row][col] = (1/detmAux)*mAdjAux[row][col];
@@ -349,12 +348,13 @@ int normalizeMatrix(double *mIni, double *mNorm)
     norm = 0;
     for(int row = 0; row < 3; row++)
       norm += pow(mInitial[row][col], 2.0);
-    if(norm != 0.0)
+    if(norm != 0.0) {
       for(int row = 0; row < 3; row++)
-	if(mInitial[row][col] != 0.0)
-	  mNormal[row][col] = mInitial[row][col]/sqrt(norm);
-        else
-	  mNormal[row][col] = 0.0;
+      if(mInitial[row][col] != 0.0)
+        mNormal[row][col] = mInitial[row][col]/sqrt(norm);
+      else
+        mNormal[row][col] = 0.0;
+    }
   }    
 
   i = 0;
