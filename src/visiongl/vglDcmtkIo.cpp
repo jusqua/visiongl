@@ -36,6 +36,7 @@ int convertDepthDcmtkToVgl(int dcmDepth)
      return IPL_DEPTH_16U;
   else if(dcmDepth <= 32)
      return IPL_DEPTH_32S;
+  return 0;
 }
 
 /** \brief Convert depth from vlg's format to dcm's format.
@@ -47,8 +48,9 @@ int convertDepthVglToDcmtk(int vglDepth)
      return 8;
   else if(vglDepth <= IPL_DEPTH_16U)
      return 16;
-  else if(vglDepth <= IPL_DEPTH_32S)
+  else if(vglDepth <= static_cast<int>(IPL_DEPTH_32S))
      return 32;
+  return 0;
 }
 
 /** Function for create DICOM Header with DCMTK library
@@ -64,13 +66,13 @@ int vglCreateHeaderDcmtk(VglImage* imagevgl, DcmFileFormat *fileformat)
     char* frames  = (char*)malloc(10);
     char* depth   = (char*)malloc(10);
     char* highbit = (char*)malloc(10);
-    int i, dcmDepth =  convertDepthDcmtkToVgl(imagevgl->depth);
+    int dcmDepth =  convertDepthDcmtkToVgl(imagevgl->depth);
     int hbit = dcmDepth-1;
-    i = sprintf(columns, "%d", imagevgl->getWidth()); // width/columns
-    i = sprintf(rows, "%d", imagevgl->getHeight());    // height/rows
-    i = sprintf(frames, "%d", imagevgl->getLength());  // number of Frames
-    i = sprintf(depth, "%d", dcmDepth);
-    i = sprintf(highbit, "%d", hbit);
+    sprintf(columns, "%d", imagevgl->getWidth()); // width/columns
+    sprintf(rows, "%d", imagevgl->getHeight());    // height/rows
+    sprintf(frames, "%d", imagevgl->getLength());  // number of Frames
+    sprintf(depth, "%d", dcmDepth);
+    sprintf(highbit, "%d", hbit);
 
     char* samplesPerPixel;
     char* photometricInterpretation;
@@ -126,7 +128,6 @@ VglImage* vglDcmtkLoadDicom(char* inFilename)
     */
     OFCmdUnsignedInt    opt_frame = 1;                    /* default: first frame */
     OFCmdUnsignedInt    opt_frameCount = 0;               /* default: all frames */
-    int                 opt_multiFrame = 1;               /* default: multiframes // opt_multifFrame = 0; no multiframes */
   
 
     // JPEG parameters
@@ -138,7 +139,6 @@ VglImage* vglDcmtkLoadDicom(char* inFilename)
        - to conv always, opt_decompCSconversion = EDC_always;
        - to conv never, opt_decompCSconversion = EDC_never;
     */
-    OFCmdUnsignedInt    opt_fileBits = 0;
 
     // register JPEG decompression codecs
     DJDecoderRegistration::registerCodecs(opt_decompCSconversion);
@@ -191,7 +191,7 @@ VglImage* vglDcmtkLoadDicom(char* inFilename)
     //imagevgl->ndarray = (void *) malloc(totalBytes);
     
     int j = 0;
-    for (int frame = 0; frame < fcount; frame++)
+    for (unsigned int frame = 0; frame < fcount; frame++)
     {
       void *pixelData = (void *)(di->getOutputData(depth, frame));
       memcpy(((char*)imagevgl->ndarray)+j, pixelData, bytesPerFrame);  
@@ -309,13 +309,12 @@ int vglDcmtkSaveDicom(char* opt_ofname, VglImage* imagevgl, int compress)
 
     DcmFileFormat *fileformat = new DcmFileFormat();
     if(!imagevgl->filename)
-      int r = vglCreateHeaderDcmtk(imagevgl, fileformat);
+      vglCreateHeaderDcmtk(imagevgl, fileformat);
     else
       OFCondition error = fileformat->loadFile(imagevgl->filename, opt_ixfer, EGL_noChange, DCM_MaxReadLength, opt_readMode);
 
     DcmDataset *dataset = fileformat->getDataset();
     
-    int nPixels = imagevgl->getWidth()*imagevgl->getHeight()*imagevgl->nChannels;
     int dcmDepth = convertDepthVglToDcmtk(imagevgl->depth); 
     int totalPixels = imagevgl->getWidth()*imagevgl->getHeight()*imagevgl->getLength()*imagevgl->nChannels;
 
