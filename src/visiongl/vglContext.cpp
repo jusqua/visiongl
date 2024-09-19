@@ -1,9 +1,6 @@
-
-
 //fprintf, stderr
 #include <stdio.h>
-//printf, stdout
-#include <iostream>
+#include <tuple>
 
 #ifdef __CUDA__
 #include <visiongl/vglCudaImage.h>
@@ -215,7 +212,10 @@ int vglCheckContext(VglImage* img, int context){
     if cudaPbo == -1.
 
  */
-int vglCheckContextForOutput(VglImage* img, int context){
+int vglCheckContextForOutput(VglImage* img, int context) {
+  // unused context
+  std::ignore = context;
+
   #if DEBUG_VGLCONTEXT
   printf("vglCheckContextForOutput: started\n");
   #endif
