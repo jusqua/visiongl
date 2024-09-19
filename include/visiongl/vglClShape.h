@@ -4,7 +4,7 @@
 #include <visiongl/vglConst.h>
 
 // OpenCL compiler definition
-#if defined(CL_VERSION_1_0)
+#if defined(__OPENCL_VERSION__) || defined(__OPENCL_C_VERSION__)|| defined(__OPENCL_CPP_VERSION__)
 typedef struct VglClShape{ 
   int ndim;
   int shape[VGL_ARR_SHAPE_SIZE];
