@@ -1,4 +1,5 @@
 
+#include <CL/cl.h>
 #ifdef __OPENCL__
 
 #include <visiongl/vglClImage.h>
@@ -396,7 +397,7 @@ void vglClInit()
     //cl.context = clCreateContext(NULL,1,cl.deviceId,NULL, NULL, &err );
     vglClCheckError(err, (char*) "clCreateContext GPU");
 
-    cl.commandQueue = clCreateCommandQueue( cl.context, *cl.deviceId, 0, &err );
+    cl.commandQueue = clCreateCommandQueueWithProperties( cl.context, *cl.deviceId, NULL, &err );
     vglClCheckError( err, (char*) "clCreateCommandQueue" );
 
     printf("%s: %s: VGL_PACK_SIZE_BITS:  %d\n", __FILE__, __FUNCTION__, VGL_PACK_SIZE_BITS);
@@ -511,6 +512,15 @@ void vglClUpload(VglImage* img)
             {*/
 
             cl_image_format format;
+            cl_image_desc desc;
+            desc.image_array_size = 0,
+            desc.image_row_pitch = 0,
+            desc.image_slice_pitch = 0,
+            desc.num_mip_levels = 0,
+            desc.num_samples = 0;
+            desc.buffer = NULL;
+
+
             if (img->nChannels == 1)
             {
                 format.image_channel_order = CL_R;
@@ -550,15 +560,21 @@ void vglClUpload(VglImage* img)
               w = img->getWidthStepWords();
 	    }
 
+            desc.image_width = w;
+            desc.image_height = img->getHeight();
             if ( (img->ndim == 2) && !(img->clForceAsBuf) )
             {
-                img->oclPtr = clCreateImage2D(cl.context, CL_MEM_READ_WRITE, &format, w, img->getHeight(), 0, NULL, &err);
-                vglClCheckError( err, (char*) "clCreateImage2D" );
+                desc.image_type = CL_MEM_OBJECT_IMAGE2D;
+                desc.image_depth = 1;
+                img->oclPtr = clCreateImage(cl.context, CL_MEM_READ_WRITE, &format, &desc, NULL, &err);
+                vglClCheckError( err, (char*) "clCreateImage" );
             }
             else if ( (img->ndim == 3) && !(img->clForceAsBuf) )
             {
-                img->oclPtr = clCreateImage3D(cl.context, CL_MEM_READ_WRITE, &format, w, img->getHeight(), img->getLength(), 0, 0, NULL, &err);
-                vglClCheckError( err, (char*) "clCreateImage3D" );
+                desc.image_type = CL_MEM_OBJECT_IMAGE3D;
+                desc.image_depth = img->getLength();
+                img->oclPtr = clCreateImage(cl.context, CL_MEM_READ_WRITE, &format, &desc, NULL, &err);
+                vglClCheckError( err, (char*) "clCreateImage" );
             }
             else
             {
@@ -698,12 +714,12 @@ void vglClAlloc(VglImage* img)
     {
         if (img->ndim == 2)
         {
-            img->oclPtr = clCreateFromGLTexture2D(cl.context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, img->tex, &err_cl);
+            img->oclPtr = clCreateFromGLTexture(cl.context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, img->tex, &err_cl);
             vglClCheckError(err_cl, (char*) "clCreateFromGLTexture");
         }
         else if(img->ndim == 3)
         {
-            img->oclPtr = clCreateFromGLTexture3D(cl.context, CL_MEM_READ_WRITE, GL_TEXTURE_3D, 0, img->tex, &err_cl);
+            img->oclPtr = clCreateFromGLTexture(cl.context, CL_MEM_READ_WRITE, GL_TEXTURE_3D, 0, img->tex, &err_cl);
             vglClCheckError(err_cl, (char*) "clCreateFromGLTexture");
         }
     }
