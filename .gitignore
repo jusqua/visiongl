@@ -1,10 +1,8 @@
 *~
-src/glsl2*
-src/cl2*
-src/kernel2*
-include/glsl2*
-include/cl2*
-include/kernel2*
+**/glsl2*
+**/cl2*
+**/kernel2*
+!scripts/
 build/
 samples/
 compile_flags.txt

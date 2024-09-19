@@ -8,8 +8,10 @@ RUNTIMEPATH        = $(ROOTPATH)/runtime
 INCLUDEPATH        = $(ROOTPATH)/include
 SOURCEPATH         = $(ROOTPATH)/src
 SCRIPTSPATH        = $(ROOTPATH)/scripts
-DEMOSPATH          = $(ROOTPATH)/demo
-TESTSPATH          = $(ROOTPATH)/test
+
+PROJECTPATH        = $(SOURCEPATH)/${PROJECT}
+DEMOSPATH          = $(SOURCEPATH)/demo
+TESTSPATH          = $(SOURCEPATH)/test
 
 OUTPUT_INCLUDEPATH = $(BUILDPATH)/include/$(PROJECT)
 OUTPUT_LIBPATH     = $(BUILDPATH)/lib
@@ -32,7 +34,7 @@ FLAGS = -Wall -Wextra -pedantic -Wno-narrowing -I$(INCLUDEPATH)
 LD    = -lGLEW -lGLU -lGL -lglut
 DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES
 FPIC  = -fPIC
-SRC   = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
+SRC   = ${PROJECTPATH}/glsl2cpp_shaders.cpp ${PROJECTPATH}/vglContext.cpp ${PROJECTPATH}/vglSimpleBGModel.cpp ${PROJECTPATH}/glsl2cpp_BG.cpp ${PROJECTPATH}/glsl2cpp_Stereo.cpp ${PROJECTPATH}/vglImage.cpp ${PROJECTPATH}/vglLoadShader.cpp ${PROJECTPATH}/vglGdcmIo.cpp ${PROJECTPATH}/vglDcmtkIo.cpp ${PROJECTPATH}/vglTiffIo.cpp ${PROJECTPATH}/vglDeconv.cpp ${PROJECTPATH}/iplImage.cpp ${PROJECTPATH}/vglOpencv.cpp ${PROJECTPATH}/vglShape.cpp ${PROJECTPATH}/vglStrEl.cpp
 
 COMPILE_FLAG_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(ROOTPATH)/runtime\"
 INSTALLATION_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(INSTALL_SHAREPATH)/$(PROJECT)/runtime\"
@@ -57,14 +59,14 @@ endif
 
 ifeq ($(WITH_CUDA), 1)
 	DEF  += -D__CUDA__
-	SRC  += src/*.cu
+	SRC  += ${PROJECTPATH}/*.cu
 	FPIC += -Xcompiler -fPIC
 endif
 
 ifeq ($(WITH_OPENCL), 1)
 	DEF += -D__OPENCL__
 	LD  += -lOpenCL
-	SRC += src/cl2cpp_shaders.cpp src/vglClFunctions.cpp src/vglClImage.cpp src/cl2cpp_MM.cpp src/cl2cpp_ND.cpp src/cl2cpp_BIN.cpp
+	SRC += ${PROJECTPATH}/cl2cpp_shaders.cpp ${PROJECTPATH}/vglClFunctions.cpp ${PROJECTPATH}/vglClImage.cpp ${PROJECTPATH}/cl2cpp_MM.cpp ${PROJECTPATH}/cl2cpp_ND.cpp ${PROJECTPATH}/cl2cpp_BIN.cpp
 endif
 
 ifeq ($(WITH_GDCM), 1)
@@ -92,15 +94,12 @@ setup:
 	echo "# Generated compile_flags.txt from Makefile" > $(ROOTPATH)/compile_flags.txt
 	sed 's/ /\n/g' /tmp/compile_flags.txt >> $(ROOTPATH)/compile_flags.txt
 
-
 all: header lib
 	@echo "Builds files are located at $(BUILDPATH)"
 
 header:
 	rm -rf $(OUTPUT_INCLUDEPATH)
-	mkdir -p $(OUTPUT_INCLUDEPATH)
-	cp -rf $(INCLUDEPATH)/* $(OUTPUT_INCLUDEPATH)
-	unlink $(OUTPUT_INCLUDEPATH)/$(PROJECT)
+	cp -rf $(INCLUDEPATH)/$(PROJECT) $(OUTPUT_INCLUDEPATH)
 
 runtime: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrapper cl_nd_wrapper cl_mm_wrapper cl_bin_wrapper
 	rm -rf $(OUTPUT_SHAREPATH)
@@ -135,33 +134,33 @@ $(TESTS):
 	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/test_$@ $(TESTSPATH)/$@.cpp
 
 cuda_wrapper:
-	$(SCRIPTSPATH)/kernel2cu.pl -o $(SOURCEPATH)/kernel2cu_shaders $(RUNTIMEPATH)/CUDA/*.kernel
-	mv $(SOURCEPATH)/kernel2cu_shaders.h $(INCLUDEPATH)
+	$(SCRIPTSPATH)/kernel2cu.pl -o $(PROJECTPATH)/kernel2cu_shaders $(RUNTIMEPATH)/CUDA/*.kernel
+	mv $(PROJECTPATH)/kernel2cu_shaders.h $(INCLUDEPATH)/$(PROJECT)
 
 frag_wrapper:
-	$(SCRIPTSPATH)/glsl2cpp.pl -o $(SOURCEPATH)/glsl2cpp_shaders -p FS $(RUNTIMEPATH)/FS/*.frag
-	mv $(SOURCEPATH)/glsl2cpp_shaders.h $(INCLUDEPATH)
+	$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_shaders -p FS $(RUNTIMEPATH)/FS/*.frag
+	mv $(PROJECTPATH)/glsl2cpp_shaders.h $(INCLUDEPATH)/$(PROJECT)
 
 frag_bg_wrapper:
-	$(SCRIPTSPATH)/glsl2cpp.pl -o $(SOURCEPATH)/glsl2cpp_BG -p FS_BG $(RUNTIMEPATH)/FS_BG/*.frag
-	mv $(SOURCEPATH)/glsl2cpp_BG.h $(INCLUDEPATH)
+	$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_BG -p FS_BG $(RUNTIMEPATH)/FS_BG/*.frag
+	mv $(PROJECTPATH)/glsl2cpp_BG.h $(INCLUDEPATH)/$(PROJECT)
 
 frag_stereo_wrapper:
-	$(SCRIPTSPATH)/glsl2cpp.pl -o $(SOURCEPATH)/glsl2cpp_Stereo -p FS_Stereo $(RUNTIMEPATH)/FS_Stereo/*.frag
-	mv $(SOURCEPATH)/glsl2cpp_Stereo.h $(INCLUDEPATH)
+	$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_Stereo -p FS_Stereo $(RUNTIMEPATH)/FS_Stereo/*.frag
+	mv $(PROJECTPATH)/glsl2cpp_Stereo.h $(INCLUDEPATH)/$(PROJECT)
 
 cl_wrapper:
-	$(SCRIPTSPATH)/cl2cpp.pl -o $(SOURCEPATH)/cl2cpp_shaders -p CL $(RUNTIMEPATH)/CL/*.cl
-	mv $(SOURCEPATH)/cl2cpp_shaders.h $(INCLUDEPATH)
+	$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_shaders -p CL $(RUNTIMEPATH)/CL/*.cl
+	mv $(PROJECTPATH)/cl2cpp_shaders.h $(INCLUDEPATH)/$(PROJECT)
 
 cl_nd_wrapper:
-	$(SCRIPTSPATH)/cl2cpp.pl -o $(SOURCEPATH)/cl2cpp_ND -p CL_ND $(RUNTIMEPATH)/CL_ND/*.cl
-	mv $(SOURCEPATH)/cl2cpp_ND.h $(INCLUDEPATH)
+	$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_ND -p CL_ND $(RUNTIMEPATH)/CL_ND/*.cl
+	mv $(PROJECTPATH)/cl2cpp_ND.h $(INCLUDEPATH)/$(PROJECT)
 
 cl_mm_wrapper:
-	$(SCRIPTSPATH)/cl2cpp.pl -o $(SOURCEPATH)/cl2cpp_MM -p CL_MM $(RUNTIMEPATH)/CL_MM/*.cl
-	mv $(SOURCEPATH)/cl2cpp_MM.h $(INCLUDEPATH)
+	$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_MM -p CL_MM $(RUNTIMEPATH)/CL_MM/*.cl
+	mv $(PROJECTPATH)/cl2cpp_MM.h $(INCLUDEPATH)/$(PROJECT)
 
 cl_bin_wrapper:
-	$(SCRIPTSPATH)/cl2cpp.pl -o $(SOURCEPATH)/cl2cpp_BIN -p CL_BIN $(RUNTIMEPATH)/CL_BIN/*.cl
-	mv $(SOURCEPATH)/cl2cpp_BIN.h $(INCLUDEPATH)
+	$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_BIN -p CL_BIN $(RUNTIMEPATH)/CL_BIN/*.cl
+	mv $(PROJECTPATH)/cl2cpp_BIN.h $(INCLUDEPATH)/$(PROJECT)
