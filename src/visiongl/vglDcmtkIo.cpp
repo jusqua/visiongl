@@ -1,3 +1,4 @@
+#include <tuple>
 #ifdef __DCMTK__
 
 #include <visiongl/vglDcmtkIo.h>
@@ -448,6 +449,8 @@ int vglDcmtkSaveDicomCompressed(char* outfilename, VglImage* imagevgl)
 
 VglImage*  vglDcmtkLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mipmap /*=0*/)
 {
+  // unused has_mipmap
+  std::ignore = has_mipmap;
 
   char* tempFilename = (char*)malloc(strlen(filename) + 256);
   sprintf(tempFilename, filename, lStart);
