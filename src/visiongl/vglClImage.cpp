@@ -179,10 +179,10 @@ void vglClInteropSetFalse(void)
 
 void vglClPrintContext(void)
 {
-    printf("cl_platform_id* platformId    = %p\n", cl.platformId);
-    printf("cl_device_id* deviceId        = %p\n", cl.deviceId);
-    printf("cl_context context            = %p\n", cl.context);
-    printf("cl_command_queue commandQueue = %p\n", cl.commandQueue);
+    printf("cl_platform_id* platformId    = %p\n", (void *) cl.platformId);
+    printf("cl_device_id* deviceId        = %p\n", (void *) cl.deviceId);
+    printf("cl_context context            = %p\n", (void *) cl.context);
+    printf("cl_command_queue commandQueue = %p\n", (void *) cl.commandQueue);
 }
 
 
@@ -364,8 +364,8 @@ void vglClInit()
     int hasDisplay = vglHasDisplay();
 	
 #ifdef __linux__
-    printf("glXGetCurrentContext() = %p\n", glXGetCurrentContext() );
-    printf("glXGetCurrentDisplay() = %p\n", glXGetCurrentDisplay() );
+    printf("glXGetCurrentContext() = %p\n", (void *) glXGetCurrentContext() );
+    printf("glXGetCurrentDisplay() = %p\n", (void *) glXGetCurrentDisplay() );
     if (not glXGetCurrentDisplay())
     {
       vglClInteropSetFalse();
@@ -532,7 +532,7 @@ void vglClUpload(VglImage* img)
 	    {
                 format.image_channel_data_type = CL_UNORM_INT16;
 	    }
-            else if (img->depth == IPL_DEPTH_32S)
+            else if (img->depth == static_cast<int>(IPL_DEPTH_32S))
 	    {
                 format.image_channel_data_type = CL_SIGNED_INT32;
 	    }
