@@ -15,6 +15,7 @@
 //toupper, tolower
 #include <ctype.h>
 
+#include <tuple>
 #include <visiongl/vglTiffIo.h>
 
 #ifdef __OPENCV__
@@ -122,11 +123,9 @@ void iplCvtColor(IplImage* src, IplImage* dst, int code)
 
   int w = src->width;
   int h = src->height;
-  int d = src->depth && 255; // d = bits per sample
+  int d = src->depth & 255; // d = bits per sample
   int b = d / 8;
   if (b < 1) b = 1;          // b = bytes per sample
-  int nPixels = w * h;
-  int datasize;
   int srcNChan;
   int dstNChan;
   int srcIChan[4];
@@ -610,12 +609,11 @@ IplImage* iplLoadPgm(char* filename){
   }
 
   int id, w, ws, h, L, b, iplDepth;
-  int result;
   IplImage* img;
 
-  result = fscanf(fp, "P%d", &id);
+  fscanf(fp, "P%d", &id);
   skipComments(fp);
-  result = fscanf(fp, "%d %d\n", &w, &h);
+  fscanf(fp, "%d %d\n", &w, &h);
 
   if (id == 4)
   {
@@ -625,7 +623,7 @@ IplImage* iplLoadPgm(char* filename){
   else if (id == 5 || id == 6)
   {
     skipComments(fp);
-    result = fscanf(fp, "%d\n", &L);
+    fscanf(fp, "%d\n", &L);
     if (L == 255)
     {
       b = 1;
@@ -848,12 +846,13 @@ int iplSavePgm(char* filename, IplImage* ipl){
 
 int iplSaveImage(char* filename, IplImage* image, int* params /*=0*/)
 {
+  std::ignore = params;
+
   if (image == NULL)
   {
     fprintf(stderr, "%s:%s: Error: image pointer is NULL.\n", __FILE__, __FUNCTION__);
     exit(1);
   }
-  IplImage* iplImage;
   int result;
 
   char* ext = getFileExtensionUppercase(filename);
