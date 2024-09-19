@@ -24,6 +24,7 @@ int convertDepthGdcmToVgl(int dcmDepth)
      return IPL_DEPTH_16U;
   else if(dcmDepth <= 32)
      return IPL_DEPTH_32S;
+  return 0;
 }
 
 /** \brief Convert depth from vlg's format to dcm's format.
@@ -33,12 +34,11 @@ int convertDepthVglToDcm(int vglDepth)
 {
   if(vglDepth == IPL_DEPTH_8U)
      return 8;
-  else
-     if(vglDepth <= IPL_DEPTH_16U)
-       return 16;
-     else
-       if(vglDepth <= IPL_DEPTH_32S)
-	 return 32;
+  else if(vglDepth <= IPL_DEPTH_16U)
+    return 16;
+  else if(vglDepth <= static_cast<int>(IPL_DEPTH_32S))
+    return 32;
+  return 0;
 }
 
 /** \brief Convert ybr array with 3 bytes to rgb array with 3 bytes.
@@ -101,7 +101,6 @@ int vglCreateHeaderGdcm(VglImage* imagevgl, gdcm::Image* img)
   img->SetDimension(1, dim[1]);
   img->SetDimension(2, dim[2]);
   
-  int dcmDepth = convertDepthVglToDcm(imagevgl->depth);
   int pixelsPerFrame = imagevgl->getWidth()*imagevgl->getHeight();
   int bytesPerFrame = pixelsPerFrame*imagevgl->nChannels;
   int totalBytes = bytesPerFrame*imagevgl->getLength();
@@ -164,19 +163,21 @@ VglImage* vglGdcmLoadDicom(char* inFilename)
     gdcm::PhotometricInterpretation PI;
     PI = image.GetPhotometricInterpretation();
 
-    if(imagevgl->nChannels == 3)
-        if(PI == gdcm::PhotometricInterpretation::YBR_FULL_422) 
-            for(int i = 0; i < ndarraySize/3; i++)
-            {
-	        unsigned char* rgb = (unsigned char*) malloc(3);
-	        unsigned char* ybr = &((unsigned char*) (imagevgl->ndarray))[3*i];
-	        YBR2RGB(rgb, ybr);
-	        //printf("i = %d, imag.ndarray = %d , %d, %d ; rgb = %d , %d, %d\n\n", i, ybr[0], ybr[1], ybr[2], rgb[0], rgb[1], rgb[2]);
-	        memcpy((unsigned char*)imagevgl->ndarray+3*i, rgb, 3);
-	    }
-       else
-            if(!(PI == gdcm::PhotometricInterpretation::RGB))
-	        printf("This format is not supported"); 
+    if(imagevgl->nChannels == 3) {
+      if(PI == gdcm::PhotometricInterpretation::YBR_FULL_422) {
+        for(int i = 0; i < ndarraySize/3; i++)
+        {
+          unsigned char* rgb = (unsigned char*) malloc(3);
+          unsigned char* ybr = &((unsigned char*) (imagevgl->ndarray))[3*i];
+          YBR2RGB(rgb, ybr);
+          //printf("i = %d, imag.ndarray = %d , %d, %d ; rgb = %d , %d, %d\n\n", i, ybr[0], ybr[1], ybr[2], rgb[0], rgb[1], rgb[2]);
+          memcpy((unsigned char*)imagevgl->ndarray+3*i, rgb, 3);
+        }
+      }
+      else if(!(PI == gdcm::PhotometricInterpretation::RGB)) {
+        printf("This format is not supported"); 
+      }
+    }
   
     vglSetContext(imagevgl, VGL_RAM_CONTEXT);
     return imagevgl;
@@ -196,17 +197,16 @@ int vglGdcmSaveDicom(char* outFilename, VglImage* imagevgl, int compress)
 
   gdcm::ImageReader reader;
   gdcm::Image* image = &reader.GetImage();
-  if(!imagevgl->filename)
-    int r = vglCreateHeaderGdcm(imagevgl, image);
-  else
-  {
+  if(!imagevgl->filename) {
+    vglCreateHeaderGdcm(imagevgl, image);
+  }
+  else {
     reader.SetFileName(imagevgl->filename);
     if(!reader.Read())
       fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, imagevgl->filename);
       //std::cerr << "Could not read: " << imagevgl->filename << std::endl;
     image = &reader.GetImage();
   }
-  
 
   int ndarraySize = imagevgl->getWidth()*imagevgl->getHeight()*imagevgl->getLength()*imagevgl->nChannels;
 
@@ -241,12 +241,13 @@ int vglGdcmSaveDicom(char* outFilename, VglImage* imagevgl, int compress)
   
   gdcm::PhotometricInterpretation PI;
   PI = image->GetPhotometricInterpretation();
-  if(imagevgl->nChannels == 3)
+  if(imagevgl->nChannels == 3) {
      if(PI == gdcm::PhotometricInterpretation::YBR_FULL)
         image->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::RGB);
      else
         if(!(PI == gdcm::PhotometricInterpretation::RGB))
 	   printf("This format is not supported");  
+  }
 
   if(imagevgl->filename)
     if(compress == 1)
