@@ -4,8 +4,6 @@
 ***                                                                ***
 *********************************************************************/
 
-//#include <sh/sh.hpp>
-#include <iostream>
 //uint8_t 16 32 64
 #include <stdint.h>
 //strcmp
@@ -16,6 +14,7 @@
 //GL
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <tuple>
 
 
 //IplImage, cvLoadImage
@@ -161,7 +160,7 @@ void VglNamedWindowList::Refresh(int win_index, int split){
     int win_id = WindowIdByName(name);
     if (win_id >= 0){
       WindowList[win_id].image = image;
-      printf("VglNamedWindowList::ShowImage: win_id = %d image = %p\n", win_id, image);
+      printf("VglNamedWindowList::ShowImage: win_id = %d image = %p\n", win_id, (void *) image);
     }
     else{
       printf("VglNamedWindowList::ShowImage: window %s not found\n", name);
@@ -238,7 +237,6 @@ int vglInit(int w, int h)
 
       glEnable(GL_TEXTURE_2D); //deve ficar depois de glutCreateWindow
 
-      GLenum err = glewInit();
       if (GLEW_VERSION_1_3)
       {
         if(!glewIsSupported("GL_EXT_framebuffer_object"))
@@ -251,10 +249,6 @@ int vglInit(int w, int h)
  
       started = 1;
 
-      //glutDisplayFunc(display);
-      //glutIdleFunc(display);
-      //glutReshapeFunc(reshape);
-      //glutKeyboardFunc(keyboard);
     }
     return window_id;
 }
@@ -285,25 +279,8 @@ void vglUpload(VglImage* image, int swapRGB){
     return;
   }
 
-  if (nChannels == 3){
-        //swapRGB = (swapRGB + 1) % 2;
-	if(ndim == 3)
-	{
-		vglNdarray3To4Channels(image);
-	}
-	else
-	{
-		/*IplImage* iplRGBA = cvCreateImage(cvGetSize(image->ipl), depth, 4);
-		printf("\t\t\t    ipl->nChannels = %d\n", image->ipl->nChannels);
-		printf("\t\t\tiplRGBA->nChannels = %d\n", iplRGBA->nChannels);
-		cvCvtColor(image->ipl, iplRGBA, CV_BGR2RGBA);
-		cvReleaseImage(&(image->ipl));
-		free(image->ipl);
-		image->ipl = iplRGBA;
-		image->nChannels = 4;
-		printf("\t\t\tipl->nChannels = %d\n", image->ipl->nChannels);
-		nChannels = 4;*/
-	}
+  if (nChannels == 3 && ndim == 3){
+    vglNdarray3To4Channels(image);
   }
 
   if (nChannels == 3){
@@ -328,7 +305,7 @@ void vglUpload(VglImage* image, int swapRGB){
   }
 
   //vglInit(1, 1);
-  if (image->tex == -1){
+  if (image->tex == static_cast<GLuint>(-1)){
     glGenTextures(1, &image->tex);
   }
 
@@ -349,6 +326,7 @@ void vglUpload(VglImage* image, int swapRGB){
   }
   else {
     fprintf(stderr, "%s: %s: Error: images with more than 3 dimensions not supported\n", __FILE__, __FUNCTION__);
+    return;
   }
 
   //printf("%s:%s: w x h x d = %d x %d x %d\n", __FILE__, __FUNCTION__, image->shape[0], image->shape[1], image->shape[2]);
@@ -412,7 +390,7 @@ void vglUpload(VglImage* image, int swapRGB){
   CHECK_FRAMEBUFFER_STATUS()
   ERRCHECK()
 
-  if (image->fbo == -1){
+  if (image->fbo == static_cast<GLuint>(-1)) {
     glGenFramebuffersEXT(1, &image->fbo);
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, image->fbo);
     if (glTarget == GL_TEXTURE_3D){
@@ -606,7 +584,6 @@ VglImage* vglCreateImage(CvSize size, int depth, int nChannels, int ndim, int ha
 VglImage* vglCreate3dImage(CvSize size, int depth, int nChannels, int layers, int has_mipmap /*=0*/)
 {
   VglImage* vglImage;
-  IplImage* ipl = NULL;
 
   int shape[VGL_MAX_DIM];
   for (int i = 0; i < VGL_MAX_DIM; i++)
@@ -657,14 +634,10 @@ void vglSaveImage(char* filename, VglImage* image)
 
 void vglSaveIplImage(char* filename, IplImage* ipl, int* params /*= 0*/)
 {
-  if (ipl->depth == IPL_DEPTH_1U)
-  {
-    iplSaveImage(filename, ipl);
-  }
-  else
-  {
-    iplSaveImage(filename, ipl);
-  }
+  // unused params
+  std::ignore = params;
+
+  iplSaveImage(filename, ipl);
 }
 
 /** Save PGM 3d images on the disk
@@ -717,7 +690,6 @@ void vglSaveNdImage(char* filename, VglImage* image, int lStart, int lEndParam /
 {
   vglCheckContext(image, VGL_RAM_CONTEXT);
 
-  int ndim = image->vglShape->getNdim();
   int shapeFrames = image->getNFrames();
   int lEnd = shapeFrames + lStart - 1;
   if ( (lEnd > lEndParam) && (lEndParam >= 0) )
@@ -1007,10 +979,10 @@ void vglReleaseImage(VglImage** p_image)
   if (image->ndarray){
     free(image->ndarray);
   }
-  if (image->fbo != -1){
+  if (image->fbo != static_cast<GLuint>(-1)) {
     glDeleteFramebuffersEXT(1, &(image->fbo)); 
   }
-  if (image->tex != -1){
+  if (image->tex != static_cast<GLuint>(-1)) {
     glDeleteTextures(1, &(image->tex));
   }
 #ifdef __OPENCL__
@@ -1210,7 +1182,6 @@ void vglDownload(VglImage* image){
 
  */ 
 void vglDownloadFBO(VglImage* image){
-  IplImage* ipl = image->ipl;
   GLenum glFormat;
   GLenum glType;
   int depth = image->depth;
@@ -1314,13 +1285,15 @@ void vglDownloadPGM(VglImage* image){
  */
 VglImage* vglLoadImage(char* filename, int iscolor /*= -1*/, int has_mipmap /*= 0*/)
 {
+  // unused has_mipmap
+  std::ignore = has_mipmap;
+
   IplImage* ipl = iplLoadImage(filename, iscolor);
 
   VglImage* img;
 
   if (!ipl){
     fprintf(stderr, "vglCreateImage: Error loading image from file %s\n", filename);
-    free(img);
     return NULL;
   }
 
@@ -1358,6 +1331,9 @@ VglImage* vglLoadImage(char* filename, int iscolor /*= -1*/, int has_mipmap /*= 
 */
 VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap /*=0*/)
 {
+  // unused has_mipmap
+  std::ignore = has_mipmap;
+
   VglImage* img;
   char* tempFilename = (char*)malloc(strlen(filename) + 256);
   sprintf(tempFilename, filename, lStart);
@@ -1372,8 +1348,6 @@ VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap /
   int bpp = (ipl->depth & 255) / 8;
   if (bpp == 0)
     bpp = 1;
-
-  int bps = VglShape::findBitsPerSample(ipl->depth); //TODO: refactor replacing bpp with bps
 
   int width = ipl->width;
   int height = ipl->height;
@@ -1431,6 +1405,9 @@ VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap /
 */
 VglImage* vglLoadNdImage(char* filename, int lStart, int lEnd, int* shape, int ndim, bool has_mipmap /*=0*/)
 {
+  // unused has_mipmap
+  std::ignore = has_mipmap;
+
   VglImage* img;
   char* tempFilename = (char*)malloc(strlen(filename) + 256);
   sprintf(tempFilename, filename, lStart);
@@ -1550,29 +1527,29 @@ int vglReshape(VglImage* img, VglShape* newShape)
 
  */
 void iplPrintImageInfo(IplImage* ipl, char* msg){
-        if (msg){
-            printf("====== %s:\n", msg);
+  if (msg){
+    printf("====== %s:\n", msg);
 	}
-	else
+  else
 	{
-            printf("====== iplPrintImageInfo:\n");
+    printf("====== iplPrintImageInfo:\n");
 	}
-        printf("Image @ %p: w x h = %d(%d) x %d\n", 
-                ipl, ipl->width, ipl->widthStep, ipl->height);
-        printf("imageData @ %p\n", ipl->imageData); 
-        printf("nChannels = %d\n", ipl->nChannels);
-        printf("depth = ");
-        switch (ipl->depth){
-          case IPL_DEPTH_1U:  printf("IPL_DEPTH_1U");  break; 
-          case IPL_DEPTH_8U:  printf("IPL_DEPTH_8U");  break; 
-          case IPL_DEPTH_16U: printf("IPL_DEPTH_16U"); break; 
-          case IPL_DEPTH_32F: printf("IPL_DEPTH_32F"); break; 
-          case IPL_DEPTH_8S:  printf("IPL_DEPTH_8S");  break; 
-          case IPL_DEPTH_16S: printf("IPL_DEPTH_16S"); break; 
-          case IPL_DEPTH_32S: printf("IPL_DEPTH_32S"); break; 
-          default: printf("unknown");
+
+  printf("Image @ %p: w x h = %d(%d) x %d\n", (void *) ipl, ipl->width, ipl->widthStep, ipl->height);
+  printf("imageData @ %p\n", (void *) ipl->imageData); 
+  printf("nChannels = %d\n", ipl->nChannels);
+  printf("depth = ");
+  switch (ipl->depth){
+    case IPL_DEPTH_1U:  printf("IPL_DEPTH_1U");  break; 
+    case IPL_DEPTH_8U:  printf("IPL_DEPTH_8U");  break; 
+    case IPL_DEPTH_16U: printf("IPL_DEPTH_16U"); break; 
+    case IPL_DEPTH_32F: printf("IPL_DEPTH_32F"); break; 
+    case IPL_DEPTH_8S:  printf("IPL_DEPTH_8S");  break; 
+    case IPL_DEPTH_16S: printf("IPL_DEPTH_16S"); break; 
+    case IPL_DEPTH_32S: printf("IPL_DEPTH_32S"); break; 
+    default: printf("unknown");
 	}
-        printf("\n");
+  printf("\n");
 }
 
 /** Print information about image.
@@ -1591,7 +1568,7 @@ void vglPrintImageInfo(VglImage* image, char* msg){
         printf("====== vglPrintImageInfo:\n");
     }
     printf("Image @ %p: w x h x l = %d(%d) x %d x %d\n", 
-	    image, image->getWidth(), image->getWidthStep(), image->getHeight(), image->getLength());
+	    (void *) image, image->getWidth(), image->getWidthStep(), image->getHeight(), image->getLength());
     printf("ndim = %d\n", image->ndim);
     printf("size = %d\n", image->vglShape->getSize());
     printf("shape = {");
@@ -1601,7 +1578,7 @@ void vglPrintImageInfo(VglImage* image, char* msg){
       printf("%d", image->vglShape->shape[i]);
     }
     printf("}\n");
-    printf("Ipl @ %p\n", image->ipl);
+    printf("Ipl @ %p\n", (void *) image->ipl);
     printf("ndarray @ %p\n", image->ndarray); 
     printf("nChannels = %d\n", image->nChannels);
     printf("depth = ");
@@ -1623,7 +1600,7 @@ void vglPrintImageInfo(VglImage* image, char* msg){
     printf("CUDAPbo = %d\n", image->cudaPbo);
 #endif
 #ifdef __OPENCL__
-    printf("OCL @ %p\n", image->oclPtr);
+    printf("OCL @ %p\n", (void *) image->oclPtr);
     printf("clForceAsBuf = %d\n", image->clForceAsBuf);
 #endif
     printf("Context = %d\n", image->inContext);
@@ -1641,7 +1618,6 @@ void vglPrintImageData(VglImage* image, char* msg /*= NULL*/, char* format /*= "
     printf("====== vglPrintImageData:\n");
   }
   int w = image->getWidthStep();
-  int h = image->getHeight();
   int ndarraySize = image->getTotalSizeInBytes();
   char* ptr = image->getImageData();
 
@@ -2020,7 +1996,7 @@ void vglClear(VglImage* image, float r, float g, float b, float a){
 */
 void vglOpenSq3(VglImage* src, VglImage* dst, VglImage* buf, int times){
   int i;
-  int in_buf, in_dst;
+  int in_buf;
 
   vglCheckContext(src, VGL_GL_CONTEXT);
 
@@ -2029,21 +2005,21 @@ void vglOpenSq3(VglImage* src, VglImage* dst, VglImage* buf, int times){
   for (i = 1; i < times; i++){
     if (in_buf){
       vglErodeSq3(buf, dst);
-      in_dst = 1; in_buf = 0;
+      in_buf = 0;
     }
     else{
       vglErodeSq3(dst, buf);
-      in_dst = 0; in_buf = 1;
+      in_buf = 1;
     }
   }
   for (i = 0; i < times; i++){
     if (in_buf){
       vglDilateSq3(buf, dst);
-      in_dst = 1; in_buf = 0;
+      in_buf = 0;
     }
     else{
       vglDilateSq3(dst, buf);
-      in_dst = 0; in_buf = 1;
+      in_buf = 1;
     }
   }
 
@@ -2059,7 +2035,7 @@ void vglOpenSq3(VglImage* src, VglImage* dst, VglImage* buf, int times){
 */
 void vglCloseSq3(VglImage* src, VglImage* dst, VglImage* buf, int times){
   int i;
-  int in_buf, in_dst = 0;
+  int in_buf;
 
   vglCheckContext(src, VGL_GL_CONTEXT);
 
@@ -2068,21 +2044,21 @@ void vglCloseSq3(VglImage* src, VglImage* dst, VglImage* buf, int times){
   for (i = 1; i < times; i++){
     if (in_buf){
       vglDilateSq3(buf, dst);
-      in_dst = 1; in_buf = 0;
+      in_buf = 0;
     }
     else{
       vglDilateSq3(dst, buf);
-      in_dst = 0; in_buf = 1;
+      in_buf = 1;
     }
   }
   for (i = 0; i < times; i++){
     if (in_buf){
       vglErodeSq3(buf, dst);
-      in_dst = 1; in_buf = 0;
+      in_buf = 0;
     }
     else{
       vglErodeSq3(dst, buf);
-      in_dst = 0; in_buf = 1;
+      in_buf = 1;
     }
   }
 
@@ -2098,7 +2074,6 @@ void vglCloseSq3(VglImage* src, VglImage* dst, VglImage* buf, int times){
 */
 void vglErodeSq3Sep(VglImage* src, VglImage* dst, VglImage* buf, int times){
   int i;
-  int in_buf, in_dst;
 
   vglCheckContext(src, VGL_GL_CONTEXT);
 
@@ -2121,7 +2096,6 @@ void vglErodeSq3Sep(VglImage* src, VglImage* dst, VglImage* buf, int times){
 */
 void vglErodeSq5Sep(VglImage* src, VglImage* dst, VglImage* buf, int times){
   int i;
-  int in_buf, in_dst;
 
   vglCheckContext(src, VGL_GL_CONTEXT);
 
@@ -2413,32 +2387,30 @@ void vglBaricenterVga(VglImage* src, double* x_avg /*= NULL*/, double* y_avg /*=
       fprintf(stderr, "%s: %s: Error: image must be 640x480.\n", __FILE__, __FUNCTION__);
   }
 
-  if(img[1] == NULL){
-    img[1]  = vglCreateImage(cvSize(width      , height      ), IPL_DEPTH_32F);
-    img[2]  = vglCreateImage(cvSize(width / 5  , height      ), IPL_DEPTH_32F);
-    img[3]  = vglCreateImage(cvSize(width / 20 , height      ), IPL_DEPTH_32F);
-    img[4]  = vglCreateImage(cvSize(width / 20 , height / 5  ), IPL_DEPTH_32F);
-    img[5]  = vglCreateImage(cvSize(width / 20 , height / 15 ), IPL_DEPTH_32F);
-    img[6]  = vglCreateImage(cvSize(width / 40 , height / 30 ), IPL_DEPTH_32F);
-    img[7]  = vglCreateImage(cvSize(width / 80 , height / 60 ), IPL_DEPTH_32F);
-    img[8]  = vglCreateImage(cvSize(width / 160, height / 120), IPL_DEPTH_32F);
-    img[9]  = vglCreateImage(cvSize(width / 320, height / 240), IPL_DEPTH_32F);
-    img[10] = vglCreateImage(cvSize(width / 640, height / 480), IPL_DEPTH_32F);
-  }
+  img[0] = vglCreateImage(cvSize(width      , height      ), IPL_DEPTH_32F);
+  img[1] = vglCreateImage(cvSize(width / 5  , height      ), IPL_DEPTH_32F);
+  img[2] = vglCreateImage(cvSize(width / 20 , height      ), IPL_DEPTH_32F);
+  img[3] = vglCreateImage(cvSize(width / 20 , height / 5  ), IPL_DEPTH_32F);
+  img[4] = vglCreateImage(cvSize(width / 20 , height / 15 ), IPL_DEPTH_32F);
+  img[5] = vglCreateImage(cvSize(width / 40 , height / 30 ), IPL_DEPTH_32F);
+  img[6] = vglCreateImage(cvSize(width / 80 , height / 60 ), IPL_DEPTH_32F);
+  img[7] = vglCreateImage(cvSize(width / 160, height / 120), IPL_DEPTH_32F);
+  img[8] = vglCreateImage(cvSize(width / 320, height / 240), IPL_DEPTH_32F);
+  img[9] = vglCreateImage(cvSize(width / 640, height / 480), IPL_DEPTH_32F);
 
-  vglBaricenterInit(src, img[1]);
-  vglSelfSum5h(img[1], img[2]);
-  vglSelfSum4h(img[2], img[3]);
-  vglSelfSum5v(img[3], img[4]);
-  vglSelfSum3v(img[4], img[5]);
+  vglBaricenterInit(src, img[0]);
+  vglSelfSum5h(img[0], img[1]);
+  vglSelfSum4h(img[1], img[2]);
+  vglSelfSum5v(img[2], img[3]);
+  vglSelfSum3v(img[3], img[4]);
+  vglSelfSum22(img[4], img[5]);
   vglSelfSum22(img[5], img[6]);
   vglSelfSum22(img[6], img[7]);
   vglSelfSum22(img[7], img[8]);
   vglSelfSum22(img[8], img[9]);
-  vglSelfSum22(img[9], img[10]);
-  vglDownload(img[10]);
+  vglDownload(img[9]);
 
-  float* data = (float*) img[10]->ipl->imageData;
+  float* data = (float*) img[9]->ipl->imageData;
   printf("MOMENTS = (%f, %f, %f)\n", data[0], data[1], data[2]);
   printf("(x, y)  = (%f, %f)\n", data[1]/data[2], data[0]/data[2]);
   if (x_avg != NULL){
@@ -2450,7 +2422,6 @@ void vglBaricenterVga(VglImage* src, double* x_avg /*= NULL*/, double* y_avg /*=
   if (pix_count != NULL){
     *pix_count = data[2];
   }
-
 }
 
 
@@ -2731,5 +2702,3 @@ void vglMultiInput_model(VglImage*  src0, VglImage*  src1, VglImage*  dst){
 
   vglSetContext(dst, VGL_GL_CONTEXT);
 }
-
-
