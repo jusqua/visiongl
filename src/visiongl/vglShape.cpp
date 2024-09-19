@@ -173,7 +173,6 @@ int VglShape::getIndexFromCoord(int* coord)
 void VglShape::getCoordFromIndex(int index, int* coord)
 {
   int ndim = this->getNdim();
-  int* shape = this->getShape();
   int* offset = this->getOffset();
   int ires = index;
   int idim;
