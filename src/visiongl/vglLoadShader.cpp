@@ -1,7 +1,3 @@
-
-//stderr, fprintf
-#include <iostream>
-
 //malloc
 #include <malloc.h>
 
@@ -29,12 +25,11 @@ GLuint vglShaderTypeIsOk(GLuint type){
 GLuint vglShaderCreateIsOk(GLuint shader){
   if (shader){
     fprintf(stderr, "Shader creation OK.\n");
+    return shader;
   }
-  else{
-    GLchar infoLog[VGL_MAX_INFO_LOG_SIZE];
-    fprintf(stderr, "Error in shader creation|\n");
-  }
-  return shader;
+
+  fprintf(stderr, "Error in shader creation|\n");
+  return 0;
 }
 
 GLuint vglShaderCompileIsOk(GLuint shader){
@@ -101,7 +96,7 @@ void vglShaderFileReadStatus(const GLchar* text, char* filename){
 GLchar *vglTextFileRead(char *fn) {
   FILE *fp;
   GLchar *content = NULL;
-  int f, count;
+  int count;
 
   if (fn != NULL) {
     fp = fopen(fn,"rt");
@@ -132,56 +127,52 @@ GLuint vglShaderLoad(GLuint ShaderType, char* filename){
   glGetIntegerv(GL_CURRENT_PROGRAM, &p);
   printf("current program = %d\n", p);
 
-  if (vglShaderTypeIsOk(ShaderType)){
-    s = glCreateShader(ShaderType);
+  if (!vglShaderTypeIsOk(ShaderType))
+    return 0;
+
+  s = glCreateShader(ShaderType);
+  if (!vglShaderCreateIsOk(s))
+    return 0;
+
+  const GLchar* src = vglTextFileRead(filename);
+  vglShaderFileReadStatus(src, filename);
+  printf("shader code = %s\n", src);
+  if (!src)
+    return 0;
+
+  const GLint len = strlen(src);
+  printf("code length= %d\n", len);
+
+  glShaderSource(s, 1, &src, &len);
+
+  glCompileShader(s);
+  success = vglShaderCompileIsOk(s);
+  if (!success) return 0;
+
+  if (p){
+    printf("Will use existing program\n");
+  }
+  else{
+    printf("Creating new program\n");
+    p = glCreateProgram();
   }
 
-  if (vglShaderCreateIsOk (s)){
-    const GLchar* src = vglTextFileRead(filename);
+  printf("Attaching shader\n");
+  glAttachShader(p, s);
 
-    vglShaderFileReadStatus(src, filename);
+  glLinkProgram(p);
+  success = vglShaderLinkIsOk(p);
+  if (!success) return 0;
 
-    printf("shader code = %s\n", src);
-    if (src){
-      const GLint len = strlen(src);
-      printf("code length= %d\n", len);
+  glValidateProgram(p);
+  success = vglShaderValidateIsOk(p);
+  if (!success) return 0;
 
-      glShaderSource(s, 1, &src, &len);
+  glUseProgram(p);
 
-      glCompileShader(s);
-      success = vglShaderCompileIsOk(s);
-      if (!success) return 0;
+  glGetIntegerv(GL_CURRENT_PROGRAM, &retval);
+  printf("current program = %d\n", retval);
 
-      if (p){
-        printf("Will use existing program\n");
-      }
-      else{
-        printf("Creating new program\n");
-        p = glCreateProgram();
-      }
-
-      printf("Attaching shader\n");
-      glAttachShader(p, s);
-
-      glLinkProgram(p);
-      success = vglShaderLinkIsOk(p);
-      if (!success) return 0;
-  
-      glValidateProgram(p);
-      success = vglShaderValidateIsOk(p);
-      if (!success) return 0;
-
-      glUseProgram(p);
-
-      glGetIntegerv(GL_CURRENT_PROGRAM, &retval);
-      printf("current program = %d\n", retval);
-
-      glDeleteShader(s);
-    }
-    else{
-      return 0;
-    }
-  }
+  glDeleteShader(s);
   return p;
 }
-
