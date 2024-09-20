@@ -18,40 +18,36 @@ __kernel void vglClNdBinRoi(__global VGL_PACK_CL_SHADER_TYPE* img_output,
 
 {
 #if __OPENCL_VERSION__ < 200
-  int coord = (  (get_global_id(2) - get_global_offset(2)) * get_global_size(1) * get_global_size(0)) +
-              (  (get_global_id(1) - get_global_offset(1)) * get_global_size (0)  ) +
-                 (get_global_id(0) - get_global_offset(0));
+    int coord = ((get_global_id(2) - get_global_offset(2)) * get_global_size(1) * get_global_size(0)) +
+                ((get_global_id(1) - get_global_offset(1)) * get_global_size(0)) +
+                (get_global_id(0) - get_global_offset(0));
 #else
-  int coord = get_global_linear_id();
+    int coord = get_global_linear_id();
 #endif
 
-  //VGL_PACK_OUTPUT_SWAP_MASK
+    // VGL_PACK_OUTPUT_SWAP_MASK
 
-  VGL_PACK_CL_SHADER_TYPE result = 0;
-  VGL_PACK_CL_SHADER_TYPE in_roi = 1;
-  int ires = coord;
-  int idim;
+    VGL_PACK_CL_SHADER_TYPE result = 0;
+    VGL_PACK_CL_SHADER_TYPE in_roi = 1;
+    int ires = coord;
+    int idim;
 
-  for (int d = img_shape->ndim; d >= VGL_SHAPE_WIDTH && in_roi > 0; d--)
-  {
-    int off = img_shape->offset[d];
-    idim = ires / off;
-    ires = ires - idim * off;
+    for (int d = img_shape->ndim; d >= VGL_SHAPE_WIDTH && in_roi > 0; d--) {
+        int off = img_shape->offset[d];
+        idim = ires / off;
+        ires = ires - idim * off;
 
-    if (  (!(d == VGL_SHAPE_WIDTH))  &&  ( (idim < p0[d]) || (idim > pf[d]) )  )
-    {
-      in_roi = 0;
+        if ((!(d == VGL_SHAPE_WIDTH)) && ((idim < p0[d]) || (idim > pf[d]))) {
+            in_roi = 0;
+        }
     }
-  }
 
-  int j_word = idim;
-  for (VGL_PACK_CL_SHADER_TYPE bit = 0; bit < VGL_PACK_SIZE_BITS && in_roi > 0; bit++)
-  {
-    int j_bit = j_word * VGL_PACK_SIZE_BITS + bit;
-    if ( (j_bit >= p0[VGL_SHAPE_WIDTH]) && (j_bit <= pf[VGL_SHAPE_WIDTH]) )
-    {
-      result = result | ( 1l << bit) ;//outputSwapMask[bit];
+    int j_word = idim;
+    for (VGL_PACK_CL_SHADER_TYPE bit = 0; bit < VGL_PACK_SIZE_BITS && in_roi > 0; bit++) {
+        int j_bit = j_word * VGL_PACK_SIZE_BITS + bit;
+        if ((j_bit >= p0[VGL_SHAPE_WIDTH]) && (j_bit <= pf[VGL_SHAPE_WIDTH])) {
+            result = result | (1l << bit);  // outputSwapMask[bit];
+        }
     }
-  }
-  img_output[coord] = result;
+    img_output[coord] = result;
 }

@@ -7,12 +7,11 @@
 
 uniform sampler2D sampler0;
 
-void main(void){
-        vec3 pix = texture2D(sampler0, gl_TexCoord[0].xy);
-        float r = pix.r;
-        float g = pix.g;
-        float b = pix.b;
+void main(void) {
+    vec3 pix = texture2D(sampler0, gl_TexCoord[0].xy);
+    float r = pix.r;
+    float g = pix.g;
+    float b = pix.b;
 
-        gl_FragColor.bgr = vec3(r, g, b*1.0);
-
+    gl_FragColor.bgr = vec3(r, g, b * 1.0);
 }

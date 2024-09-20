@@ -7,9 +7,7 @@
 
 uniform sampler2D sampler0;
 
-void main(void){
-
-  gl_FragColor = dot(  vec3(.2125, .7154, .0721), 
-                       texture2D(sampler0, gl_TexCoord[0].xy)  );
-
+void main(void) {
+    gl_FragColor = dot(vec3(.2125, .7154, .0721),
+                       texture2D(sampler0, gl_TexCoord[0].xy));
 }

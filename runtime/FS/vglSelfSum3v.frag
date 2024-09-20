@@ -1,6 +1,6 @@
 
 /** Stores in output pixel the sum of 3 adjacent pixels of the input
-    image. 
+    image.
     The height of the output image must be 1/3th of the input image.
 
   */
@@ -9,19 +9,18 @@
 
 uniform sampler2D sampler0;
 
-uniform vec2 tex_size; // src->ipl->width, src->ipl->height
+uniform vec2 tex_size;  // src->ipl->width, src->ipl->height
 
-void main(void){
-  vec4 pix;
-  vec4 chosen_val;
+void main(void) {
+    vec4 pix;
+    vec4 chosen_val;
 
-  chosen_val = vec4(0.0);
+    chosen_val = vec4(0.0);
 
-  for (int i = 0; i < 3; i++){
-    pix = texture2D(sampler0, 
-                    gl_TexCoord[0].xy + vec2(0, i - 1.0) / tex_size);
-    chosen_val += pix;
-  }
-  gl_FragColor = chosen_val / 1.0;
-
+    for (int i = 0; i < 3; i++) {
+        pix = texture2D(sampler0,
+                        gl_TexCoord[0].xy + vec2(0, i - 1.0) / tex_size);
+        chosen_val += pix;
+    }
+    gl_FragColor = chosen_val / 1.0;
 }

@@ -7,9 +7,7 @@
 
 uniform sampler2D sampler0;
 
-void main(void){
-
-  //gl_FragColor.rg =  vec2(-.5, -.5) + 2.0 * gl_TexCoord[0].xy;
-  gl_FragColor.rg =  gl_TexCoord[0].xy;
-
+void main(void) {
+    // gl_FragColor.rg =  vec2(-.5, -.5) + 2.0 * gl_TexCoord[0].xy;
+    gl_FragColor.rg = gl_TexCoord[0].xy;
 }

@@ -8,12 +8,11 @@
 #define __IPLIMAGE_H__
 
 #ifdef __OPENCV__
-  #include <opencv2/core/types_c.h>
-  #include <opencv2/imgcodecs/legacy/constants_c.h>
+#include <opencv2/core/types_c.h>
+#include <opencv2/imgcodecs/legacy/constants_c.h>
 #else
-  #include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.h>
 #endif
-
 
 /*********************************************************************
 ***  Function prototypes                                           ***
@@ -33,7 +32,5 @@ IplImage* iplLoadImage(char* filename, int iscolor = CV_LOAD_IMAGE_UNCHANGED);
 int iplGenericSavePgm(char* filename, char* buf, int w, int h, int widthStep, int c, int b);
 int iplSavePgm(char* filename, IplImage* ipl);
 int iplSaveImage(char* filename, IplImage* image, int* params = 0);
-
-
 
 #endif

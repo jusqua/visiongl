@@ -9,19 +9,17 @@
 #ifndef __VGLCLIMAGE_H__
 #define __VGLCLIMAGE_H__
 
-
 #ifdef __OPENCL__
 
 #include <CL/cl.h>
 
 #include <visiongl/vglImage.h>
 
-struct VglClContext
-{
-	cl_platform_id* platformId;
-	cl_device_id* deviceId;
-	cl_context context;
-	cl_command_queue commandQueue;
+struct VglClContext {
+    cl_platform_id* platformId;
+    cl_device_id* deviceId;
+    cl_context context;
+    cl_command_queue commandQueue;
 };
 
 void vglClInteropSetTrue(void);

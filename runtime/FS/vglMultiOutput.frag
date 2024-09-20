@@ -9,10 +9,8 @@
 
 uniform sampler2D sampler0;
 
-void main(void){
+void main(void) {
+    gl_FragData[0] = .5 * texture2D(sampler0, gl_TexCoord[0].xy);
 
-  gl_FragData[0] = .5   * texture2D(sampler0, gl_TexCoord[0].xy) ;
-
-  gl_FragData[1] =  2.0 * texture2D(sampler0, gl_TexCoord[0].xy) ;
-
+    gl_FragData[1] = 2.0 * texture2D(sampler0, gl_TexCoord[0].xy);
 }

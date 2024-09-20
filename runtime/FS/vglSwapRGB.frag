@@ -7,8 +7,7 @@
 
 uniform sampler2D sampler0;
 
-void main(void){
-  vec4 pix = texture2D(sampler0, gl_TexCoord[0].xy);
-  gl_FragColor.rgb = pix.bgr; 
-
+void main(void) {
+    vec4 pix = texture2D(sampler0, gl_TexCoord[0].xy);
+    gl_FragColor.rgb = pix.bgr;
 }

@@ -7,9 +7,7 @@
 uniform sampler2D sampler0;
 uniform sampler2D sampler1;
 
-void main(void){
-
-  gl_FragColor = max ( texture2D(sampler0, gl_TexCoord[0].st), 
-                       texture2D(sampler1, gl_TexCoord[0].st)   ); 
-
+void main(void) {
+    gl_FragColor = max(texture2D(sampler0, gl_TexCoord[0].st),
+                       texture2D(sampler1, gl_TexCoord[0].st));
 }

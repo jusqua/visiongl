@@ -7,8 +7,7 @@
 #ifndef __VGLLOADSHADER_H__
 #define __VGLLOADSHADER_H__
 
-
-//GL
+// GL
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
@@ -20,7 +19,7 @@ GLuint vglShaderCompileIsOk(GLuint shader);
 GLuint vglShaderLinkIsOk(GLuint program);
 GLuint vglShaderValidateIsOk(GLuint program);
 void vglShaderFileReadStatus(const GLchar* text, char* filename);
-GLchar *vglTextFileRead(char *fn) ;
+GLchar* vglTextFileRead(char* fn);
 GLuint vglSingleShaderLoad(GLuint ShaderType, char* filename);
 GLuint vglShaderLoad(GLuint ShaderType, char* filename);
 GLuint vglProgramLoad(char* v_filename, char* f_filename);

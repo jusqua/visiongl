@@ -11,11 +11,11 @@
 
 #include <visiongl/vglImage.h>
 
-//IplImage
+// IplImage
 #ifdef __OPENCV__
-  #include <opencv2/core/types_c.h>
+#include <opencv2/core/types_c.h>
 #else
-  #include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.h>
 #endif
 
 VglImage* vglLoadTiff(char* inFilename);
