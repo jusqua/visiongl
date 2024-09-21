@@ -1,6 +1,5 @@
-PROJECT  = visiongl
-DEMOS = cuda fractal cam gdcm dcmtk cl3d clnd tiff io bin benchmark_cv benchmark_cvocl benchmark_cl benchmark_cl3d benchmark_clnd benchmark_MM benchmark_clbin benchmark_cl3dbin benchmark_clndbin benchmark_FuzzyTophat colordeconv clinfo cltest image_info
-TESTS = core cl
+PROJECT = visiongl
+TARGET  = lib$(PROJECT).so
 
 ROOTPATH           = $(shell pwd)
 BUILDPATH          = $(ROOTPATH)/build
@@ -9,9 +8,13 @@ INCLUDEPATH        = $(ROOTPATH)/include
 SOURCEPATH         = $(ROOTPATH)/src
 SCRIPTSPATH        = $(ROOTPATH)/scripts
 
-PROJECTPATH        = $(SOURCEPATH)/${PROJECT}
-DEMOSPATH          = $(SOURCEPATH)/demo
-TESTSPATH          = $(SOURCEPATH)/test
+TARGETPATH = $(SOURCEPATH)/${PROJECT}
+DEMOSPATH  = $(SOURCEPATH)/demo
+TESTSPATH  = $(SOURCEPATH)/test
+
+DEMOS   = $(shell find $(DEMOSPATH)/ -type f -name '*.cpp')
+TESTS   = $(shell find $(TESTSPATH)/ -type f -name '*.cpp')
+SOURCES = $(shell find $(TARGETPATH)/ -type f -name '*.cpp')
 
 OUTPUT_INCLUDEPATH = $(BUILDPATH)/include/$(PROJECT)
 OUTPUT_LIBPATH     = $(BUILDPATH)/lib
@@ -34,7 +37,6 @@ FLAGS = -Wall -Wextra -pedantic -Wno-narrowing -I$(INCLUDEPATH)
 LD    = -lGLEW -lGLU -lGL -lglut
 DEF   = -DGL_GLEXT_PROTOTYPES -DGLX_GLXEXT_PROTOTYPES
 FPIC  = -fPIC
-SRC   = ${PROJECTPATH}/glsl2cpp_shaders.cpp ${PROJECTPATH}/vglContext.cpp ${PROJECTPATH}/vglSimpleBGModel.cpp ${PROJECTPATH}/glsl2cpp_BG.cpp ${PROJECTPATH}/glsl2cpp_Stereo.cpp ${PROJECTPATH}/vglImage.cpp ${PROJECTPATH}/vglLoadShader.cpp ${PROJECTPATH}/vglGdcmIo.cpp ${PROJECTPATH}/vglDcmtkIo.cpp ${PROJECTPATH}/vglTiffIo.cpp ${PROJECTPATH}/vglDeconv.cpp ${PROJECTPATH}/iplImage.cpp ${PROJECTPATH}/vglOpencv.cpp ${PROJECTPATH}/vglShape.cpp ${PROJECTPATH}/vglStrEl.cpp
 
 COMPILE_FLAG_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(ROOTPATH)/runtime\"
 INSTALLATION_RUNTIME_DEFINITION = -DVGL_RUNTIME_PATH=\"$(INSTALL_SHAREPATH)/$(PROJECT)/runtime\"
@@ -59,14 +61,13 @@ endif
 
 ifeq ($(WITH_CUDA), 1)
 	DEF  += -D__CUDA__
-	SRC  += ${PROJECTPATH}/*.cu
 	FPIC += -Xcompiler -fPIC
+	SOURCES = $(shell find $(TARGETPATH)/ -type f -name '*.cu)
 endif
 
 ifeq ($(WITH_OPENCL), 1)
 	DEF += -D__OPENCL__
 	LD  += -lOpenCL
-	SRC += ${PROJECTPATH}/cl2cpp_shaders.cpp ${PROJECTPATH}/vglClFunctions.cpp ${PROJECTPATH}/vglClImage.cpp ${PROJECTPATH}/cl2cpp_MM.cpp ${PROJECTPATH}/cl2cpp_ND.cpp ${PROJECTPATH}/cl2cpp_BIN.cpp
 endif
 
 ifeq ($(WITH_GDCM), 1)
@@ -85,82 +86,95 @@ ifeq ($(WITH_TIFF), 1)
 endif
 
 setup:
-	rm -f /tmp/compile_flags.txt
-	echo $(LD) >> /tmp/compile_flags.txt
-	echo $(FLAGS) >> /tmp/compile_flags.txt
-	echo $(FPIC) >> /tmp/compile_flags.txt
-	echo $(DEF) >> /tmp/compile_flags.txt
-	echo $(COMPILE_FLAG_RUNTIME_DEFINITION) >> /tmp/compile_flags.txt
-	echo "# Generated compile_flags.txt from Makefile" > $(ROOTPATH)/compile_flags.txt
-	sed 's/ /\n/g' /tmp/compile_flags.txt >> $(ROOTPATH)/compile_flags.txt
+	@echo "Generating compile flags for development environment"
+	@rm -f /tmp/compile_flags.txt
+	@echo $(LD) >> /tmp/compile_flags.txt
+	@echo $(FLAGS) >> /tmp/compile_flags.txt
+	@echo $(FPIC) >> /tmp/compile_flags.txt
+	@echo $(DEF) >> /tmp/compile_flags.txt
+	@echo $(COMPILE_FLAG_RUNTIME_DEFINITION) >> /tmp/compile_flags.txt
+	@echo "# Generated compile_flags.txt from Makefile" > $(ROOTPATH)/compile_flags.txt
+	@sed 's/ /\n/g' /tmp/compile_flags.txt >> $(ROOTPATH)/compile_flags.txt
 
-all: header lib
+all: wrapper runtime header lib
 	@echo "Builds files are located at $(BUILDPATH)"
 
+wrapper: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrapper cl_nd_wrapper cl_mm_wrapper cl_bin_wrapper
+	@echo "Every runtime file wrapped into source code"
+
 header:
-	rm -rf $(OUTPUT_INCLUDEPATH)
-	cp -rf $(INCLUDEPATH)/$(PROJECT) $(OUTPUT_INCLUDEPATH)
+	@echo "Copying headers to build directory"
+	@rm -rf $(OUTPUT_INCLUDEPATH)
+	@cp -rf $(INCLUDEPATH)/$(PROJECT) $(OUTPUT_INCLUDEPATH)
 
-runtime: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrapper cl_nd_wrapper cl_mm_wrapper cl_bin_wrapper
-	rm -rf $(OUTPUT_SHAREPATH)
-	mkdir -p $(OUTPUT_SHAREPATH)
-	cp -rf $(RUNTIMEPATH) $(OUTPUT_SHAREPATH)
+runtime:
+	@echo "Copying runtime to build directory"
+	@rm -rf $(OUTPUT_SHAREPATH)
+	@mkdir -p $(OUTPUT_SHAREPATH)
+	@cp -rf $(RUNTIMEPATH) $(OUTPUT_SHAREPATH)
 
-lib: runtime
-	mkdir -p $(OUTPUT_LIBPATH)
-	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) $(INSTALLATION_RUNTIME_DEFINITION) -shared -o $(OUTPUT_LIBPATH)/$(LIB_NAME) $(SRC)
+lib:
+	@echo "Compiling library to build directory"
+	@mkdir -p $(OUTPUT_LIBPATH)
+	@$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) $(INSTALLATION_RUNTIME_DEFINITION) -shared -o $(OUTPUT_LIBPATH)/$(LIB_NAME) $(SOURCES)
 
 install:
-	rm -rf $(INSTALL_SHAREPATH)/$(PROJECT)
-	cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
-	rm -rf $(INSTALL_INCLUDEPATH)/$(PROJECT)
-	cp -rf $(OUTPUT_INCLUDEPATH) $(INSTALL_INCLUDEPATH)
-	cp -f  $(OUTPUT_LIBPATH)/$(LIB_NAME) $(INSTALL_LIB64PATH)
-	ln -sf $(INSTALL_LIB64PATH)/$(LIB_NAME) $(INSTALL_LIBPATH)/
-	ldconfig
-
-dox: all
-	doxygen $(BINARY_NAME).dox
-	cd dox/latex; pwd; make; xdvi refman.dvi&
+	@echo "Installing library at path $(INSTALLPATH)"
+	@rm -rf $(INSTALL_SHAREPATH)/$(PROJECT)
+	@cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
+	@rm -rf $(INSTALL_INCLUDEPATH)/$(PROJECT)
+	@cp -rf $(OUTPUT_INCLUDEPATH) $(INSTALL_INCLUDEPATH)
+	@cp -f  $(OUTPUT_LIBPATH)/$(LIB_NAME) $(INSTALL_LIB64PATH)
+	@ln -sf $(INSTALL_LIB64PATH)/$(LIB_NAME) $(INSTALL_LIBPATH)/
 
 .PHONY: $(DEMOS)
 $(DEMOS):
+	@echo "Building demo $@"
 	mkdir -p $(OUTPUT_BINPATH)
 	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/demo_$@ $(DEMOSPATH)/$@.cpp
 
 .PHONY: $(TESTS)
 $(TESTS):
-	mkdir -p $(OUTPUT_BINPATH)
-	$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/test_$@ $(TESTSPATH)/$@.cpp
+	@echo "Building test $@"
+	@mkdir -p $(OUTPUT_BINPATH)
+	@$(CC) $(FLAGS) $(FPIC) $(LD) -l$(PROJECT) $(DEF) -o $(OUTPUT_BINPATH)/test_$@ $(TESTSPATH)/$@.cpp
 
 cuda_wrapper:
-	@$(SCRIPTSPATH)/kernel2cu.pl -o $(PROJECTPATH)/kernel2cu_shaders $(RUNTIMEPATH)/CUDA/*.kernel > /dev/null
-	@mv $(PROJECTPATH)/kernel2cu_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
+	@echo "Generating CUDA wrapper"
+	@$(SCRIPTSPATH)/kernel2cu.pl -o $(TARGETPATH)/kernel2cu_shaders $(RUNTIMEPATH)/CUDA/*.kernel >> /dev/null 2>&1
+	@mv $(TARGETPATH)/kernel2cu_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
 
 frag_wrapper:
-	@$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_shaders -p FS $(RUNTIMEPATH)/FS/*.frag > /dev/null
-	@mv $(PROJECTPATH)/glsl2cpp_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
+	@echo "Generating FS wrapper"
+	@$(SCRIPTSPATH)/glsl2cpp.pl -o $(TARGETPATH)/glsl2cpp_shaders -p FS $(RUNTIMEPATH)/FS/*.frag >> /dev/null 2>&1
+	@mv $(TARGETPATH)/glsl2cpp_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
 
 frag_bg_wrapper:
-	@$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_BG -p FS_BG $(RUNTIMEPATH)/FS_BG/*.frag > /dev/null
-	@mv $(PROJECTPATH)/glsl2cpp_BG.hpp $(INCLUDEPATH)/$(PROJECT)
+	@echo "Generating FS_BG wrapper"
+	@$(SCRIPTSPATH)/glsl2cpp.pl -o $(TARGETPATH)/glsl2cpp_BG -p FS_BG $(RUNTIMEPATH)/FS_BG/*.frag >> /dev/null 2>&1
+	@mv $(TARGETPATH)/glsl2cpp_BG.hpp $(INCLUDEPATH)/$(PROJECT)
 
 frag_stereo_wrapper:
-	$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_Stereo -p FS_Stereo $(RUNTIMEPATH)/FS_Stereo/*.frag > /dev/null
-	@mv $(PROJECTPATH)/glsl2cpp_Stereo.hpp $(INCLUDEPATH)/$(PROJECT)
+	@echo "Generating FS_Stereo wrapper"
+	@$(SCRIPTSPATH)/glsl2cpp.pl -o $(TARGETPATH)/glsl2cpp_Stereo -p FS_Stereo $(RUNTIMEPATH)/FS_Stereo/*.frag >> /dev/null 2>&1
+	@mv $(TARGETPATH)/glsl2cpp_Stereo.hpp $(INCLUDEPATH)/$(PROJECT)
 
 cl_wrapper:
-	@$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_shaders -p CL $(RUNTIMEPATH)/CL/*.cl > /dev/null
-	@mv $(PROJECTPATH)/cl2cpp_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
+	@echo "Generating CL wrapper"
+	@$(SCRIPTSPATH)/cl2cpp.pl -o $(TARGETPATH)/cl2cpp_shaders -p CL $(RUNTIMEPATH)/CL/*.cl >> /dev/null 2>&1
+	@mv $(TARGETPATH)/cl2cpp_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
 
 cl_nd_wrapper:
-	@$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_ND -p CL_ND $(RUNTIMEPATH)/CL_ND/*.cl > /dev/null
-	@mv $(PROJECTPATH)/cl2cpp_ND.hpp $(INCLUDEPATH)/$(PROJECT)
+	@echo "Generating CL_ND wrapper"
+	@$(SCRIPTSPATH)/cl2cpp.pl -o $(TARGETPATH)/cl2cpp_ND -p CL_ND $(RUNTIMEPATH)/CL_ND/*.cl >> /dev/null 2>&1
+	@mv $(TARGETPATH)/cl2cpp_ND.hpp $(INCLUDEPATH)/$(PROJECT)
 
 cl_mm_wrapper:
-	@$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_MM -p CL_MM $(RUNTIMEPATH)/CL_MM/*.cl > /dev/null
-	@mv $(PROJECTPATH)/cl2cpp_MM.hpp $(INCLUDEPATH)/$(PROJECT)
+	@echo "Generating CL_MM wrapper"
+	@$(SCRIPTSPATH)/cl2cpp.pl -o $(TARGETPATH)/cl2cpp_MM -p CL_MM $(RUNTIMEPATH)/CL_MM/*.cl >> /dev/null 2>&1
+	@mv $(TARGETPATH)/cl2cpp_MM.hpp $(INCLUDEPATH)/$(PROJECT)
 
 cl_bin_wrapper:
-	@$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_BIN -p CL_BIN $(RUNTIMEPATH)/CL_BIN/*.cl > /dev/null
-	@mv $(PROJECTPATH)/cl2cpp_BIN.hpp $(INCLUDEPATH)/$(PROJECT)
+	@echo "Generating CL_BIN wrapper"
+	@$(SCRIPTSPATH)/cl2cpp.pl -o $(TARGETPATH)/cl2cpp_BIN -p CL_BIN $(RUNTIMEPATH)/CL_BIN/*.cl >> /dev/null 2>&1
+	@mv $(TARGETPATH)/cl2cpp_BIN.hpp $(INCLUDEPATH)/$(PROJECT)
