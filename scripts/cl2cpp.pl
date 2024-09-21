@@ -60,7 +60,9 @@ sub LineStartHeader { # ($line) {
 
   $line =~ s#^\s*((__kernel)\s*(void)[\s\S]*?)\{##; # *? is ungreedy match
   $result = $1;
-  $result =~ s#\s+# #g;
+  if (defined($result)) {
+    $result =~ s#\s+# #g;
+  }
 
   return ($result, $line);
 }
@@ -167,6 +169,7 @@ sub LineStartMain { # ($line) {
 # size is passed as parameter to clCreateBuffer and clEnqueueWriteBuffer.
 #
 sub foo{
+no warnings "once";
 $bar = '
 sub ProcessClDirectives { # ($directives, $variable) {
   my $directives   = $_[0];
@@ -325,12 +328,14 @@ sub ProcessClDirective { # ($directive) {
     }
     elsif ($result_directive eq "SHAPE"){
       print "Searching value of SHAPE type directive\n";
+      no warnings "once";
       ($result_size, $directive) = LineStartValue($directive);
-      print "SHAPE result value: $result_val\n\n";
+      print "SHAPE result value: $result_size\n\n";
       if (!$result_size){
         die "Error: Start-of-line value not found\n";
       }
       else{
+        no warnings "once";
         print "After eliminating value:\n$directives[$i]\n";
       }
     }
@@ -516,13 +521,13 @@ sub ProcessClFile { # ($filename, $output, $cpp_read_path) {
   do {
     ($dircomment[$i], $line) = LineStartSingleLineComment($line);
     print "directive[$i] = >>$dircomment[$i]<< size = >>$#dircomment<<\n";
-    if ($dircomment[$i]){
+    if (defined($dircomment[$i])){
       print ("Found directive: $dircomment[$i]\n");
       ($dirvar[$i], $dirsize[$i], $dirisarray[$i], $dirisshape[$i]) = ProcessClDirective($dircomment[$i]);
       print ("ProcessClFile result = <$dirvar[$i]> <$dirsize[$i]> <$dirisarray[$i]> <$dirisshape[$i]>\n");
     }
     else{
-      #print ("Directive not found\n");
+      print ("Directive not found\n");
     }
     $i++;
   }
@@ -629,8 +634,10 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   open CPP, ">>", "$output.cpp";
   open HEAD, ">>", "$output.hpp";
 
-  print CPP "$comment\n";
-  print HEAD "$comment\n";
+  if (defined($comment)) {
+    print CPP "$comment\n";
+    print HEAD "$comment\n";
+  }
 
   print CPP "void $basename(";
   print HEAD "void $basename(";

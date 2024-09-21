@@ -102,7 +102,7 @@ sub LineStartExpression { # ($line) {
 sub LineStartExecution { # ($line) {
   my $line = $_[0];
 
-  $line =~ s#^\s*(<<<\s*[\w->\[\]\(\)]+\s*(,\s*[\w->\[\]\(\)]*\s*){0,2}>>>)##;
+  $line =~ s#^\s*(<<<\s*[\w\->\[\]\(\)]+\s*(,\s*[\w\->\[\]\(\)]*\s*){0,2}>>>)##;
   return ($1, $line);
 }
 
@@ -560,6 +560,7 @@ $nargs = $#ARGV;
 $nargs++;
 print "Number of args = $nargs\n";
 
+no warnings 'once';
 $foo = '
 $lixo = "IN_TEX";
 if (!($lixo =~ m#^(IN_TEX|OUT_FBO)$#)){
@@ -643,6 +644,7 @@ for ($i=$firstInputFile; $i<$nargs; $i++) {
     undef @semantics;
     undef @type;
     undef @variable;
+    no warnings 'once';
     undef @uniform;
     undef @default;
     undef @execution;

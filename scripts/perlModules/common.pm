@@ -18,9 +18,9 @@ our @EXPORT_OK = qw( LineStartMultiLineComment
 #############################################################################
 # LineStartMultilineComment
 #
-# Returns the string from the "/*" if found in start of $line, blank string 
+# Returns the string from the "/*" if found in start of $line, blank string
 # if not found. Matches the smallest string between /* and */
-# 
+#
 sub LineStartMultiLineComment { # ($line) {
   my $line = $_[0];
 
@@ -31,9 +31,9 @@ sub LineStartMultiLineComment { # ($line) {
 #############################################################################
 # LineStartSingleLineComment
 #
-# Returns the string after the "//" to the first "\n" if found 
+# Returns the string after the "//" to the first "\n" if found
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartSingleLineComment { # ($line) {
   my $line = $_[0];
 
@@ -46,7 +46,7 @@ sub LineStartSingleLineComment { # ($line) {
 # LineStartCleanComments
 #
 # Throws away comments in begginning of $line
-# 
+#
 sub LineStartCleanComments { # ($line) {
   my $line = $_[0];
 
@@ -72,9 +72,9 @@ sub LineStartCleanComments { # ($line) {
 #############################################################################
 # LineStartParenthesis
 #
-# Returns the string after the "(" 
+# Returns the string after the "("
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartParenthesis { # ($line) {
   my $line = $_[0];
 
@@ -86,7 +86,7 @@ sub LineStartParenthesis { # ($line) {
 # LineStartType
 #
 # Returns the datatype in start of $line, blank string if not found.
-# 
+#
 sub LineStartType { # ($line) {
   my $line = $_[0];
 
@@ -99,7 +99,7 @@ sub LineStartType { # ($line) {
 #
 # Returns the string after the datatype and, * if present,
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartTypeStar { # ($line) {
   my $line = $_[0];
 
@@ -108,7 +108,7 @@ sub LineStartTypeStar { # ($line) {
   my $result2 = $2;
   $result2 =~ s#\s##g;
   my $result;
-  if ($result1 eq ""){
+  if (not $result1){
     $result = $result2;
   }
   else
@@ -122,9 +122,9 @@ sub LineStartTypeStar { # ($line) {
 #############################################################################
 # LineStartVariable
 #
-# Returns the variable name 
+# Returns the variable name
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartVariable { # ($line) {
   my $line = $_[0];
 
@@ -137,7 +137,7 @@ sub LineStartVariable { # ($line) {
 #
 # Returns the string, after the variable
 # in start of $line, that defines its default value, blank string if not found.
-# 
+#
 sub LineStartDefault { # ($line) {
   my $line = $_[0];
 
@@ -150,7 +150,7 @@ sub LineStartDefault { # ($line) {
 #
 # Returns the string after the first "," or ")" found
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartSeparator { # ($line) {
   my $line = $_[0];
 

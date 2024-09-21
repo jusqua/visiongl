@@ -365,9 +365,10 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   open CPP, ">>", "$output.cpp";
   open HEAD, ">>", "$output.hpp";
 
-
-  print CPP "$comment\n";
-  print HEAD "$comment\n";
+  if (defined($comment)) {
+    print CPP "$comment\n";
+    print HEAD "$comment\n";
+  }
 
   print CPP "void $basename(";
   print HEAD "void $basename(";
@@ -423,6 +424,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
       for ($j = $i_uniform; $j <= $#uniform; $j++){
         print "j = $j\n";
         if ($uniform[$j]){
+          no warnings "once";
           ($type, $unif_type, $unif_variable, $cpp_value) = ProcessGlslUniform($uniform[$i]);
           print "type = $type\n";
           print "unif_variable = $unif_variable\n";
@@ -588,6 +590,7 @@ $nargs = $#ARGV;
 $nargs++;
 print "Number of args = $nargs\n";
 
+no warnings "once";
 $foo = '
 $lixo = "IN_TEX";
 if (!($lixo =~ m#^(IN_TEX|OUT_FBO)$#)){
