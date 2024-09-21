@@ -1,11 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglOpencv                                         ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLOPENCV_H__
-#define __VGLOPENCV_H__
+#ifndef VISIONGL_VGLOPENCV_HPP
+#define VISIONGL_VGLOPENCV_HPP
 
 #ifndef __OPENCV__
 
@@ -138,6 +132,6 @@ void cvCvtColor(IplImage* src, IplImage* dst, int code);
 IplImage* cvLoadImage(char* filename, int iscolor = CV_LOAD_IMAGE_UNCHANGED);
 int cvSaveImage(char* filename, IplImage* image, int* params = 0);
 
-#endif
+#endif  // __OPENCV__
 
-#endif
+#endif  // VISIONGL_VGLOPENCV_HPP

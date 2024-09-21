@@ -1,6 +1,6 @@
-#include <visiongl/vglImage.h>
-#include <visiongl/vglDcmtkIo.h>
-#include <visiongl/glsl2cpp_shaders.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglDcmtkIo.hpp>
+#include <visiongl/glsl2cpp_shaders.hpp>
 
 int main(int argc, char *argv[]) {
     char *usage = (char *)

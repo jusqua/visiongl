@@ -1,15 +1,9 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglGdcmIo.h                                       ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLGDCMIO_H__
-#define __VGLGDCMIO_H__
+#ifndef VISIONGL_VGLGDCMIO_HPP
+#define VISIONGL_VGLGDCMIO_HPP
 
 #ifdef __GDCM__
 
-#include <visiongl/vglImage.h>
+#include <visiongl/vglImage.hpp>
 
 VglImage* vglGdcmLoadDicom(char* inFilename);
 VglImage* vglGdcmLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mipmap = 0);
@@ -20,6 +14,6 @@ int vglGdcmSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, in
 int convertDepthGdcmToVgl(int dcmDepth);
 int convertDepthVglToGdcm(int vglDepth);
 
-#endif
+#endif  // __GDCM__
 
-#endif
+#endif  // VISIONGL_VGLGDCMIO_HPP

@@ -6,8 +6,8 @@
 // SHAPE in_shape  (img_input->vglShape->asVglClShape())
 // SHAPE out_shape (img_output->vglShape->asVglClShape())
 
-#include <visiongl/vglClShape.h>
-#include <visiongl/vglConst.h>
+#include <visiongl/vglClShape.hpp>
+#include <visiongl/vglConst.hpp>
 
 __kernel void vglClNdBinThreshold(__global char* img_input,
                                   __global VGL_PACK_CL_SHADER_TYPE* img_output,

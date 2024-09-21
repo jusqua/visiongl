@@ -6,8 +6,8 @@
 
 #ifndef __OPENCV__
 
-#include <visiongl/vglOpencv.h>
-#include <visiongl/iplImage.h>
+#include <visiongl/vglOpencv.hpp>
+#include <visiongl/iplImage.hpp>
 
 void cvReleaseImage(IplImage** p_ipl) {
     iplReleaseImage(p_ipl);

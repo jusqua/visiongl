@@ -7,7 +7,7 @@
 // O_RDONLY
 #include <fcntl.h>
 
-#include <visiongl/vglLoadShader.h>
+#include <visiongl/vglLoadShader.hpp>
 
 GLuint vglShaderTypeIsOk(GLuint type) {
     switch (type) {

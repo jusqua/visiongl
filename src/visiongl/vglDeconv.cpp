@@ -1,4 +1,4 @@
-#include <visiongl/vglDeconv.h>
+#include <visiongl/vglDeconv.hpp>
 
 #include <stdio.h>
 #include <math.h>

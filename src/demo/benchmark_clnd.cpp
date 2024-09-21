@@ -1,13 +1,12 @@
-#include <visiongl/vglImage.h>
-#include <visiongl/vglClImage.h>
-#include <visiongl/vglContext.h>
-#include <visiongl/cl2cpp_shaders.h>
-#include <visiongl/cl2cpp_ND.h>
-#include <visiongl/glsl2cpp_shaders.h>
-
-#include <visiongl/vglConst.h>
-#include <visiongl/vglShape.h>
-#include <visiongl/vglStrEl.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglClImage.hpp>
+#include <visiongl/vglContext.hpp>
+#include <visiongl/cl2cpp_shaders.hpp>
+#include <visiongl/cl2cpp_ND.hpp>
+#include <visiongl/glsl2cpp_shaders.hpp>
+#include <visiongl/vglConst.hpp>
+#include <visiongl/vglShape.hpp>
+#include <visiongl/vglStrEl.hpp>
 
 #include <demo/timer.hpp>
 

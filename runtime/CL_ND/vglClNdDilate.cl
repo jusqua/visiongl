@@ -6,8 +6,8 @@
 
 // SHAPE img_shape (img_input->vglShape->asVglClShape())
 
-#include <visiongl/vglClShape.h>
-#include <visiongl/vglClStrEl.h>
+#include <visiongl/vglClShape.hpp>
+#include <visiongl/vglClStrEl.hpp>
 
 __kernel void vglClNdDilate(__global unsigned char* img_input,
                             __global unsigned char* img_output,

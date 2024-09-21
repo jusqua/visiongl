@@ -1,17 +1,9 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglDcmtkIo.h                                      ***
-***                                                                ***
-***                                                                ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLDCMTK_H__
-#define __VGLDCMTK_H__
+#ifndef VISIONGL_VGLDCMTKIO_HPP
+#define VISIONGL_VGLDCMTKIO_HPP
 
 #ifdef __DCMTK__
 
-#include <visiongl/vglImage.h>
+#include <visiongl/vglImage.hpp>
 #include <dcmtk/dcmdata/dctk.h>
 
 VglImage* vglDcmtkLoadDicom(char* inFilename);
@@ -23,6 +15,6 @@ int vglDcmtkSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, i
 int convertDepthDcmtkToVgl(int dcmDepth);
 int convertDepthVglToDcmtk(int vglDepth);
 
-#endif
+#endif  // __DCMTK__
 
-#endif
+#endif  // VISIONGL_VGLDCMTKIO_HPP

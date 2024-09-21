@@ -1,6 +1,6 @@
-#include <visiongl/vglImage.h>
-#include <visiongl/vglGdcmIo.h>
-#include <visiongl/vglDcmtkIo.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglGdcmIo.hpp>
+#include <visiongl/vglDcmtkIo.hpp>
 
 // toupper
 #include <ctype.h>

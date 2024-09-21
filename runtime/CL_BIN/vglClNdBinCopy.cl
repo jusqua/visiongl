@@ -2,7 +2,7 @@
 
   */
 
-#include <visiongl/vglConst.h>
+#include <visiongl/vglConst.hpp>
 
 __kernel void vglClNdBinCopy(__global VGL_PACK_CL_SHADER_TYPE* img_input, __global VGL_PACK_CL_SHADER_TYPE* img_output) {
 #if __OPENCL_VERSION__ < 200

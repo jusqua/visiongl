@@ -1,10 +1,7 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglSimpleBGModel.h                                ***
-***                                                                ***
-*********************************************************************/
+#ifndef VISIONGL_VGLSIMPLEBGMODEL_HPP
+#define VISIONGL_VGLSIMPLEBGMODEL_HPP
 
-#include <visiongl/vglImage.h>
+#include <visiongl/vglImage.hpp>
 
 #define VGL_SIMPLEBG_STD_THRESHOLD 2.5   // lambda=2.5 is 99%
 #define VGL_SIMPLEBG_WINDOW_SIZE 200     // learning rate; alpha = 1/WINDOW_SIZE
@@ -45,3 +42,5 @@ public:
     void UpdateSimpleBGModelXGY(VglImage* img_in);
     void UpdateSimpleBGModelRGL(VglImage* img_in);
 };
+
+#endif  // VISIONGL_VGLSIMPLEBGMODEL_HPP

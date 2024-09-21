@@ -15,17 +15,17 @@
 #include <ctype.h>
 
 #include <tuple>
-#include <visiongl/vglTiffIo.h>
+#include <visiongl/vglTiffIo.hpp>
 
 #ifdef __OPENCV__
 #include <opencv2/imgproc/types_c.h>
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/imgcodecs/legacy/constants_c.h>
 #else
-#include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.hpp>
 #endif
 
-#include <visiongl/iplImage.h>
+#include <visiongl/iplImage.hpp>
 
 /*********************************************************************
 ***  IplImage                                                      ***

@@ -1,9 +1,9 @@
 
-#include <visiongl/vglConst.h>
-#include <visiongl/vglShape.h>
+#include <visiongl/vglConst.hpp>
+#include <visiongl/vglShape.hpp>
 
 #ifdef __OPENCL__
-#include <visiongl/vglClShape.h>
+#include <visiongl/vglClShape.hpp>
 #endif
 
 // printf

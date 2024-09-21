@@ -1,11 +1,11 @@
-
-#include <CL/cl.h>
 #ifdef __OPENCL__
 
-#include <visiongl/vglClImage.h>
-#include <visiongl/vglContext.h>
-#include <visiongl/cl2cpp_shaders.h>
-#include <visiongl/vglConst.h>
+#include <CL/cl.h>
+
+#include <visiongl/vglClImage.hpp>
+#include <visiongl/vglContext.hpp>
+#include <visiongl/cl2cpp_shaders.hpp>
+#include <visiongl/vglConst.hpp>
 
 // ifstream
 #include <fstream>
@@ -18,7 +18,7 @@
 #include <opencv2/imgproc/types_c.h>
 #include <opencv2/imgproc/imgproc_c.h>
 #else
-#include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.hpp>
 #endif
 
 // cl-gl interoperability
@@ -783,4 +783,4 @@ int vglClMpIsZero(VglImage* num_a) {
     return isZero;
 }
 
-#endif
+#endif  // __OPENCL__

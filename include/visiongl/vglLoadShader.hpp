@@ -1,13 +1,6 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglLoadShader                                     ***
-***                                                                ***
-*********************************************************************/
+#ifndef VISIONGL_VGLLOADSHADER_HPP
+#define VISIONGL_VGLLOADSHADER_HPP
 
-#ifndef __VGLLOADSHADER_H__
-#define __VGLLOADSHADER_H__
-
-// GL
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
@@ -24,4 +17,4 @@ GLuint vglSingleShaderLoad(GLuint ShaderType, char* filename);
 GLuint vglShaderLoad(GLuint ShaderType, char* filename);
 GLuint vglProgramLoad(char* v_filename, char* f_filename);
 
-#endif
+#endif  // VISIONGL_VGLLOADSHADER_HPP

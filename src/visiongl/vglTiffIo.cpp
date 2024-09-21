@@ -1,8 +1,8 @@
 #ifdef __TIFF__
 
 #include <tiffio.hxx>
-#include <visiongl/vglTiffIo.h>
-#include <visiongl/vglContext.h>
+#include <visiongl/vglTiffIo.hpp>
+#include <visiongl/vglContext.hpp>
 
 // malloc_usable_size
 #include <malloc.h>
@@ -14,7 +14,7 @@
 #include <opencv2/highgui/highgui_c.h>
 //  #include <opencv2/imgproc/imgproc_c.h>
 #else
-#include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.hpp>
 #endif
 
 /** \brief Convert depth from tiff's format to ipl's format.
@@ -690,4 +690,4 @@ int vglSave4dTiff(char* filename, VglImage* image, int lStart, int lEnd) {
     return 0;
 }
 
-#endif
+#endif  // __TIFF__

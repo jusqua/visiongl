@@ -1,7 +1,7 @@
-#include <visiongl/vglImage.h>
-#include <visiongl/vglClImage.h>
-#include <visiongl/cl2cpp_shaders.h>
-#include <visiongl/glsl2cpp_shaders.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglClImage.hpp>
+#include <visiongl/cl2cpp_shaders.hpp>
+#include <visiongl/glsl2cpp_shaders.hpp>
 
 #include <string.h>
 

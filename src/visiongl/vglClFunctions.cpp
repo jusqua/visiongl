@@ -1,12 +1,14 @@
+#ifdef __OPENCL__
+
 #include <fstream>
 #include <tuple>
-#include <visiongl/vglImage.h>
-#include <visiongl/vglClImage.h>
-#include <visiongl/vglContext.h>
-#include <visiongl/vglClFunctions.h>
-#include <visiongl/cl2cpp_shaders.h>
-#include <visiongl/cl2cpp_MM.h>
-#include <visiongl/cl2cpp_BIN.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglClImage.hpp>
+#include <visiongl/vglContext.hpp>
+#include <visiongl/vglClFunctions.hpp>
+#include <visiongl/cl2cpp_shaders.hpp>
+#include <visiongl/cl2cpp_MM.hpp>
+#include <visiongl/cl2cpp_BIN.hpp>
 #include <math.h>
 
 #if defined(__OPENCL_VERSION__) || defined(__OPENCL_C_VERSION__) || defined(__OPENCL_CPP_VERSION__)
@@ -1617,3 +1619,5 @@ void vglClBinNConditionalErode(VglImage* src, VglImage* mask, VglImage* dst, Vgl
             vglClXdBinCopy(buff, dst);
     }
 }
+
+#endif  // __OPENCL__

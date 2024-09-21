@@ -11,19 +11,19 @@
 // opencv CvCamera
 // #include <cvaux.h>
 
-#include <visiongl/vglSimpleBGModel.h>
-#include <visiongl/glsl2cpp_shaders.h>
-#include <visiongl/vglContext.h>
+#include <visiongl/vglSimpleBGModel.hpp>
+#include <visiongl/glsl2cpp_shaders.hpp>
+#include <visiongl/vglContext.hpp>
 
 // Shaders
-#include <visiongl/glsl2cpp_BG.h>
+#include <visiongl/glsl2cpp_BG.hpp>
 
 // opencv IplImage
 #ifdef __OPENCV__
 #undef __SSE2__
 #include <opencv2/core/types_c.h>
 #else
-#include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.hpp>
 #endif
 
 #define max(a, b) (a > b ? a : b)

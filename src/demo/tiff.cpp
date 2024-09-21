@@ -1,6 +1,6 @@
-#include <visiongl/vglImage.h>
-#include <visiongl/vglTiffIo.h>
-#include <visiongl/vglGdcmIo.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglTiffIo.hpp>
+#include <visiongl/vglGdcmIo.hpp>
 
 int main(int argc, char* argv[]) {
     char* usage = (char*)

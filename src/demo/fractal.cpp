@@ -1,7 +1,7 @@
 // visiongl
-#include <visiongl/glsl2cpp_shaders.h>
-#include <visiongl/vglImage.h>
-#include <visiongl/vglContext.h>
+#include <visiongl/glsl2cpp_shaders.hpp>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglContext.hpp>
 
 // time
 #include <time.h>

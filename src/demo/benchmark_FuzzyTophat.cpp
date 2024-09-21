@@ -1,8 +1,8 @@
-#include <visiongl/vglImage.h>
-#include <visiongl/vglClImage.h>
-#include <visiongl/cl2cpp_shaders.h>
-#include <visiongl/cl2cpp_MM.h>
-#include <visiongl/vglContext.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglClImage.hpp>
+#include <visiongl/cl2cpp_shaders.hpp>
+#include <visiongl/cl2cpp_MM.hpp>
+#include <visiongl/vglContext.hpp>
 
 #include <demo/timer.hpp>
 

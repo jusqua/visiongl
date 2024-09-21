@@ -1,11 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglConst                                          ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLCONST_H__
-#define __VGLCONST_H__
+#ifndef VISIONGL_VGLCONST_HPP
+#define VISIONGL_VGLCONST_HPP
 
 #define VGL_WIN_X0 -1.0
 #define VGL_WIN_X1 1.0
@@ -124,4 +118,4 @@
 // clang-format on
 #endif
 
-#endif
+#endif  // VISIONGL_VGLCONST_HPP

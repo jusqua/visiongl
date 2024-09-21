@@ -1,6 +1,6 @@
-#include <visiongl/vglImage.h>
-#include <visiongl/vglContext.h>
-#include <visiongl/kernel2cu_shaders.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglContext.hpp>
+#include <visiongl/kernel2cu_shaders.hpp>
 
 int main(int argc, char* argv[]) {
     char* usage = (char*)

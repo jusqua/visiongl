@@ -1,24 +1,12 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglShape                                          ***
-***                                                                ***
-*********************************************************************/
+#ifndef VISIONGL_VGLSHAPE_HPP
+#define VISIONGL_VGLSHAPE_HPP
 
-#ifndef __VGLSHAPE_H__
-#define __VGLSHAPE_H__
+#include <visiongl/vglConst.hpp>
 
-#include <visiongl/vglConst.h>
-
-// CL
 #ifdef __OPENCL__
 #include <CL/cl.h>
-#include <visiongl/vglClShape.h>
+#include <visiongl/vglClShape.hpp>
 #endif
-
-// printf
-#include <stdio.h>
-
-////////// VglShape
 
 #define VglShapeIndex1C2D(vs, i, j) (i + j * vs->offset[2])
 #define VglShapeIndexNC2D(vs, c, i, j) (c + i * vs->offset[1] + j * vs->offset[2])
@@ -80,4 +68,4 @@ public:
 // int getNdim();
 // int getSize();
 
-#endif
+#endif  // VISIONGL_VGLSHAPE_HPP

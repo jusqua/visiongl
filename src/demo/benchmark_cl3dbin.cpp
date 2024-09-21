@@ -1,19 +1,19 @@
 #ifdef __OPENCL__
 // this program requires opencl
 
-#include <visiongl/vglClImage.h>
-#include <visiongl/vglContext.h>
-#include <visiongl/cl2cpp_shaders.h>
-#include <visiongl/glsl2cpp_shaders.h>
-#include <visiongl/cl2cpp_BIN.h>
-#include <visiongl/iplImage.h>
+#include <visiongl/vglClImage.hpp>
+#include <visiongl/vglContext.hpp>
+#include <visiongl/cl2cpp_shaders.hpp>
+#include <visiongl/glsl2cpp_shaders.hpp>
+#include <visiongl/cl2cpp_BIN.hpp>
+#include <visiongl/iplImage.hpp>
 
 #ifdef __OPENCV__
 #include <opencv2/imgproc/types_c.h>
 #include <opencv2/imgproc/imgproc_c.h>
 #include <opencv2/highgui/highgui_c.h>
 #else
-#include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.hpp>
 #endif
 
 #include <demo/timer.hpp>

@@ -6,9 +6,8 @@
 
   */
 
-#define _CRT_SECURE_NO_WARNINGS
-#ifndef _DEMO_TIMER_HPP
-#define _DEMO_TIMER_HPP
+#ifndef VISIONGL_DEMO_TIMER_HPP
+#define VISIONGL_DEMO_TIMER_HPP
 
 // fps, clock
 #include <sys/time.h>
@@ -60,4 +59,4 @@ inline char *getTimeElapsedInSeconds() {
     return ret;
 }
 
-#endif  // _DEMO_TIMER_HPP
+#endif  // VISIONGL_DEMO_TIMER_HPP

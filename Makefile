@@ -109,7 +109,7 @@ runtime: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrappe
 lib: runtime
 	mkdir -p $(OUTPUT_LIBPATH)
 	$(CC) $(FLAGS) $(FPIC) $(LD) $(DEF) $(INSTALLATION_RUNTIME_DEFINITION) -shared -o $(OUTPUT_LIBPATH)/$(LIB_NAME) $(SRC)
-	
+
 install:
 	rm -rf $(INSTALL_SHAREPATH)/$(PROJECT)
 	cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
@@ -135,32 +135,32 @@ $(TESTS):
 
 cuda_wrapper:
 	@$(SCRIPTSPATH)/kernel2cu.pl -o $(PROJECTPATH)/kernel2cu_shaders $(RUNTIMEPATH)/CUDA/*.kernel > /dev/null
-	@mv $(PROJECTPATH)/kernel2cu_shaders.h $(INCLUDEPATH)/$(PROJECT)
+	@mv $(PROJECTPATH)/kernel2cu_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
 
 frag_wrapper:
 	@$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_shaders -p FS $(RUNTIMEPATH)/FS/*.frag > /dev/null
-	@mv $(PROJECTPATH)/glsl2cpp_shaders.h $(INCLUDEPATH)/$(PROJECT)
+	@mv $(PROJECTPATH)/glsl2cpp_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
 
 frag_bg_wrapper:
 	@$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_BG -p FS_BG $(RUNTIMEPATH)/FS_BG/*.frag > /dev/null
-	@mv $(PROJECTPATH)/glsl2cpp_BG.h $(INCLUDEPATH)/$(PROJECT)
+	@mv $(PROJECTPATH)/glsl2cpp_BG.hpp $(INCLUDEPATH)/$(PROJECT)
 
 frag_stereo_wrapper:
 	$(SCRIPTSPATH)/glsl2cpp.pl -o $(PROJECTPATH)/glsl2cpp_Stereo -p FS_Stereo $(RUNTIMEPATH)/FS_Stereo/*.frag > /dev/null
-	@mv $(PROJECTPATH)/glsl2cpp_Stereo.h $(INCLUDEPATH)/$(PROJECT)
+	@mv $(PROJECTPATH)/glsl2cpp_Stereo.hpp $(INCLUDEPATH)/$(PROJECT)
 
 cl_wrapper:
 	@$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_shaders -p CL $(RUNTIMEPATH)/CL/*.cl > /dev/null
-	@mv $(PROJECTPATH)/cl2cpp_shaders.h $(INCLUDEPATH)/$(PROJECT)
+	@mv $(PROJECTPATH)/cl2cpp_shaders.hpp $(INCLUDEPATH)/$(PROJECT)
 
 cl_nd_wrapper:
 	@$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_ND -p CL_ND $(RUNTIMEPATH)/CL_ND/*.cl > /dev/null
-	@mv $(PROJECTPATH)/cl2cpp_ND.h $(INCLUDEPATH)/$(PROJECT)
+	@mv $(PROJECTPATH)/cl2cpp_ND.hpp $(INCLUDEPATH)/$(PROJECT)
 
 cl_mm_wrapper:
 	@$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_MM -p CL_MM $(RUNTIMEPATH)/CL_MM/*.cl > /dev/null
-	@mv $(PROJECTPATH)/cl2cpp_MM.h $(INCLUDEPATH)/$(PROJECT)
+	@mv $(PROJECTPATH)/cl2cpp_MM.hpp $(INCLUDEPATH)/$(PROJECT)
 
 cl_bin_wrapper:
 	@$(SCRIPTSPATH)/cl2cpp.pl -o $(PROJECTPATH)/cl2cpp_BIN -p CL_BIN $(RUNTIMEPATH)/CL_BIN/*.cl > /dev/null
-	@mv $(PROJECTPATH)/cl2cpp_BIN.h $(INCLUDEPATH)/$(PROJECT)
+	@mv $(PROJECTPATH)/cl2cpp_BIN.hpp $(INCLUDEPATH)/$(PROJECT)

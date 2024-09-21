@@ -16,9 +16,9 @@ use scripts::perlModules::common qw( LineStartMultiLineComment
 #############################################################################
 # LineStartHeader
 #
-# Returns the string after the "//" to the first "\n" if found 
+# Returns the string after the "//" to the first "\n" if found
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartHeader { # ($line) {
   my $line = $_[0];
 
@@ -29,9 +29,9 @@ sub LineStartHeader { # ($line) {
 #############################################################################
 # LineStartGlobalHeader
 #
-# Returns the string after the "//" to the first "\n" if found 
+# Returns the string after the "//" to the first "\n" if found
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartGlobalHeader { # ($line) {
   my $line = $_[0];
 
@@ -41,7 +41,7 @@ sub LineStartGlobalHeader { # ($line) {
   else{
     $glo_template = "";
   }
-  print "Global header: template = $glo_template\n"; 
+  print "Global header: template = $glo_template\n";
 
   if ($line =~ s#^\s*(__global__)\s*([a-zA-Z_]\w*)\s*([a-zA-Z_]\w*)\s*##){
     $glo_funcname = $3;
@@ -49,10 +49,10 @@ sub LineStartGlobalHeader { # ($line) {
   else{
     $glo_funcname = "";
   }
-  print "Global header: funcname = $glo_funcname\n"; 
+  print "Global header: funcname = $glo_funcname\n";
 
   $line =~ s#^\s*(\(.*\))##;
-  print "Global header: paramlist = $1\n"; 
+  print "Global header: paramlist = $1\n";
   return ($glo_template, $glo_funcname, $1, $line);
 }
 
@@ -62,7 +62,7 @@ sub LineStartGlobalHeader { # ($line) {
 # Returns the string after the semantic binding and the ":"
 # in start of $line, blank string if not found.
 # Valid semantic bindincs are IO_PBO, IN_PBO, OUT_PBO and IN_TEX.
-# 
+#
 sub LineStartSemantics { # ($line) {
   my $line = $_[0];
 
@@ -85,7 +85,7 @@ sub LineStartSemantics { # ($line) {
 #
 # Returns the cpp expression in the start of the line,
 # blank string if not found.
-# 
+#
 sub LineStartExpression { # ($line) {
   my $line = $_[0];
 
@@ -98,7 +98,7 @@ sub LineStartExpression { # ($line) {
 #
 # Returns the string that contains the execution configuration, that is,
 # everything between <<< and >>> including it.
-# 
+#
 sub LineStartExecution { # ($line) {
   my $line = $_[0];
 
@@ -128,7 +128,7 @@ sub ProcessKernelHeader { # ($line) {
   }
   else{
     print "After eliminating execution configuration:\n$line\n";
-  }  
+  }
 
   $line = LineStartParenthesis($line);
   if (!$line){
@@ -136,7 +136,7 @@ sub ProcessKernelHeader { # ($line) {
   }
   else{
     #print "After eliminating parenthesis:\n$line\n";
-  }  
+  }
 
   ($separator, $line) = LineStartSeparator($line);
 
@@ -202,7 +202,7 @@ sub ProcessKernelHeader { # ($line) {
 #############################################################################
 # ProcessKernelGlobalParams
 #
-# Receives as input a .kernel global function parameter list 
+# Receives as input a .kernel global function parameter list
 # and breaks it.
 #
 sub ProcessKernelGlobalParams { # ($line) {
@@ -218,7 +218,7 @@ sub ProcessKernelGlobalParams { # ($line) {
   }
   else{
     #print "After eliminating parenthesis:\n$line\n";
-  }  
+  }
 
   ($separator, $line) = LineStartSeparator($line);
 
@@ -278,7 +278,7 @@ sub ProcessKernelCaller { # ($line) {
   }
   else{
     #print "After eliminating parenthesis:\n$line\n";
-  }  
+  }
 
   ($separator, $line) = LineStartSeparator($line);
 
@@ -343,16 +343,16 @@ sub AppendFile { # ($inFilename, $outFilename) {
 #
 sub ProcessKernelFile { # ($filename) {
   my $filename      = $_[0];
-  
-  my $comment; 
-  my $semantics; 
+
+  my $comment;
+  my $semantics;
   my $type;
   my $variable;
   my $default;
   my $expression;
 
-  undef $comment; 
-  undef $semantics; 
+  undef $comment;
+  undef $semantics;
   undef $type;
   undef $variable;
   undef $expression;
@@ -374,7 +374,7 @@ sub ProcessKernelFile { # ($filename) {
   }
   else{
     print "Writing this comment:\n$comment\n";
-  }  
+  }
 
   ($perl_header, $line) = LineStartHeader($line);
   if (!$perl_header){
@@ -407,7 +407,7 @@ sub ProcessKernelFile { # ($filename) {
     print "Writing this global function name:\n$glo_funcname\n";
   }
   ($glo_type, $glo_variable) = ProcessKernelGlobalParams($glo_paramlist);
-  
+
   return  ($comment, $semantics, $type, $variable, $default, $execution, $expression, $glo_template, $glo_funcname, $glo_type, $glo_variable);
 }
 
@@ -432,15 +432,15 @@ sub PrintCudaFile { # ($basename, $comment, $semantics, $type, $variable, $defau
   my $glo_type      = $_[10];
   my $glo_variable  = $_[11];
   my $output        = $_[12];
- 
+
   my $i;
   my $j;
   my $first_framebuffer = "";
 
-  print "Will write to $output.cu and $output.h\n";
+  print "Will write to $output.cu and $output.hpp\n";
 
   open CUDA, ">>", "$output.cu";
-  open HEAD, ">>", "$output.h";
+  open HEAD, ">>", "$output.hpp";
 
 
   #print CUDA "$comment\n";
@@ -455,7 +455,7 @@ sub PrintCudaFile { # ($basename, $comment, $semantics, $type, $variable, $defau
     if ($i < $#type){
       print CUDA ", ";
       print HEAD ", ";
-    } 
+    }
   }
   print CUDA "){\n";
   print HEAD ");\n\n";
@@ -464,7 +464,7 @@ sub PrintCudaFile { # ($basename, $comment, $semantics, $type, $variable, $defau
   my $var = "";
   print "==== Input semantics\n";
   for ($i = 0; $i <= $#type; $i++){
-    if ($semantics[$i] eq "IN_TEX" or $semantics[$i] eq "IO_PBO" or 
+    if ($semantics[$i] eq "IN_TEX" or $semantics[$i] eq "IO_PBO" or
         $semantics[$i] eq "IN_PBO" or $semantics[$i] eq "OUT_PBO"   ){
       if ($first_var eq ""){
         $first_var = $variable[$i];
@@ -476,7 +476,7 @@ sub PrintCudaFile { # ($basename, $comment, $semantics, $type, $variable, $defau
       print CUDA "              __FILE__, __LINE__);\n";
       print CUDA "      exit(1);\n";
       print CUDA "    }\n";
-      if ($semantics[$i] eq "IN_TEX" or $semantics[$i] eq "IO_PBO" or 
+      if ($semantics[$i] eq "IN_TEX" or $semantics[$i] eq "IO_PBO" or
           $semantics[$i] eq "IN_PBO"                                  ){
         print CUDA "    vglCheckContext(".$var.", VGL_CUDA_CONTEXT);\n";
       }
@@ -494,7 +494,7 @@ sub PrintCudaFile { # ($basename, $comment, $semantics, $type, $variable, $defau
 
   $type_opencv[0] = "IPL_DEPTH_8U";
   $type_cpp[0] = "unsigned char";
-  
+
   my $a_type;
   my $a_cpptype;
   print CUDA "\n";
@@ -532,11 +532,8 @@ sub PrintCudaFile { # ($basename, $comment, $semantics, $type, $variable, $defau
   }
 
   print CUDA "}\n\n";
-
-  close CUDA;
-  close HEAD;
 }
-  
+
 #############################################################################
 # Main program
 #
@@ -547,8 +544,8 @@ Usage:
 
 kernel2cu  [-o OutputFile] InputFileList
 
-OutputFile      Source file to which the output will be written. Two files 
-                are written with this prefix, a \".cu\" and a \".h\". 
+OutputFile      Source file to which the output will be written. Two files
+                are written with this prefix, a \".cu\" and a \".hpp\".
                 It is optional and the default is \"kernel2cu_shaders\".
 
 InputFileList   List of input files. Wildcard characters are allowed.
@@ -560,7 +557,7 @@ print $USAGE;
 
 
 $nargs = $#ARGV;
-$nargs++;        
+$nargs++;
 print "Number of args = $nargs\n";
 
 $foo = '
@@ -577,9 +574,9 @@ die "morreu";
 
 
 for ($i=0; $i<$nargs; $i=$i+2) {
-  if    ($ARGV[$i] eq "-o") {  
+  if    ($ARGV[$i] eq "-o") {
     $output = $ARGV[$i+1] ;
-    print ("Output Files: $output.cu and $output.h\n") ;
+    print ("Output Files: $output.cu and $output.hpp\n") ;
   }
   else {
     last;
@@ -593,8 +590,9 @@ if (!$output){
 $firstInputFile = $i;
 
 unlink("$output.cu");
-unlink("$output.h");
+unlink("$output.hpp");
 
+$header_guard = "VISIONGL_".uc(basename($output))."_HPP";
 $topMsg = "
 /*********************************************************************\
 ***                                                                 ***
@@ -604,34 +602,37 @@ $topMsg = "
 ***                                                                 ***
 \*********************************************************************/
 ";
-open HEAD, ">>", "$output.h";
+open HEAD, ">>", "$output.hpp";
 print HEAD $topMsg;
-open HEAD, ">>", "$output.h";
-print HEAD "#include <visiongl/vglImage.h>\n";
-close HEAD;
+print HEAD "
+#ifndef $header_guard
+#define $header_guard
+
+#ifdef __CUDA__
+
+#include <visiongl/vglImage.hpp>
+
+";
+
 open CUDA, ">>", "$output.cu";
 print CUDA $topMsg;
 print CUDA "
-#include <visiongl/vglImage.h>
-#include <visiongl/vglLoadShader.h>
-#include <visiongl/vglContext.h>\n
-#include <iostream>
+#ifdef __CUDA__
 
-//kernels
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglLoadShader.hpp>
+#include <visiongl/vglContext.hpp>
+
 ";
-close HEAD;
-close CUDA;
-
-
 
 for ($i=$firstInputFile; $i<$nargs; $i++) {
     $fullname = $ARGV[$i];
     print "====================\n";
     print "$ARGV[$i]\n";
     ($a, $b, $c) = fileparse($fullname, ".kernel");
-    $a or $a = ""; 
-    $b or $b = ""; 
-    $c or $c = ""; 
+    $a or $a = "";
+    $b or $b = "";
+    $c or $c = "";
     print "Path: $b\n";
     print "Basename: $a\n";
     print "Extenssion: $c\n";
@@ -661,6 +662,11 @@ for ($i=$firstInputFile; $i<$nargs; $i++) {
 
 }
 
+print CUDA "#endif  // __CUDA__";
+close CUDA;
+print HEAD "
+#endif  // __CUDA__
 
-
-
+#endif  // $header_guard
+";
+close HEAD;

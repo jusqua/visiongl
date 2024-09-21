@@ -3,7 +3,7 @@
     Maximum or union between img_input1 and img_input2. Result saved in img_output.
   */
 
-#include <visiongl/vglConst.h>
+#include <visiongl/vglConst.hpp>
 
 __kernel void vglClNdBinMax(__global VGL_PACK_CL_SHADER_TYPE* img_input1,
                             __global VGL_PACK_CL_SHADER_TYPE* img_input2,

@@ -1,22 +1,13 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglStrEl                                          ***
-***                                                                ***
-*********************************************************************/
+#ifndef VISIONGL_VGLSTREL_HPP
+#define VISIONGL_VGLSTREL_HPP
 
-#ifndef __VGLSTREL_H__
-#define __VGLSTREL_H__
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglShape.hpp>
+#include <visiongl/vglClStrEl.hpp>
 
-#include <visiongl/vglImage.h>
-#include <visiongl/vglShape.h>
-#include <visiongl/vglClStrEl.h>
-
-// CL
 #ifdef __OPENCL__
 #include <CL/cl.h>
 #endif
-
-////////// VglStrEl
 
 #define VGL_STREL_CUBE 1
 #define VGL_STREL_CROSS 2
@@ -47,4 +38,4 @@ public:
 #endif
 };
 
-#endif
+#endif  // VISIONGL_VGLSTREL_HPP

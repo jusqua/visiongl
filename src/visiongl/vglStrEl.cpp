@@ -1,6 +1,6 @@
-#include <visiongl/vglStrEl.h>
-#include <visiongl/vglShape.h>
-#include <visiongl/vglClStrEl.h>
+#include <visiongl/vglStrEl.hpp>
+#include <visiongl/vglShape.hpp>
+#include <visiongl/vglClStrEl.hpp>
 
 /** /brief Common code for structuring element construction.
 

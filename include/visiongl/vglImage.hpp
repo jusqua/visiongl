@@ -1,11 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglImage                                          ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLIMAGE_H__
-#define __VGLIMAGE_H__
+#ifndef VISIONGL_VGLIMAGE_HPP
+#define VISIONGL_VGLIMAGE_HPP
 
 #define GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT 0x8CD8
 #define GL_FRAMEBUFFER_STATUS_ERROR_EXT 0x8CDE
@@ -42,8 +36,8 @@
 // VGL HEADER - Vision with OpenGL
 
 // VisionGL
-#include <visiongl/vglConst.h>
-#include <visiongl/vglShape.h>
+#include <visiongl/vglConst.hpp>
+#include <visiongl/vglShape.hpp>
 
 ////////// VglImage
 
@@ -342,4 +336,4 @@ void vglInOut_model(VglImage* dst, VglImage* dst1);
         }                                                                                     \
     }
 
-#endif
+#endif  // VISIONGL_VGLIMAGE_HPP

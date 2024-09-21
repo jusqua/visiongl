@@ -1,15 +1,9 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglTiffIo.h                                       ***
-***                                                                ***
-*********************************************************************/
-
 #ifndef __VGLTIFFIO_H__
 #define __VGLTIFFIO_H__
 
 #ifdef __TIFF__
 
-#include <visiongl/vglImage.h>
+#include <visiongl/vglImage.hpp>
 
 // IplImage
 #ifdef __OPENCV__

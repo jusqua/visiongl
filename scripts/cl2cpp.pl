@@ -624,10 +624,10 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   my $i;
   my $first_framebuffer = "";
 
-  print "Will write to $output.cpp and $output.h\n";
+  print "Will write to $output.cpp and $output.hpp\n";
 
   open CPP, ">>", "$output.cpp";
-  open HEAD, ">>", "$output.h";
+  open HEAD, ">>", "$output.hpp";
 
   print CPP "$comment\n";
   print HEAD "$comment\n";
@@ -853,9 +853,6 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
 
   print CPP "}\n\n";
 
-
-  close CPP;
-  close HEAD;
 }
 
 #############################################################################
@@ -924,7 +921,7 @@ Usage:
 cl2cpp  [-o OutputFile] [-p ShadersPath] InputFileList
 
 OutputFile      Source file to which the output will be written. Two files
-                are written with this prefix, a \".cpp\" and a \".h\".
+                are written with this prefix, a \".cpp\" and a \".hpp\".
                 It is optional and the default is \"cl2cpp_shaders\".
 
 ShadersPath     Path to shader files, added to cpp source code before the
@@ -946,7 +943,7 @@ print "Number of args = $nargs\n";
 for ($i=0; $i<$nargs; $i=$i+2) {
   if    ($ARGV[$i] eq "-o") {
     $output = $ARGV[$i+1] ;
-    print ("Output Files: $output.cpp and $output.h\n") ;
+    print ("Output Files: $output.cpp and $output.hpp\n") ;
   }
   elsif ($ARGV[$i] eq "-p") {
     $cpp_read_path = $ARGV[$i+1] ;
@@ -982,8 +979,9 @@ for ($i=0; $i<=$#files; $i=$i+1) {
 }
 
 unlink("$output.cpp");
-unlink("$output.h");
+unlink("$output.hpp");
 
+$header_guard = "VISIONGL_".uc(basename($output))."_HPP";
 $topMsg = "
 /*********************************************************************\
 ***                                                                 ***
@@ -993,35 +991,40 @@ $topMsg = "
 ***                                                                 ***
 \*********************************************************************/
 ";
-open HEAD, ">>", "$output.h";
+open HEAD, ">>", "$output.hpp";
 print HEAD $topMsg;
-print HEAD "#include <visiongl/vglImage.h>
+print HEAD "
+#ifndef $header_guard
+#define $header_guard
 
-#include <visiongl/vglShape.h>
+#ifdef __OPENCL__
 
-#include <visiongl/vglStrEl.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglShape.hpp>
+#include <visiongl/vglStrEl.hpp>
 
 ";
-close HEAD;
+
 open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
-#include <visiongl/vglImage.h>
-#include <visiongl/vglClImage.h>
-#include <visiongl/vglContext.h>
+#ifdef __OPENCL__
 
-#include <visiongl/vglShape.h>
-#include <visiongl/vglClShape.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglClImage.hpp>
+#include <visiongl/vglContext.hpp>
 
-#include <visiongl/vglStrEl.h>
-#include <visiongl/vglClStrEl.h>
+#include <visiongl/vglShape.hpp>
+#include <visiongl/vglClShape.hpp>
+
+#include <visiongl/vglStrEl.hpp>
+#include <visiongl/vglClStrEl.hpp>
 
 #include <fstream>
 
 extern VglClContext cl;
 
 ";
-close CPP;
 
 $i = 0;
 
@@ -1054,3 +1057,12 @@ for ($i=0; $i<=$#files; $i++) {
     PrintCppFile($basename, $comment, $semantics, $type, $variable, $default, $is_array, $is_shape, $size, $output, $cpp_read_path);
 
 }
+
+print CPP "#endif  // __OPENCL__";
+close CPP;
+print HEAD "
+#endif  // __OPENCL__
+
+#endif  // $header_guard
+";
+close HEAD;

@@ -21,16 +21,16 @@
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/imgproc/imgproc_c.h>
 #else
-#include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.hpp>
 #endif
 
-#include <visiongl/vglContext.h>
-#include <visiongl/vglImage.h>
-#include <visiongl/vglLoadShader.h>
-#include <visiongl/iplImage.h>
+#include <visiongl/vglContext.hpp>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglLoadShader.hpp>
+#include <visiongl/iplImage.hpp>
 
 // vglDilateSq3, vglErodeSq3
-#include <visiongl/glsl2cpp_shaders.h>
+#include <visiongl/glsl2cpp_shaders.hpp>
 
 /** \brief Refresh all output images.
  */

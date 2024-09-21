@@ -16,9 +16,9 @@ use scripts::perlModules::common qw( LineStartMultiLineComment
 #############################################################################
 # LineStartCppValue
 #
-# Returns the string from the "//" to the first "\n" if found in 
-# start of $line, 
-# 
+# Returns the string from the "//" to the first "\n" if found in
+# start of $line,
+#
 sub LineStartCppValue { # ($line) {
   my $line = $_[0];
 
@@ -30,9 +30,9 @@ sub LineStartCppValue { # ($line) {
 #############################################################################
 # LineStartHeader
 #
-# Returns the string after the "//" to the first "\n" if found 
+# Returns the string after the "//" to the first "\n" if found
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartHeader { # ($line) {
   my $line = $_[0];
 
@@ -43,9 +43,9 @@ sub LineStartHeader { # ($line) {
 #############################################################################
 # LineStartSemicolon
 #
-# Returns the string after the ";" 
+# Returns the string after the ";"
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartSemicolon { # ($line) {
   my $line = $_[0];
 
@@ -59,7 +59,7 @@ sub LineStartSemicolon { # ($line) {
 # Returns the string after the semantic binding and the ":"
 # in start of $line, blank string if not found.
 # Valid semantic bindincs are IN_TEX, OUT_FBO and IN_OUT
-# 
+#
 sub LineStartSemantics { # ($line) {
   my $line = $_[0];
 
@@ -82,7 +82,7 @@ sub LineStartSemantics { # ($line) {
 #
 # Returns the string after the first "uniform"  found
 # in start of $line, blank string if not found.
-# 
+#
 sub LineStartUniform { # ($line) {
   my $line = $_[0];
 
@@ -95,7 +95,7 @@ sub LineStartUniform { # ($line) {
 #
 # Returns the string that contains the main program, that is,
 # everything after void main(void) including it.
-# 
+#
 sub LineStartMain { # ($line) {
   my $line = $_[0];
 
@@ -107,7 +107,7 @@ sub LineStartMain { # ($line) {
 # LineNonEmpty
 #
 # Returns the string from the first non space character, and "" if line is blank
-# 
+#
 sub LineNonEmpty { # ($line) {
   my $line = $_[0];
 
@@ -120,7 +120,7 @@ sub LineNonEmpty { # ($line) {
 #############################################################################
 # ProcessGlslUniform
 #
-# Receives as input a line and breaks it. Are expected a datatype, a 
+# Receives as input a line and breaks it. Are expected a datatype, a
 # variable name, a semicolon and a single line comment.
 #
 #
@@ -210,7 +210,7 @@ sub ProcessGlslHeader { # ($line) {
   }
   else{
     #print "After eliminating parenthesis:\n$line\n";
-  }  
+  }
 
   ($separator, $line) = LineStartSeparator($line);
 
@@ -283,16 +283,16 @@ sub ProcessGlslFile { # ($filename, $output, $cpp_read_path) {
   my $filename      = $_[0];
   my $output        = $_[1];
   my $cpp_read_path = $_[2];
-  
-  my $comment; 
-  my $semantics; 
+
+  my $comment;
+  my $semantics;
   my $type;
   my $variable;
   my $default;
   my $uniform;
 
-  undef $comment; 
-  undef $semantics; 
+  undef $comment;
+  undef $semantics;
   undef $type;
   undef $variable;
   undef $uniform;
@@ -300,7 +300,7 @@ sub ProcessGlslFile { # ($filename, $output, $cpp_read_path) {
   open GLSL, $filename;
   @list = <GLSL>;
   $line = join("", @list);
-  close GLSL;  
+  close GLSL;
 
   ($comment, $line) = LineStartMultiLineComment($line);
   if (!$comment){
@@ -308,7 +308,7 @@ sub ProcessGlslFile { # ($filename, $output, $cpp_read_path) {
   }
   else{
     print "Writing this comment:\n$comment\n";
-  }  
+  }
 
   ($perl_header, $line) = LineStartHeader($line);
   if (!$perl_header){
@@ -360,10 +360,10 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   my $i;
   my $first_framebuffer = "";
 
-  print "Will write to $output.cpp and $output.h\n";
+  print "Will write to $output.cpp and $output.hpp\n";
 
   open CPP, ">>", "$output.cpp";
-  open HEAD, ">>", "$output.h";
+  open HEAD, ">>", "$output.hpp";
 
 
   print CPP "$comment\n";
@@ -377,7 +377,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
     if ($i < $#type){
       print CPP ", ";
       print HEAD ", ";
-    } 
+    }
   }
   print CPP "){\n";
   print HEAD ");\n\n";
@@ -413,7 +413,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
 
 ";
 
-  
+
   $i_tex = 0;
   $i_uniform = 0;
   print "==== Input semantics\n";
@@ -557,10 +557,8 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
 
 
   print CPP "}\n\n";
-
-  #close(CPP);
 }
-  
+
 #############################################################################
 # Main program
 #
@@ -571,11 +569,11 @@ Usage:
 
 glsl2cpp  [-o OutputFile] [-p ShadersPath] InputFileList
 
-OutputFile      Source file to which the output will be written. Two files 
-                are written with this prefix, a \".cpp\" and a \".h\". 
+OutputFile      Source file to which the output will be written. Two files
+                are written with this prefix, a \".cpp\" and a \".hpp\".
                 It is optional and the default is \"glsl2cpp_shaders\".
 
-ShadersPath     Path to shader files, added to cpp source code before the 
+ShadersPath     Path to shader files, added to cpp source code before the
                 shader file name. Default is blank.
 
 InputFileList   List of input files. Wildcard characters are allowed.
@@ -587,7 +585,7 @@ print $USAGE;
 
 
 $nargs = $#ARGV;
-$nargs++;        
+$nargs++;
 print "Number of args = $nargs\n";
 
 $foo = '
@@ -601,14 +599,12 @@ else {
 die "morreu";
 ';
 
-
-
 for ($i=0; $i<$nargs; $i=$i+2) {
-  if    ($ARGV[$i] eq "-o") {  
+  if    ($ARGV[$i] eq "-o") {
     $output = $ARGV[$i+1] ;
-    print ("Output Files: $output.cpp and $output.h\n") ;
+    print ("Output Files: $output.cpp and $output.hpp\n") ;
   }
-  elsif ($ARGV[$i] eq "-p") {  
+  elsif ($ARGV[$i] eq "-p") {
     $cpp_read_path = $ARGV[$i+1] ;
     print ("Shader files search path: $cpp_read_path\n") ;
   }
@@ -633,8 +629,9 @@ elsif ($cpp_read_path =~ m#[^/]$#){
 $firstInputFile = $i;
 
 unlink("$output.cpp");
-unlink("$output.h");
+unlink("$output.hpp");
 
+$header_guard = "VISIONGL_".uc(basename($output))."_HPP";
 $topMsg = "
 /*********************************************************************\
 ***                                                                 ***
@@ -644,31 +641,32 @@ $topMsg = "
 ***                                                                 ***
 \*********************************************************************/
 ";
-open HEAD, ">>", "$output.h";
+open HEAD, ">>", "$output.hpp";
 print HEAD $topMsg;
-print HEAD "#include <visiongl/vglImage.h>\n";
-close HEAD;
+print HEAD "
+#ifndef $header_guard
+#define $header_guard
+
+#include <visiongl/vglImage.hpp>
+
+";
 open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
-#include <visiongl/vglImage.h>
-#include <visiongl/vglLoadShader.h>
-#include <visiongl/vglContext.h>\n
-#include <iostream>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglLoadShader.hpp>
+#include <visiongl/vglContext.hpp>
+
 ";
-close HEAD;
-close CPP;
-
-
 
 for ($i=$firstInputFile; $i<$nargs; $i++) {
     $fullname = $ARGV[$i];
     print "====================\n";
     print "$ARGV[$i]\n";
     ($a, $b, $c) = fileparse($fullname, ".frag");
-    $a or $a = ""; 
-    $b or $b = ""; 
-    $c or $c = ""; 
+    $a or $a = "";
+    $b or $b = "";
+    $c or $c = "";
     print "Path: $b\n";
     print "Basename: $a\n";
     print "Extenssion: $c\n";
@@ -689,5 +687,6 @@ for ($i=$firstInputFile; $i<$nargs; $i++) {
 
 }
 
-
-
+close CPP;
+print HEAD "#endif  // $header_guard";
+close HEAD;

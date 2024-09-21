@@ -3,15 +3,15 @@
 #include <tuple>
 
 #ifdef __CUDA__
-#include <visiongl/vglCudaImage.h>
+#include <visiongl/vglCudaImage.hpp>
 #endif
 
 #ifdef __OPENCL__
-#include <visiongl/vglClImage.h>
+#include <visiongl/vglClImage.hpp>
 #endif
 
-#include <visiongl/vglContext.h>
-#include <visiongl/vglImage.h>
+#include <visiongl/vglContext.hpp>
+#include <visiongl/vglImage.hpp>
 
 #define DEBUG_VGLCONTEXT 0
 

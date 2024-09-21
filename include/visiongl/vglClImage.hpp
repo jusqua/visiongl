@@ -1,19 +1,11 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglClImage.h                                      ***
-***                                                                ***
-***  ddantas, hdanilo 21/1/2014                                    ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLCLIMAGE_H__
-#define __VGLCLIMAGE_H__
+#ifndef VISIONGL_VGLCLIMAGE_HPP
+#define VISIONGL_VGLCLIMAGE_HPP
 
 #ifdef __OPENCL__
 
 #include <CL/cl.h>
 
-#include <visiongl/vglImage.h>
+#include <visiongl/vglImage.hpp>
 
 struct VglClContext {
     cl_platform_id* platformId;
@@ -40,6 +32,6 @@ void vglClToGl(VglImage* img);
 void vglGlToCl(VglImage* img);
 void vglClAlloc(VglImage* img);
 
-#endif
+#endif  // __OPENCL__
 
-#endif
+#endif  // VISIONGL_VGLCLIMAGE_HPP

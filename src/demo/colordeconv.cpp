@@ -1,4 +1,4 @@
-#include <visiongl/vglDeconv.h>
+#include <visiongl/vglDeconv.hpp>
 
 int main(int argc, char *argv[]) {
     char *usage = (char *)

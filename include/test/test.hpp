@@ -6,8 +6,10 @@
 ***                                                                ***
 *********************************************************************/
 
-#ifndef __VGLTEST_H__
-#define __VGLTEST_H__
+#ifndef VISIONGL_TEST_HPP
+#define VISIONGL_TEST_HPP
+
+#include <stdio.h>
 
 #define C_NRM "\x1B[0m"
 #define C_RED "\x1B[31m"
@@ -56,4 +58,4 @@ char* ASSERT_SECTION_MSG;
     NUM_OK = 0;                                                                                        \
     NUM_ERR = 0;
 
-#endif
+#endif  // VISIONGL_TEST_HPP

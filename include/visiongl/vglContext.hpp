@@ -1,15 +1,7 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglContext.h                                      ***
-***                                                                ***
-***  ddantas 4/2/2009                                              ***
-***                                                                ***
-*********************************************************************/
+#ifndef VISIONGL_VGLCONTEXT_HPP
+#define VISIONGL_VGLCONTEXT_HPP
 
-#ifndef __VGLCONTEXT_H__
-#define __VGLCONTEXT_H__
-
-#include <visiongl/vglImage.h>
+#include <visiongl/vglImage.hpp>
 
 #define VGL_BLANK_CONTEXT 0
 #define VGL_RAM_CONTEXT 1
@@ -28,4 +20,4 @@ int vglCheckContextForOutput(VglImage* img, int context);
 void vglPrintContext(int context, char* msg = NULL);
 void vglPrintContext(VglImage* img, char* msg = NULL);
 
-#endif
+#endif  // VISIONGL_VGLCONTEXT_HPP

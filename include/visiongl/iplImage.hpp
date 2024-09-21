@@ -1,22 +1,12 @@
-/*********************************************************************
-***                                                                ***
-***  Header file iplImage                                          ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __IPLIMAGE_H__
-#define __IPLIMAGE_H__
+#ifndef VISIONGL_IPLIMAGE_HPP
+#define VISIONGL_IPLIMAGE_HPP
 
 #ifdef __OPENCV__
 #include <opencv2/core/types_c.h>
 #include <opencv2/imgcodecs/legacy/constants_c.h>
 #else
-#include <visiongl/vglOpencv.h>
+#include <visiongl/vglOpencv.hpp>
 #endif
-
-/*********************************************************************
-***  Function prototypes                                           ***
-*********************************************************************/
 
 int iplFindBitsPerSample(int depth);
 int iplFindWidthStep(int depth, int width, int channels = 1);
@@ -33,4 +23,4 @@ int iplGenericSavePgm(char* filename, char* buf, int w, int h, int widthStep, in
 int iplSavePgm(char* filename, IplImage* ipl);
 int iplSaveImage(char* filename, IplImage* image, int* params = 0);
 
-#endif
+#endif  // VISIONGL_IPLIMAGE_HPP

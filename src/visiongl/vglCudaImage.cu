@@ -1,9 +1,9 @@
-
+#ifdef __CUDA__
 // fprintf
 #include <iostream>
 
-#include <visiongl/vglCudaImage.h>
-#include <visiongl/vglContext.h>
+#include <visiongl/vglCudaImage.hpp>
+#include <visiongl/vglContext.hpp>
 // #include "vglImage.h"
 
 // cuda
@@ -256,3 +256,5 @@ int vglCudaToGl(VglImage* img) {
 
     return 1;
 }
+
+#endif  // __CUDA__

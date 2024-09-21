@@ -1,7 +1,7 @@
-#include <visiongl/vglImage.h>
-#include <visiongl/vglClImage.h>
-#include <visiongl/vglDcmtkIo.h>
-#include <visiongl/vglClFunctions.h>
+#include <visiongl/vglImage.hpp>
+#include <visiongl/vglClImage.hpp>
+#include <visiongl/vglDcmtkIo.hpp>
+#include <visiongl/vglClFunctions.hpp>
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/imgproc/imgproc_c.h>
 

@@ -1,4 +1,4 @@
-#include <visiongl/vglShape.h>
+#include <visiongl/vglShape.hpp>
 
 #include <test/test.hpp>
 

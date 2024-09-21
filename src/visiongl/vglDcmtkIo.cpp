@@ -1,8 +1,7 @@
-#include <tuple>
 #ifdef __DCMTK__
 
-#include <visiongl/vglDcmtkIo.h>
-#include <visiongl/vglContext.h>
+#include <visiongl/vglDcmtkIo.hpp>
+#include <visiongl/vglContext.hpp>
 #include <dcmtk/config/osconfig.h> /* make sure OS specific configuration is included first */
 
 #define INCLUDE_CSTDLIB
@@ -24,6 +23,8 @@
 #include <dcmtk/dcmjpeg/djrploss.h> /* for DJ_RPLossy */
 #include <dcmtk/dcmjpeg/dipijpeg.h> /* for dcmimage JPEG plugin */
 #include <dcmtk/ofstd/ofcmdln.h>    /* for OFCmdUnsignedInt */
+
+#include <tuple>
 
 /** \brief Convert depth from dcm's format to vgl's format.
  */
@@ -476,4 +477,4 @@ int vglDcmtkSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, i
     return 0;
 }
 
-#endif
+#endif  // __DCMTK__
