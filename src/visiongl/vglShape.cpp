@@ -335,19 +335,6 @@ VglClShape* VglShape::asVglClShape() {
         result->offset[VGL_SHAPE_HEIGHT] = result->shape[VGL_SHAPE_HEIGHT - 1] * result->offset[VGL_SHAPE_HEIGHT - 1];
     }
 
-#ifdef __DEBUG__
-    printf("Inside VglShape::asVglClShape()===============\n");
-    printf("ndim    = %d\n", result->ndim);
-    printf("shape   = ");
-    this->printArray(result->shape, result->ndim);
-    printf("\n");
-    printf("offset  = ");
-    this->printArray(result->offset, result->ndim);
-    printf("\n");
-    printf("size    = %d\n", result->size);
-    printf("bps     = %d\n", result->bps);
-#endif
-
     return result;
 }
 #endif
