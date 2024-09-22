@@ -7,3 +7,4 @@ build/
 samples/
 compile_flags.txt
 .vscode/
+gmon.out
