@@ -12,8 +12,8 @@ TARGETPATH = $(SOURCEPATH)/${PROJECT}
 DEMOSPATH  = $(SOURCEPATH)/demo
 TESTSPATH  = $(SOURCEPATH)/test
 
-DEMOS   = $(shell find $(DEMOSPATH)/ -type f -name '*.cpp')
-TESTS   = $(shell find $(TESTSPATH)/ -type f -name '*.cpp')
+DEMOS   = $(shell find $(DEMOSPATH)/ -type f -name '*.cpp' -exec basename -- {} .cpp \;)
+TESTS   = $(shell find $(TESTSPATH)/ -type f -name '*.cpp' -exec basename -- {} .cpp \;)
 SOURCES = $(shell find $(TARGETPATH)/ -type f -name '*.cpp')
 
 OUTPUT_INCLUDEPATH = $(BUILDPATH)/include/$(PROJECT)
