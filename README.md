@@ -3,10 +3,50 @@
 The objective of this library is to provide an easy way to prototype and implement image and video processing functions in CUDA, GLSL and OpenCL.
 The library provides wrapper code generators for all the three languages.
 
-The wrapper functions are generated in C++ from the shader code. Shader codes written in CUDA or GLSL must contain three types of directives in comments:
-1. Documentation comment: a multiple line comment between `/** <doc comment> */`. This comment is copied ipsis literis to the output files.
-2. Declaration comment: a single line comment describing the parameter list of the wrapper function. The list has variable name, type, and, when it is an image, semantics indicating if it is an input or output image.
-3. Attribution comment: single line comments associating variables in C++ to its counterparts in GLSL or CUDA.
+## Dependencies
+
+> [!CAUTION]
+> This section is a work in progress and may contain incorrect or missing information.
+
+### Compiler and Libraries
+
+#### Ubuntu
+
+```shell
+sudo apt install clang opencl-headers libopencv-dev libtiff-dev libgdcm-dev libdcmtk-dev freeglut3-dev libglew-dev
+```
+
+#### OpenSUSE
+
+```shell
+sudo zypper install clang opencl-cpp-headers opencl-headers opencv-devel libtiff-devel gdcm-devel dcmtk-devel freeglut-devel glew-devel
+```
+
+### OpenCL Runtimes
+
+#### Generic
+
+Install [PoCL](https://portablecl.org/) to use OpenCL in any supported platform.
+
+##### Ubuntu
+
+```shell
+sudo apt install pocl pocl-opencl-icd
+```
+
+##### OpenSUSE
+
+```shell
+sudo zypper install pocl ocl-icd-devel
+```
+
+#### Specific
+
+Install the hardware specific runtime to use OpenCL, if the hardware is hybrid then you need to install for every platform:
+
+- [NVIDIA CUDA (NVIDIA)](https://developer.nvidia.com/cuda-downloads)
+- [AMD ROCm/HIP (AMD / NVIDIA)](https://rocm.docs.amd.com/projects/HIP/en/latest/install/install.html)
+- [Intel oneAPI (Intel and AMD)](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html)
 
 ## Build
 
@@ -20,12 +60,10 @@ To build and install the library:
 sudo make install
 ```
 
-To build the library and documentation:
-```shell
-make dox
-```
-
 ## Library demo
+
+> [!CAUTION]
+> This section is a work in progress and may contain incorrect or missing information.
 
 To build the demo you can use make file with `make <demo name>` and run with `make run<demo name>`:
 
@@ -51,6 +89,16 @@ To build the demo you can use make file with `make <demo name>` and run with `ma
 
 - demobenchmark_clnd: To run this example, please compile VisionGL with OpenCL support.
 - demobin: Examples of operations on binary images (1bpp). To run this example, please compile VisionGL with OpenCL support.
+
+## Contributing
+
+> [!CAUTION]
+> This section is a work in progress and may contain incorrect or missing information.
+
+The wrapper functions are generated in C++ from the shader code. Shader codes written in CUDA or GLSL must contain three types of directives in comments:
+1. Documentation comment: a multiple line comment between `/** <doc comment> */`. This comment is copied ipsis literis to the output files.
+2. Declaration comment: a single line comment describing the parameter list of the wrapper function. The list has variable name, type, and, when it is an image, semantics indicating if it is an input or output image.
+3. Attribution comment: single line comments associating variables in C++ to its counterparts in GLSL or CUDA.
 
 ## References
 
