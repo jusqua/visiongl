@@ -16,7 +16,7 @@ DEMOS   = $(shell find $(DEMOSPATH)/ -type f -name '*.cpp' -exec basename -- {} 
 TESTS   = $(shell find $(TESTSPATH)/ -type f -name '*.cpp' -exec basename -- {} .cpp \;)
 SOURCES = $(shell find $(TARGETPATH)/ -type f -name '*.cpp')
 
-OUTPUT_INCLUDEPATH = $(BUILDPATH)/include/$(PROJECT)
+OUTPUT_INCLUDEPATH = $(BUILDPATH)/include
 OUTPUT_LIBPATH     = $(BUILDPATH)/lib
 OUTPUT_BINPATH     = $(BUILDPATH)/bin
 OUTPUT_SHAREPATH   = $(BUILDPATH)/share/$(PROJECT)
@@ -128,7 +128,7 @@ install:
 	@rm -rf $(INSTALL_SHAREPATH)/$(PROJECT)
 	@cp -rf $(OUTPUT_SHAREPATH) $(INSTALL_SHAREPATH)
 	@rm -rf $(INSTALL_INCLUDEPATH)/$(PROJECT)
-	@cp -rf $(OUTPUT_INCLUDEPATH) $(INSTALL_INCLUDEPATH)
+	@cp -rf $(OUTPUT_INCLUDEPATH)/$(PROJECT) $(INSTALL_INCLUDEPATH)
 	@cp -f  $(OUTPUT_LIBPATH)/$(LIB_NAME) $(INSTALL_LIB64PATH)
 	@ln -sf $(INSTALL_LIB64PATH)/$(LIB_NAME) $(INSTALL_LIBPATH)/
 
