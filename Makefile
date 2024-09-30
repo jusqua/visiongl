@@ -110,12 +110,14 @@ header:
 	@mkdir -p $(OUTPUT_INCLUDEPATH)
 	@cp -rf $(INCLUDEPATH)/$(PROJECT) $(OUTPUT_INCLUDEPATH)
 
+.PHONY: runtime
 runtime:
 	@echo "Copying runtime to build directory"
 	@rm -rf $(OUTPUT_SHAREPATH)
 	@mkdir -p $(OUTPUT_SHAREPATH)
 	@cp -rf $(RUNTIMEPATH) $(OUTPUT_SHAREPATH)
 
+.PHONY: lib
 lib:
 	@echo "Compiling library to build directory"
 	@mkdir -p $(OUTPUT_LIBPATH)
