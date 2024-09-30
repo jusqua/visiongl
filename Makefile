@@ -107,6 +107,7 @@ wrapper: cuda_wrapper frag_wrapper frag_bg_wrapper frag_stereo_wrapper cl_wrappe
 header:
 	@echo "Copying headers to build directory"
 	@rm -rf $(OUTPUT_INCLUDEPATH)
+	@mkdir -p $(OUTPUT_INCLUDEPATH)
 	@cp -rf $(INCLUDEPATH)/$(PROJECT) $(OUTPUT_INCLUDEPATH)
 
 runtime:
