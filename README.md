@@ -10,43 +10,17 @@ The library provides wrapper code generators for all the three languages.
 
 ### Compiler and Libraries
 
-#### Ubuntu
-
 ```shell
-sudo apt install clang opencl-headers libopencv-dev libtiff-dev libgdcm-dev libdcmtk-dev freeglut3-dev libglew-dev
-```
-
-#### OpenSUSE
-
-```shell
-sudo zypper install clang opencl-cpp-headers opencl-headers opencv-devel libtiff-devel gdcm-devel dcmtk-devel freeglut-devel glew-devel
+sudo apt install git build-essential clang clangd opencl-headers ocl-icd-opencl-dev libopencv-dev libtiff-dev libgdcm-dev libdcmtk-dev freeglut3-dev libglew-dev
 ```
 
 ### OpenCL Runtimes
 
-#### Generic
+Install the hardware specific runtime to use OpenCL, if the hardware is hybrid then maybe you need to install for every platform:
 
-Install [PoCL](https://portablecl.org/) to use OpenCL in any supported platform.
-
-##### Ubuntu
-
-```shell
-sudo apt install pocl pocl-opencl-icd
-```
-
-##### OpenSUSE
-
-```shell
-sudo zypper install pocl ocl-icd-devel
-```
-
-#### Specific
-
-Install the hardware specific runtime to use OpenCL, if the hardware is hybrid then you need to install for every platform:
-
-- [NVIDIA CUDA (NVIDIA)](https://developer.nvidia.com/cuda-downloads)
-- [AMD ROCm/HIP (AMD / NVIDIA)](https://rocm.docs.amd.com/projects/HIP/en/latest/install/install.html)
-- [Intel oneAPI (Intel and AMD)](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html)
+- NVIDIA: [CUDA](https://developer.nvidia.com/cuda-downloads)
+- AMD: [ROCm](https://rocm.docs.amd.com/projects/HIP/en/latest/install/install.html)
+- Intel: install `intel-opencl-icd` package or [oneAPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html)
 
 ## Build
 
