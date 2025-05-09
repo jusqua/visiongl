@@ -9,8 +9,8 @@
 #ifndef VISIONGL_DEMO_TIMER_HPP
 #define VISIONGL_DEMO_TIMER_HPP
 
-// fps, clock
-#include <sys/time.h>
+// Modern C++ timing utilities
+#include <chrono>
 
 // malloc
 #include <stdlib.h>
@@ -24,19 +24,20 @@
 
   */
 inline long TimerElapsed(int start = 0) {
-    static struct timeval *Tps = NULL;
-    static struct timeval *Tpf = NULL;
-    long retval;
-    if (start || Tps == NULL) {
-        Tps = (struct timeval *)malloc(sizeof(struct timeval));
-        gettimeofday(Tps, 0);
-        Tpf = (struct timeval *)malloc(sizeof(struct timeval));
-        gettimeofday(Tpf, 0);
+    using namespace std::chrono;
+    static time_point<high_resolution_clock> Tps;
+    static time_point<high_resolution_clock> Tpf;
+    static bool initialized = false;
+
+    if (start || !initialized) {
+        Tps = high_resolution_clock::now();
+        Tpf = high_resolution_clock::now();
+        initialized = true;
     } else {
-        gettimeofday(Tpf, 0);
+        Tpf = high_resolution_clock::now();
     }
-    retval = (Tpf->tv_sec - Tps->tv_sec) * 1000000 + Tpf->tv_usec - Tps->tv_usec;
-    return retval;
+
+    return duration_cast<microseconds>(Tpf - Tps).count();
 }
 
 /** \brief Timer start.
