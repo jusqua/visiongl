@@ -7,6 +7,9 @@
 // O_RDONLY
 #include <fcntl.h>
 
+// stderr
+#include <cstdio>
+
 #include <visiongl/vglLoadShader.hpp>
 
 GLuint vglShaderTypeIsOk(GLuint type) {

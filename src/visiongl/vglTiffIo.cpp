@@ -1,6 +1,6 @@
 #ifdef __TIFF__
 
-#include <tiffio.hxx>
+#include <tiffio.h>
 #include <visiongl/vglTiffIo.hpp>
 #include <visiongl/vglContext.hpp>
 
@@ -262,8 +262,6 @@ tdata_t tif_ReadContigStripData(TIFF* tif) {
 tdata_t tif_ReadRGBData(TIFF* tif) {
     int* buffer = (int*)tif_Malloc(tif);
     char* raster = (char*)tif_Malloc(tif);
-    printf("sizeof(raster) = %ld\n", malloc_usable_size(raster));
-    printf("sizeof(buffer) = %ld\n", malloc_usable_size(buffer));
 
     int rgba;
 
