@@ -278,11 +278,11 @@ tdata_t tif_ReadRGBData(TIFF* tif) {
     if (buffer != NULL) {
         printf("Reading raster rgba: w = %d, h = %d, c = %d, tif = %p, buffer = %p, raster = %p\n", w, h, c, (void*)tif, (void*)buffer, (void*)raster);
         result = TIFFReadRGBAImage(tif, w, h, (uint32_t*)buffer, 0);
-        printf("Result = %ld\n", result);
+        printf("Result = %lld\n", result);
         if (result == 0) {
             printf("Read error on input rgba image.\n");
         }
-        printf("Read ok: result = %ld\n", result);
+        printf("Read ok: result = %lld\n", result);
     }
     if (raster != NULL) {
         for (ih = 0; ih < h; ih++) {
@@ -547,7 +547,7 @@ int vglPrintTiffInfo(char* inFilename, char* msg) {
         }
         dirCount = tif_DirCount(tif);
 
-        printf("size = %lu, w = %d, h = %d, spp = %d, bps = %d, pixelSize = %ld\n", sizeof(w), w, h, spp, bps, (long int)pixelSize);
+        printf("size = %llu, w = %d, h = %d, spp = %d, bps = %d, pixelSize = %ld\n", sizeof(w), w, h, spp, bps, (long int)pixelSize);
         printf("Page Number = %d\n", pageNumber);
         printf("Number Pages = %d\n", numberPages);
         printf("Photometric interpretation = %d\n", photo);
