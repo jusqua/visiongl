@@ -14,7 +14,7 @@ set(INCLUDEPATH ${ROOTPATH}/include)
 set(SOURCEPATH ${ROOTPATH}/src)
 set(SCRIPTSPATH ${ROOTPATH}/scripts)
 set(TARGETPATH ${SOURCEPATH}/${PROJECT_NAME})
-set(DEMOSPATH ${SOURCEPATH}/demo)
+set(BENCHMARKPATH ${SOURCEPATH}/demo)
 set(TESTSPATH ${SOURCEPATH}/test)
 
 # Output directories
@@ -31,7 +31,6 @@ option(WITH_GDCM "Enable GDCM support" OFF)
 option(WITH_TIFF "Enable TIFF support" ON)
 
 # Build options
-option(BUILD_DEMOS "Build demo applications" OFF)
 option(BUILD_BENCHMARKS "Build benchmark applications" OFF)
 
 # Print build options
@@ -194,34 +193,18 @@ add_custom_target(runtime_copy
 # Make sure runtime is copied before library is built
 add_dependencies(${PROJECT_NAME} runtime_copy)
 
-# Add demos if enabled
-if(BUILD_DEMOS)
-    add_custom_target(demos)
-    file(GLOB DEMO_SOURCES "${DEMOSPATH}/*.cpp")
-    foreach(DEMO_SOURCE ${DEMO_SOURCES})
-        get_filename_component(DEMO_NAME ${DEMO_SOURCE} NAME_WE)
-        add_executable(demo_${DEMO_NAME} ${DEMO_SOURCE})
-        target_link_libraries(demo_${DEMO_NAME} PRIVATE ${PROJECT_NAME})
-        set_target_properties(demo_${DEMO_NAME} PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/demos"
-        )
-        add_dependencies(demos demo_${DEMO_NAME})
-    endforeach()
-    message(STATUS "Demo applications will be built")
-endif()
-
 # Add benchmarks if enabled
 if(BUILD_BENCHMARKS)
     add_custom_target(benchmarks)
-    file(GLOB BENCHMARK_SOURCES "${TESTSPATH}/*.cpp")
+    file(GLOB BENCHMARK_SOURCES "${BENCHMARKPATH}/benchmark_*.cpp")
     foreach(BENCHMARK_SOURCE ${BENCHMARK_SOURCES})
         get_filename_component(BENCHMARK_NAME ${BENCHMARK_SOURCE} NAME_WE)
-        add_executable(benchmark_${BENCHMARK_NAME} ${BENCHMARK_SOURCE})
-        target_link_libraries(benchmark_${BENCHMARK_NAME} PRIVATE ${PROJECT_NAME})
-        set_target_properties(benchmark_${BENCHMARK_NAME} PROPERTIES
+        add_executable(${BENCHMARK_NAME} ${BENCHMARK_SOURCE})
+        target_link_libraries(${BENCHMARK_NAME} PRIVATE ${PROJECT_NAME})
+        set_target_properties(${BENCHMARK_NAME} PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/benchmarks"
         )
-        add_dependencies(benchmarks benchmark_${BENCHMARK_NAME})
+        add_dependencies(benchmarks ${BENCHMARK_NAME})
     endforeach()
     message(STATUS "Benchmark applications will be built")
 endif()
@@ -229,17 +212,7 @@ endif()
 # Installation
 include(GNUInstallDirs)
 
-# Demo and Benchmark installation
-if(BUILD_DEMOS)
-    install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/demos/
-            DESTINATION ${CMAKE_INSTALL_BINDIR}/demos
-            FILES_MATCHING PATTERN "demo_*"
-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
-                        GROUP_READ GROUP_EXECUTE
-                        WORLD_READ WORLD_EXECUTE
-    )
-endif()
-
+# Benchmarks installation
 if(BUILD_BENCHMARKS)
     install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/benchmarks/
             DESTINATION ${CMAKE_INSTALL_BINDIR}/benchmarks
