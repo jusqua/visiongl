@@ -2,9 +2,10 @@
 **/glsl2*
 **/cl2*
 **/kernel2*
-!scripts/
+!scripts/*
 build/
 samples/
 compile_flags.txt
 .vscode/
+.cache/
 gmon.out
