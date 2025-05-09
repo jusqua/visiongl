@@ -1,11 +1,12 @@
 /*********************************************************************
 ***                                                                ***
-***  Source file iplImage                                          ***
+***  Source file for OpenCV compatibility layer                    ***
 ***                                                                ***
 *********************************************************************/
 
 #ifndef __OPENCV__
 
+#include <visiongl/vglCommonTypes.hpp>
 #include <visiongl/vglOpencv.hpp>
 #include <visiongl/iplImage.hpp>
 

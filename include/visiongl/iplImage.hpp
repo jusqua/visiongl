@@ -5,8 +5,12 @@
 #include <opencv2/core/types_c.h>
 #include <opencv2/imgcodecs/legacy/constants_c.h>
 #else
-#include <visiongl/vglOpencv.hpp>
+#include <visiongl/vglCommonTypes.hpp>
 #endif
+
+/*********************************************************************
+***  IPL Image function prototypes                                 ***
+*********************************************************************/
 
 int iplFindBitsPerSample(int depth);
 int iplFindWidthStep(int depth, int width, int channels = 1);
