@@ -157,27 +157,31 @@ macro(add_wrapper_generation SCRIPT_NAME OUTPUT_BASENAME PREFIX INPUT_GLOB)
         COMMAND perl -I${ROOTPATH} ${PERL_SCRIPT} -o ${TARGETPATH}/${OUTPUT_BASENAME} -p ${PREFIX} ${INPUT_FILES}
         COMMAND ${CMAKE_COMMAND} -E make_directory ${INCLUDEPATH}/${PROJECT_NAME}
         COMMAND ${CMAKE_COMMAND} -E copy ${INTERMEDIATE_HPP} ${FINAL_HPP}
-        DEPENDS ${INPUT_FILES} ${PERL_SCRIPT} ${PERL_COMMON_MODULE} # Add dependency on common.pm
+        DEPENDS ${INPUT_FILES} ${PERL_SCRIPT} ${PERL_COMMON_MODULE}
         COMMENT "Generating ${FINAL_HPP} from ${SCRIPT_NAME}.pl"
-        VERBATIM # Important for multiple commands, especially on Windows
+        VERBATIM
     )
     list(APPEND GENERATED_HEADERS ${FINAL_HPP})
 endmacro()
 
 # Define generation for each wrapper type
-add_wrapper_generation(kernel2cu kernel2cu_shaders "" ${RUNTIMEPATH}/CUDA/*.kernel)
+if(WITH_CUDA)
+    add_wrapper_generation(kernel2cu kernel2cu_shaders "" ${RUNTIMEPATH}/CUDA/*.kernel)
+endif()
+
+if(WITH_OPENCL)
+    add_wrapper_generation(cl2cpp cl2cpp_shaders CL ${RUNTIMEPATH}/CL/*.cl)
+    add_wrapper_generation(cl2cpp cl2cpp_ND CL_ND ${RUNTIMEPATH}/CL_ND/*.cl)
+    add_wrapper_generation(cl2cpp cl2cpp_MM CL_MM ${RUNTIMEPATH}/CL_MM/*.cl)
+    add_wrapper_generation(cl2cpp cl2cpp_BIN CL_BIN ${RUNTIMEPATH}/CL_BIN/*.cl)
+endif()
+
 add_wrapper_generation(glsl2cpp glsl2cpp_shaders FS ${RUNTIMEPATH}/FS/*.frag)
 add_wrapper_generation(glsl2cpp glsl2cpp_BG FS_BG ${RUNTIMEPATH}/FS_BG/*.frag)
 add_wrapper_generation(glsl2cpp glsl2cpp_Stereo FS_Stereo ${RUNTIMEPATH}/FS_Stereo/*.frag)
-add_wrapper_generation(cl2cpp cl2cpp_shaders CL ${RUNTIMEPATH}/CL/*.cl)
-add_wrapper_generation(cl2cpp cl2cpp_ND CL_ND ${RUNTIMEPATH}/CL_ND/*.cl)
-add_wrapper_generation(cl2cpp cl2cpp_MM CL_MM ${RUNTIMEPATH}/CL_MM/*.cl)
-add_wrapper_generation(cl2cpp cl2cpp_BIN CL_BIN ${RUNTIMEPATH}/CL_BIN/*.cl)
 
 # Custom target that depends on the *output files*
 add_custom_target(generate_headers ALL DEPENDS ${GENERATED_HEADERS})
-
-# --- End Generated Header Files ---
 
 add_dependencies(${PROJECT_NAME} generate_headers) # Add new dependency
 
