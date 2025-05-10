@@ -42,7 +42,6 @@ message(STATUS "  - OpenCL support: ${WITH_OPENCL}")
 message(STATUS "  - OpenCV support: ${WITH_OPENCV}")
 message(STATUS "  - GDCM support: ${WITH_GDCM}")
 message(STATUS "  - TIFF support: ${WITH_TIFF}")
-message(STATUS "  - Build demos: ${BUILD_DEMOS}")
 message(STATUS "  - Build benchmarks: ${BUILD_BENCHMARKS}")
 
 # Find all source files
@@ -211,17 +210,6 @@ endif()
 
 # Installation
 include(GNUInstallDirs)
-
-# Benchmarks installation
-if(BUILD_BENCHMARKS)
-    install(DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/benchmarks/
-            DESTINATION ${CMAKE_INSTALL_BINDIR}/benchmarks
-            FILES_MATCHING PATTERN "benchmark_*"
-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
-                        GROUP_READ GROUP_EXECUTE
-                        WORLD_READ WORLD_EXECUTE
-    )
-endif()
 
 install(TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}Targets
