@@ -23,7 +23,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BUILDPATH}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BUILDPATH}/bin)
 
 # Options (matching Makefile conditionals)
-option(WITH_DEBUG "Enable debug mode" ON)
+option(WITH_DEBUG "Enable debug mode" OFF)
 option(WITH_CUDA "Enable CUDA support" OFF)
 option(WITH_OPENCL "Enable OpenCL support" ON)
 option(WITH_OPENCV "Enable OpenCV support" ON)
