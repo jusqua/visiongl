@@ -27,7 +27,7 @@ option(WITH_DEBUG "Enable debug mode" ON)
 option(WITH_CUDA "Enable CUDA support" OFF)
 option(WITH_OPENCL "Enable OpenCL support" ON)
 option(WITH_OPENCV "Enable OpenCV support" OFF)
-option(WITH_GDCM "Enable GDCM support" OFF)
+option(WITH_GDCM "Enable GDCM support" ON)
 option(WITH_TIFF "Enable TIFF support" ON)
 
 # Build options
@@ -126,7 +126,7 @@ if(WITH_OPENCL)
 endif()
 
 if(WITH_GDCM)
-    target_link_libraries(${PROJECT_NAME} PUBLIC ${GDCM_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PUBLIC gdcmCommon gdcmDICT gdcmDSED gdcmIOD gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmMEXD gdcmMSFF socketxx)
 endif()
 
 if(WITH_TIFF)
