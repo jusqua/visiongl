@@ -1,6 +1,6 @@
 
 #include <visiongl/image.hpp>
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 #include "kernel2cu_shaders.h"
 
 

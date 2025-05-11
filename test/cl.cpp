@@ -5,7 +5,7 @@
 #include "cl2cpp_BIN.h"
 #include <visiongl/cl/image.hpp>
 #include <visiongl/cl/functions.hpp>
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 
 #include <visiongl/common.hpp>
 

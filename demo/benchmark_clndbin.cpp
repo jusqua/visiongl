@@ -1,7 +1,7 @@
 
 #include <visiongl/image.hpp>
 #include <visiongl/cl/image.hpp>
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 #include "cl2cpp_shaders.h"
 #include "cl2cpp_ND.h"
 #include "cl2cpp_BIN.h"

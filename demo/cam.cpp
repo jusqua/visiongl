@@ -8,7 +8,7 @@
 #include "glsl2cpp_shaders.h"
 #include "glsl2cpp_Stereo.h"
 #include <visiongl/image.hpp>
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 #include <visiongl/cuda/image.hpp>
 #include <visiongl/bg_model.hpp>
 

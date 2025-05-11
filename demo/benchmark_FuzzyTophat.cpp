@@ -2,7 +2,7 @@
 #include <visiongl/cl/image.hpp>
 #include "cl2cpp_shaders.h"
 #include "cl2cpp_MM.h"
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 
 //#include <opencv2/highgui/highgui_c.h>
 //#include <opencv2/imgproc/imgproc_c.h>
