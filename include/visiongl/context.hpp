@@ -1,13 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglContext.h                                      ***
-***                                                                ***
-***  ddantas 4/2/2009                                              ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLCONTEXT_H__
-#define __VGLCONTEXT_H__
+#ifndef VGL_CONTEXT_HPP
+#define VGL_CONTEXT_HPP
 
 #include "vglImage.h"
 
@@ -28,4 +20,4 @@ int vglCheckContextForOutput(VglImage* img, int context);
 void vglPrintContext(int context, char* msg = NULL);
 void vglPrintContext(VglImage* img, char* msg = NULL);
 
-#endif
+#endif // VGL_CONTEXT_HPP

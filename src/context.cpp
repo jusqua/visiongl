@@ -13,7 +13,7 @@
 #include "vglClImage.h"
 #endif
 
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 #include "vglImage.h"
 
 #define DEBUG_VGLCONTEXT 0

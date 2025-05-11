@@ -1,6 +1,6 @@
 #include <tiffio.h> 
 #include <visiongl/tiff/io.hpp>
-#include <vglContext.h>
+#include <visiongl/context.hpp>
 
 //malloc_usable_size
 #include <malloc.h>

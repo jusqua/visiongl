@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "vglCudaImage.h"
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 //#include "vglImage.h"
 
 //cuda

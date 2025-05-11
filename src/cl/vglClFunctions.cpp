@@ -1,6 +1,6 @@
 #include "vglImage.h"
 #include "vglClImage.h"
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 #include "vglClFunctions.h"
 #include "cl2cpp_shaders.h"
 #include "cl2cpp_MM.h"

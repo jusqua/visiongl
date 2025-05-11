@@ -13,7 +13,7 @@
 
 #include "vglSimpleBGModel.h"
 #include "glsl2cpp_shaders.h"
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 
 //Shaders
 #include "glsl2cpp_BG.h"

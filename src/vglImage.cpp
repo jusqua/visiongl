@@ -20,7 +20,7 @@
 
 #include <visiongl/common.hpp>
 
-#include "vglContext.h"
+#include <visiongl/context.hpp>
 #include "vglImage.h"
 #include "vglLoadShader.h"
 

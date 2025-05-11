@@ -1,5 +1,5 @@
 #include <visiongl/gdcm/io.hpp>
-#include <vglContext.h>
+#include <visiongl/context.hpp>
 #include <gdcmImageReader.h>
 #include <gdcmImage.h>
 #include <gdcmWriter.h>

@@ -1,5 +1,5 @@
 #include <visiongl/dcmtk/io.hpp>
-#include <vglContext.h>
+#include <visiongl/context.hpp>
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
 #define INCLUDE_CSTDLIB
