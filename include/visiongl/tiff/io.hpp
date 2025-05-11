@@ -1,16 +1,9 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglTiffIo.h                                       ***
-***                                                                ***
-*********************************************************************/
+#ifndef VGL_TIFF_IO_HPP
+#define VGL_TIFF_IO_HPP
 
-#ifndef __VGLTIFFIO_H__
-#define __VGLTIFFIO_H__
-
-#ifdef __TIFF__
+#ifdef VGL_USE_TIFF
 
 #include <vglImage.h>
-
 #include <visiongl/common.hpp>
 
 VglImage* vglLoadTiff(char* inFilename);
@@ -23,6 +16,6 @@ int vglSave4dTiff(char* filename, VglImage* image, int lStart, int lEnd);
 
 int vglPrintTiffInfo(char* inFilename, char* msg = NULL);
 
-#endif
+#endif // VGL_USE_TIFF
 
-#endif
+#endif // VGL_TIFF_IO_HPP

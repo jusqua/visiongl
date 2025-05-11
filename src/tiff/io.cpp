@@ -1,7 +1,5 @@
-#ifdef __TIFF__
-
 #include <tiffio.h> 
-#include <vglTiffIo.h>
+#include <visiongl/tiff/io.hpp>
 #include <vglContext.h>
 
 //malloc_usable_size
@@ -753,6 +751,3 @@ int vglSave4dTiff(char* filename, VglImage* image, int lStart, int lEnd)
 
   return 0;
 }      
-
-
-#endif

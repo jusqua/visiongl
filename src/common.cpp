@@ -3,9 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __TIFF__
-#include <vglTiffIo.h>
-#endif
+#include <visiongl/tiff/io.hpp>
 
 #include <visiongl/common.hpp>
 
@@ -649,7 +647,7 @@ IplImage *iplLoadImage(char *filename,
   }
 
   else if (strcmp(ext, "TIFF") == 0 || strcmp(ext, ".TIF") == 0) {
-#ifdef __TIFF__
+#ifdef VGL_USE_TIFF
     iplImage = iplLoadTiff(filename);
 #else
     fprintf(stderr,
@@ -827,7 +825,7 @@ int iplSaveImage(char *filename, IplImage *image, int *params /*=0*/) {
   }
 
   else if (strcmp(ext, "TIFF") == 0 || strcmp(ext, ".TIF") == 0) {
-#ifdef __TIFF__
+#ifdef VGL_USE_TIFF
     result = iplSaveTiff(filename, image);
 #else
     fprintf(stderr,

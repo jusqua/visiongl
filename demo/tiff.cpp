@@ -1,5 +1,5 @@
 #include <vglImage.h>
-#include <vglTiffIo.h>
+#include <visiongl/tiff/io.hpp>
 #include <vglGdcmIo.h>
 
 
