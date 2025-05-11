@@ -645,14 +645,14 @@ $topMsg = "
 ";
 open HEAD, ">>", "$output.h";
 print HEAD $topMsg;
-print HEAD "#include \"vglImage.h\"\n";
+print HEAD "#include <visiongl/image.hpp>\n";
 close HEAD;
 open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
-#include \"vglImage.h\"
-#include \"vglLoadShader.h\"
-#include \"vglContext.h\"\n
+#include <visiongl/image.hpp>
+#include <visiongl/shader_loader.hpp>
+#include <visiongl/context.hpp>\n
 #include <iostream>
 ";
 close HEAD;

@@ -995,26 +995,26 @@ $topMsg = "
 ";
 open HEAD, ">>", "$output.h";
 print HEAD $topMsg;
-print HEAD "#include \"vglImage.h\"
+print HEAD "#include <visiongl/image.hpp>
 
-#include \"vglShape.h\"
+#include <visiongl/shape.hpp>
 
-#include \"vglStrEl.h\"
+#include <visiongl/strel.hpp>
 
 ";
 close HEAD;
 open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
-#include \"vglImage.h\"
-#include \"vglClImage.h\"
-#include \"vglContext.h\"
+#include <visiongl/image.hpp>
+#include <visiongl/cl/image.hpp>
+#include <visiongl/context.hpp>
 
-#include \"vglShape.h\"
-#include \"vglClShape.h\"
+#include <visiongl/shape.hpp>
+#include <visiongl/cl/shape.hpp>
 
-#include \"vglStrEl.h\"
-#include \"vglClStrEl.h\"
+#include <visiongl/strel.hpp>
+#include <visiongl/cl/strel.hpp>
 
 #include <fstream>
 
