@@ -11,7 +11,7 @@
 //O_RDONLY
 #include <fcntl.h>
 
-#include "vglLoadShader.h"
+#include <visiongl/shader_loader.hpp>
 
 
 GLuint vglShaderTypeIsOk(GLuint type){

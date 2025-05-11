@@ -22,7 +22,7 @@
 
 #include <visiongl/context.hpp>
 #include <visiongl/image.hpp>
-#include "vglLoadShader.h"
+#include <visiongl/shader_loader.hpp>
 
 //vglDilateSq3, vglErodeSq3
 #include "glsl2cpp_shaders.h"

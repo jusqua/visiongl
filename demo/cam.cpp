@@ -4,7 +4,7 @@
 #include <GL/freeglut.h>
 
 // visiongl
-#include "vglLoadShader.h"
+#include <visiongl/shader_loader.hpp>
 #include "glsl2cpp_shaders.h"
 #include "glsl2cpp_Stereo.h"
 #include <visiongl/image.hpp>
