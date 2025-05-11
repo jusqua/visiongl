@@ -1,6 +1,6 @@
 
 #include <vglImage.h>
-#include <vglGdcmIo.h>
+#include <visiongl/gdcm/io.hpp>
 #include <vglDcmtkIo.h>
 
 //toupper
@@ -37,7 +37,7 @@ image_info <input file> -p\n\
 
   if(strcmp(extension, ".DCM") == 0)
   {
-#ifdef __GDCM__
+#ifdef VGL_USE_GDCM
     imagevgl = vglGdcmLoadDicom(filename);
 #elif defined __DCMTK__
     imagevgl = vglDcmtkLoadDicom(filename);

@@ -1,6 +1,6 @@
 
 #include "vglImage.h"
-#include "vglGdcmIo.h"
+#include <visiongl/gdcm/io.hpp>
 #include "glsl2cpp_shaders.h"
 
 //toupper

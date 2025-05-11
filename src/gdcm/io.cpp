@@ -1,6 +1,4 @@
-#ifdef __GDCM__
-
-#include <vglGdcmIo.h>
+#include <visiongl/gdcm/io.hpp>
 #include <vglContext.h>
 #include <gdcmImageReader.h>
 #include <gdcmImage.h>
@@ -384,5 +382,3 @@ int vglGdcmSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, in
 
   return 0;
 }     
-
-#endif

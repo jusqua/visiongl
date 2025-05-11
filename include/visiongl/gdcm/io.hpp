@@ -1,13 +1,7 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglGdcmIo.h                                       ***
-***                                                                ***
-*********************************************************************/
+#ifndef VGL_GDCM_IO_HPP
+#define VGL_GDCM_IO_HPP
 
-#ifndef __VGLGDCMIO_H__
-#define __VGLGDCMIO_H__
-
-#ifdef __GDCM__
+#ifdef VGL_USE_GDCM
 
 #include <vglImage.h>
 
@@ -20,8 +14,8 @@ int vglGdcmSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, in
 int convertDepthGdcmToVgl(int dcmDepth);
 int convertDepthVglToGdcm(int vglDepth);
 
-#endif
+#endif // VGL_USE_GDCM
 
-#endif
+#endif // VGL_GDCM_IO_HPP
 
 

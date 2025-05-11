@@ -1,6 +1,6 @@
 #include <vglImage.h>
 #include <visiongl/tiff/io.hpp>
-#include <vglGdcmIo.h>
+#include <visiongl/gdcm/io.hpp>
 
 
 int main(int argc, char *argv[])
