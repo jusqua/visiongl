@@ -114,4 +114,8 @@ void vglClBinReconstructionByClosing(VglImage* src, VglImage* dst, VglImage* buf
 void vglClBinNConditionalDilate(VglImage* src, VglImage* mask, VglImage* dst, VglImage* buff, VglStrEl* strel, int times);
 void vglClBinNConditionalErode(VglImage* src, VglImage* mask, VglImage* dst, VglImage* buff, VglStrEl* strel, int times);
 
+void vglCl3dMergeZByMean(VglImage* img_input, VglImage* img_output, int number_of_merges);
+void vglCl3dMergeZByMax(VglImage* img_input, VglImage* img_output, int number_of_merges);
+float vglCl9root(float number);
+
 #endif // VGL_CL_FUNCTIONS_HPP
