@@ -2,7 +2,7 @@
 #ifdef __OPENCL__
 //this program requires opencl
 
-#include "vglClImage.h"
+#include <visiongl/cl/image.hpp>
 #include "vglContext.h"
 #include "cl2cpp_shaders.h"
 

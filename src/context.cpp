@@ -10,7 +10,7 @@
 #endif
 
 #ifdef __OPENCL__
-#include "vglClImage.h"
+#include <visiongl/cl/image.hpp>
 #endif
 
 #include <visiongl/context.hpp>

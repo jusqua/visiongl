@@ -1,14 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglClImage.h                                      ***
-***                                                                ***
-***  ddantas, hdanilo 21/1/2014                                    ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLCLIMAGE_H__
-#define __VGLCLIMAGE_H__
-
+#ifndef VGL_CL_IMAGE_HPP
+#define VGL_CL_IMAGE_HPP
 
 #ifdef __OPENCL__
 
@@ -44,4 +35,4 @@ void vglClAlloc(VglImage* img);
 
 #endif
 
-#endif
+#endif // VGL_CL_IMAGE_HPP

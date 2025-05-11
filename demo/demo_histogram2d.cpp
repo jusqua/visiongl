@@ -1,5 +1,5 @@
 #include <visiongl/image.hpp>
-#include "vglClImage.h"
+#include <visiongl/cl/image.hpp>
 #include <visiongl/dcmtk/io.hpp>
 #include "vglClFunctions.h"
 #include "demo/timer.h"

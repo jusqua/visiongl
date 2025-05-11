@@ -1,7 +1,7 @@
 
 #ifdef __OPENCL__
 
-#include "vglClImage.h"
+#include <visiongl/cl/image.hpp>
 #include <visiongl/context.hpp>
 #include "cl2cpp_shaders.h"
 #include <visiongl/constants.hpp>
