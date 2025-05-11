@@ -5,8 +5,8 @@
 
 // visiongl
 #include <visiongl/shader_loader.hpp>
-#include "glsl2cpp_shaders.h"
-#include "glsl2cpp_Stereo.h"
+#include <visiongl/glsl2cpp_shaders.hpp>
+#include <visiongl/glsl2cpp_Stereo.hpp>
 #include <visiongl/image.hpp>
 #include <visiongl/context.hpp>
 #include <visiongl/cuda/image.hpp>

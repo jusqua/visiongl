@@ -12,11 +12,11 @@
 //#include <cvaux.h>
 
 #include <visiongl/bg_model.hpp>
-#include "glsl2cpp_shaders.h"
+#include <visiongl/glsl2cpp_shaders.hpp>
 #include <visiongl/context.hpp>
 
 //Shaders
-#include "glsl2cpp_BG.h"
+#include <visiongl/glsl2cpp_BG.hpp>
 
 #include <visiongl/common.hpp>
 

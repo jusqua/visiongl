@@ -1,7 +1,7 @@
 
 #include <visiongl/image.hpp>
 #include <visiongl/context.hpp>
-#include "kernel2cu_shaders.h"
+#include <visiongl/cuda/kernel2cu_shaders.hpp>
 
 
 int main(int argc, char *argv[])

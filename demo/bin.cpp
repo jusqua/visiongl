@@ -1,8 +1,8 @@
 #include <visiongl/image.hpp>
 #include <visiongl/context.hpp>
 #include <visiongl/cl/image.hpp>
-#include <cl2cpp_BIN.h>
-#include <cl2cpp_shaders.h>
+#include <visiongl/cl/cl2cpp_BIN.hpp>
+#include <visiongl/cl/cl2cpp_shaders.hpp>
 #include <visiongl/common.hpp>
 // strlen
 #include <string.h>

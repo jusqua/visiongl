@@ -1,7 +1,7 @@
 
 #include <visiongl/image.hpp>
 #include <visiongl/dcmtk/io.hpp>
-#include "glsl2cpp_shaders.h"
+#include <visiongl/glsl2cpp_shaders.hpp>
 
 
 int main(int argc, char *argv[])

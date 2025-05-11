@@ -25,7 +25,7 @@
 #include <visiongl/shader_loader.hpp>
 
 //vglDilateSq3, vglErodeSq3
-#include "glsl2cpp_shaders.h"
+#include <visiongl/glsl2cpp_shaders.hpp>
 
 
   /** \brief Refresh all output images.

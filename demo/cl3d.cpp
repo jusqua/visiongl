@@ -1,8 +1,8 @@
 
 #include <visiongl/image.hpp>
 #include <visiongl/cl/image.hpp>
-#include "cl2cpp_shaders.h"
-#include "glsl2cpp_shaders.h"
+#include <visiongl/cl/cl2cpp_shaders.hpp>
+#include <visiongl/glsl2cpp_shaders.hpp>
 
 #include <string.h>
 

@@ -1,9 +1,9 @@
 
 #include <visiongl/image.hpp>
 #include <visiongl/cl/image.hpp>
-#include "cl2cpp_shaders.h"
-#include "cl2cpp_ND.h"
-#include "glsl2cpp_shaders.h"
+#include <visiongl/cl/cl2cpp_shaders.hpp>
+#include <visiongl/cl/cl2cpp_ND.hpp>
+#include <visiongl/glsl2cpp_shaders.hpp>
 
 #include <visiongl/shape.hpp>
 #include <visiongl/strel.hpp>

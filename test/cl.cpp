@@ -1,8 +1,8 @@
 
 #include <visiongl/image.hpp>
 
-#include "cl2cpp_shaders.h"
-#include "cl2cpp_BIN.h"
+#include <visiongl/cl/cl2cpp_shaders.hpp>
+#include <visiongl/cl/cl2cpp_BIN.hpp>
 #include <visiongl/cl/image.hpp>
 #include <visiongl/cl/functions.hpp>
 #include <visiongl/context.hpp>
