@@ -6,7 +6,7 @@
 #include "cl2cpp_ND.h"
 #include "glsl2cpp_shaders.h"
 
-#include "vglConst.h"
+#include <visiongl/constants.hpp>
 #include "vglShape.h"
 #include "vglStrEl.h"
 

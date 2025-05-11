@@ -4,7 +4,7 @@
 #include "vglClImage.h"
 #include "vglContext.h"
 #include "cl2cpp_shaders.h"
-#include "vglConst.h"
+#include <visiongl/constants.hpp>
 
 
 //ifstream

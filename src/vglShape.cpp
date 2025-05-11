@@ -1,5 +1,5 @@
 
-#include <vglConst.h>
+#include <visiongl/constants.hpp>
 #include <vglShape.h>
 
 #ifdef __OPENCL__

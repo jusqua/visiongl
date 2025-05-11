@@ -7,7 +7,7 @@
 #ifndef __VGLSHAPE_H__
 #define __VGLSHAPE_H__
 
-#include <vglConst.h>
+#include <visiongl/constants.hpp>
 
 //CL
 #ifdef __OPENCL__
