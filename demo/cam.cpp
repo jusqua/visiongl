@@ -10,7 +10,7 @@
 #include <visiongl/image.hpp>
 #include "vglContext.h"
 #include "vglCudaImage.h"
-#include "vglSimpleBGModel.h"
+#include <visiongl/bg_model.hpp>
 
 //IplImage, cvLoadImage
 #include <opencv2/highgui/highgui_c.h>

@@ -1,8 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglSimpleBGModel.h                                ***
-***                                                                ***
-*********************************************************************/
+#ifndef VGL_SIMPLEBGMODEL_HPP
+#define VGL_SIMPLEBGMODEL_HPP
 
 #include <visiongl/image.hpp>
 
@@ -48,5 +45,4 @@ public:
   void UpdateSimpleBGModelRGL(VglImage* img_in);
 };
 
-
-
+#endif // VGL_SIMPLEBGMODEL_HPP

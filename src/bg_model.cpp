@@ -11,7 +11,7 @@
 //opencv CvCamera
 //#include <cvaux.h>
 
-#include "vglSimpleBGModel.h"
+#include <visiongl/bg_model.hpp>
 #include "glsl2cpp_shaders.h"
 #include <visiongl/context.hpp>
 
