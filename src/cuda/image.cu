@@ -2,7 +2,7 @@
 //fprintf
 #include <iostream>
 
-#include "vglCudaImage.h"
+#include <visiongl/cuda/image.hpp>
 #include <visiongl/context.hpp>
 //#include <visiongl/image.hpp>
 

@@ -9,7 +9,7 @@
 #include "glsl2cpp_Stereo.h"
 #include <visiongl/image.hpp>
 #include "vglContext.h"
-#include "vglCudaImage.h"
+#include <visiongl/cuda/image.hpp>
 #include <visiongl/bg_model.hpp>
 
 //IplImage, cvLoadImage

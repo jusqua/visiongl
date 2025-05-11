@@ -6,7 +6,7 @@
 #include <iostream>
 
 #ifdef __CUDA__
-#include "vglCudaImage.h"
+#include <visiongl/cuda/image.hpp>
 #endif
 
 #ifdef __OPENCL__

@@ -1,11 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglCudaImage.h                                    ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLCUDAIMAGE_H__
-#define __VGLCUDAIMAGE_H__
+#ifndef VGL_CUDA_IMAGE_HPP
+#define VGL_CUDA_IMAGE_HPP
 
 #include <visiongl/image.hpp>
 
@@ -23,4 +17,4 @@ void vglCudaCopy(VglImage* img, VglImage* dst);
 void vglCudaCopy2(VglImage* img, VglImage* dst);
 void vglCudaInvert(VglImage* img, VglImage* dst);
 
-#endif
+#endif // VGL_CUDAIMAGE_HPP
