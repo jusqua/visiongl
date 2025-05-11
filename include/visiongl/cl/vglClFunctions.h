@@ -1,5 +1,5 @@
 #include <visiongl/image.hpp>
-#include "vglStrEl.h"
+#include <visiongl/strel.hpp>
 
 int* vglClHistogram(VglImage* img_input);
 

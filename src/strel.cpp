@@ -1,5 +1,5 @@
 
-#include <vglStrEl.h>
+#include <visiongl/strel.hpp>
 
 #include <vglClStrEl.h>
 

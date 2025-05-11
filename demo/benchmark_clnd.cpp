@@ -8,7 +8,7 @@
 
 #include <visiongl/constants.hpp>
 #include <visiongl/shape.hpp>
-#include "vglStrEl.h"
+#include <visiongl/strel.hpp>
 
 #include "demo/timer.h"
 

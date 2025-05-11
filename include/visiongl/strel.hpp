@@ -1,11 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglStrEl                                          ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLSTREL_H__
-#define __VGLSTREL_H__
+#ifndef VGL_STREL_HPP
+#define VGL_STREL_HPP
 
 #include <visiongl/image.hpp>
 #include <visiongl/shape.hpp>
@@ -48,9 +42,4 @@ class VglStrEl{
 
 };
 
-
-
-
-
-
-#endif
+#endif // VGL_STREL_HPP

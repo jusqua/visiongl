@@ -6,7 +6,7 @@
 #include "glsl2cpp_shaders.h"
 
 #include <visiongl/shape.hpp>
-#include "vglStrEl.h"
+#include <visiongl/strel.hpp>
 
 // strcmp, strlen
 #include <string.h>
