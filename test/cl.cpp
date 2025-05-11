@@ -6,7 +6,8 @@
 #include "vglClImage.h"
 #include "vglClFunctions.h"
 #include "vglContext.h"
-#include "iplImage.h"
+
+#include <visiongl/common.hpp>
 
 #include "vglTest.h"
 

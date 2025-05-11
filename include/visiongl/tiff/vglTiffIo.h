@@ -11,12 +11,7 @@
 
 #include <vglImage.h>
 
-//IplImage
-#ifdef __OPENCV__
-  #include <opencv2/core/types_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
+#include <visiongl/common.hpp>
 
 VglImage* vglLoadTiff(char* inFilename);
 IplImage* iplLoadTiff(char* inFilename);

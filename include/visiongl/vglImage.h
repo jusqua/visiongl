@@ -20,14 +20,7 @@
 
 #include <cstdio>
 
-//opencv IplImage
-#ifdef __OPENCV__
-  #undef __SSE2__
-  #include <opencv2/imgproc/types_c.h>
-  #include <opencv2/highgui/highgui_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
+#include <visiongl/common.hpp>
 
 //GL
 #include <GL/glew.h>

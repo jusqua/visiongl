@@ -3,16 +3,7 @@
 #include <vglClImage.h>
 #include <cl2cpp_BIN.h>
 #include <cl2cpp_shaders.h>
-#include <iplImage.h>
-
-// IplImage, cvLoadImage
-#ifdef __OPENCV__
-  #include <opencv2/highgui/highgui_c.h>
-  #include <opencv2/imgproc/imgproc_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
-
+#include <visiongl/common.hpp>
 // strlen
 #include <string.h>
 

@@ -4,12 +4,7 @@
 #include "cl2cpp_MM.h"
 #include "vglContext.h"
 
-#ifdef __OPENCV__
-  #include <opencv2/highgui/highgui_c.h>
-  #include <opencv2/imgproc/imgproc_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
+#include <visiongl/common.hpp>
 
 #include <demo/timer.h>
 #include <math.h>

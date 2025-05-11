@@ -7,13 +7,7 @@
 #include "cl2cpp_shaders.h"
 #include "glsl2cpp_shaders.h"
 
-#ifdef __OPENCV__
-  #include <opencv2/imgproc/types_c.h>
-  #include <opencv2/imgproc/imgproc_c.h>
-  #include <opencv2/highgui/highgui_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
+#include <visiongl/common.hpp>
 
 #include "demo/timer.h"
 

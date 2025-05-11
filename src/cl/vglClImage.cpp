@@ -13,15 +13,7 @@
 #include <string.h>
 
 
-//opencv IplImage
-#ifdef __OPENCV__
-  //#undef __SSE2__
-  #include <opencv2/imgproc/types_c.h>
-  #include <opencv2/imgproc/imgproc_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
-
+#include <visiongl/common.hpp>
 
 // cl-gl interoperability
 #include <CL/cl_gl.h>

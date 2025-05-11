@@ -1,11 +1,6 @@
 #include <vglImage.h>
 
-//IplImage, cvLoadImage
-#ifdef __OPENCV__
-  #include <opencv2/highgui/highgui_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
+#include <visiongl/common.hpp>
 
 
 int main(int argc, char *argv[])
