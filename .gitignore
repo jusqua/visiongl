@@ -1,10 +1,27 @@
-images/
-src/AMDOpenCLDebug.log
-src/AMDOpenCLDebugAPIUsage.log
-src/OpenCL.dll
-src/OpenCL.pdb
-bin/
+# temp files
 *~
-dox/
-lib/*.so
-include/*.h
+.cache
+.clangd/
+.DS_store
+
+# build folder
+/build/
+
+# generated files
+cl2cpp_*.*
+cl2cloud_*.*
+glsl2cpp_*.*
+kernel2cu_*.*
+
+# editors config files
+.vscode
+.vs
+.zed
+.idea
+.*.sw?
+.sw?
+
+# cmake custom configs
+CMakeSettings.json
+CMakeUserPresets.json
+cmake-build*
