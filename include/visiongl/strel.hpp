@@ -3,7 +3,7 @@
 
 #include <visiongl/image.hpp>
 #include <visiongl/shape.hpp>
-#include <vglClStrEl.h>
+#include <visiongl/cl/strel.hpp>
 
 //CL
 #ifdef __OPENCL__

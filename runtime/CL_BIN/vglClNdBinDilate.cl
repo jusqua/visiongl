@@ -7,7 +7,7 @@
 //SHAPE img_shape (img_input->vglShape->asVglClShape())
 
 #include "vglClShape.h"
-#include "vglClStrEl.h"
+#include <visiongl/cl/strel.hpp>
 
 __kernel void vglClNdBinDilate(__global VGL_PACK_CL_SHADER_TYPE* img_input, 
                             __global VGL_PACK_CL_SHADER_TYPE* img_output,  

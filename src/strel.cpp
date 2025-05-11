@@ -1,7 +1,6 @@
 
 #include <visiongl/strel.hpp>
-
-#include <vglClStrEl.h>
+#include <visiongl/cl/strel.hpp>
 
 /** /brief Common code for structuring element construction.
 

@@ -7,7 +7,7 @@
 //SHAPE img_shape (img_input->vglShape->asVglClShape())
 
 #include "vglClShape.h"
-#include "vglClStrEl.h"
+#include <visiongl/cl/strel.hpp>
 
 __kernel void vglClNdConvolution(__global unsigned char* img_input, 
                             __global unsigned char* img_output,  

@@ -1,9 +1,7 @@
-
-#ifndef __VGLCLSTREL_H__
-#define __VGLCLSTREL_H__
+#ifndef VGL_CL_STREL_HPP
+#define VGL_CL_STREL_HPP
 
 #include <visiongl/constants.hpp>
-
 
 // OpenCL
 #ifdef __OPENCL_VERSION__
@@ -27,4 +25,4 @@ typedef struct VglClStrEl{
 } VglClStrEl;
 #endif
 
-#endif
+#endif // VGL_CL_STREL_HPP
