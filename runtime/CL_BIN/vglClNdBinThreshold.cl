@@ -6,7 +6,7 @@
 // SHAPE in_shape  (img_input->vglShape->asVglClShape())
 // SHAPE out_shape (img_output->vglShape->asVglClShape())
 
-#include "vglClShape.h"
+#include <visiongl/cl/shape.hpp>
 #include <visiongl/constants.hpp>
 
 __kernel void vglClNdBinThreshold(__global char* img_input,

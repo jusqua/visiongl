@@ -3,7 +3,7 @@
 #include <visiongl/shape.hpp>
 
 #ifdef __OPENCL__
-#include <vglClShape.h>
+#include <visiongl/cl/shape.hpp>
 #endif
 
 //printf

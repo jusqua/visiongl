@@ -8,7 +8,7 @@
 // SCALAR window_size_y
 
 #include <visiongl/constants.hpp>
-#include "vglClShape.h"
+#include <visiongl/cl/shape.hpp>
 
 __kernel void vglClBinDilatePack(__read_only image2d_t img_input,
                              __write_only image2d_t img_output,

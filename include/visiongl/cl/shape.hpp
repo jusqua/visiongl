@@ -1,5 +1,5 @@
-#ifndef __VGLCLSHAPE_H__
-#define __VGLCLSHAPE_H__
+#ifndef VGL_CL_SHAPE_HPP
+#define VGL_CL_SHAPE_HPP
 
 #include <visiongl/constants.hpp>
 
@@ -23,4 +23,4 @@ typedef struct VglClShape{
 } VglClShape;
 #endif
 
-#endif
+#endif // VGL_CL_SHAPE_HPP

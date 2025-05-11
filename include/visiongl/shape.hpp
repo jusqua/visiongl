@@ -6,7 +6,7 @@
 //CL
 #ifdef __OPENCL__
 #include <CL/cl.h>
-#include <vglClShape.h>
+#include <visiongl/cl/shape.hpp>
 #endif
 
 // printf

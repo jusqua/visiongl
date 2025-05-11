@@ -7,7 +7,7 @@
 // SHAPE out_shape (img_output->vglShape->asVglClShape())
 
 #include <visiongl/constants.hpp>
-#include "vglClShape.h"
+#include <visiongl/cl/shape.hpp>
 
 __kernel void vglCl3dBinToGray(__read_only image3d_t img_input,
                              __write_only image3d_t img_output,
