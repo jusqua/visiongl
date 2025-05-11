@@ -1,6 +1,6 @@
 
 #include <vglStrEl.h>
-#include <vglShape.h>
+
 #include <vglClStrEl.h>
 
 /** /brief Common code for structuring element construction.

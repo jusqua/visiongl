@@ -1,11 +1,5 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglShape                                          ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLSHAPE_H__
-#define __VGLSHAPE_H__
+#ifndef VGL_SHAPE_HPP
+#define VGL_SHAPE_HPP
 
 #include <visiongl/constants.hpp>
 
@@ -81,5 +75,4 @@ class VglShape{
 //int getNdim();
 //int getSize();
 
-#endif
-
+#endif // VGL_SHAPE_HPP

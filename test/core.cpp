@@ -1,5 +1,5 @@
 
-#include "vglShape.h"
+#include <visiongl/shape.hpp>
 
 #include "vglTest.h"
 

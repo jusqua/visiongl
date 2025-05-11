@@ -1,6 +1,6 @@
 
 #include <visiongl/constants.hpp>
-#include <vglShape.h>
+#include <visiongl/shape.hpp>
 
 #ifdef __OPENCL__
 #include <vglClShape.h>

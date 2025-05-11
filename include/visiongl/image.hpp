@@ -31,7 +31,7 @@
 
 //VisionGL
 #include <visiongl/constants.hpp>
-#include <vglShape.h>
+#include <visiongl/shape.hpp>
 
 ////////// VglImage
 

@@ -8,7 +8,7 @@
 #include "glsl2cpp_shaders.h"
 
 #include <visiongl/constants.hpp>
-#include "vglShape.h"
+#include <visiongl/shape.hpp>
 #include "vglStrEl.h"
 
 #include "demo/timer.h"
