@@ -1,7 +1,7 @@
 #include <visiongl/image.hpp>
 #include <visiongl/cl/image.hpp>
 #include <visiongl/dcmtk/io.hpp>
-#include "vglClFunctions.h"
+#include <visiongl/cl/functions.hpp>
 #include "demo/timer.h"
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/imgproc/imgproc_c.h>

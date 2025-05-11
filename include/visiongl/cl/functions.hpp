@@ -1,3 +1,6 @@
+#ifndef VGL_CL_FUNCTIONS_HPP
+#define VGL_CL_FUNCTIONS_HPP
+
 #include <visiongl/image.hpp>
 #include <visiongl/strel.hpp>
 
@@ -110,3 +113,5 @@ void vglClBinReconstructionByOpening(VglImage* src, VglImage* dst, VglImage* buf
 void vglClBinReconstructionByClosing(VglImage* src, VglImage* dst, VglImage* buff, VglImage* buff2, VglStrEl* strel);
 void vglClBinNConditionalDilate(VglImage* src, VglImage* mask, VglImage* dst, VglImage* buff, VglStrEl* strel, int times);
 void vglClBinNConditionalErode(VglImage* src, VglImage* mask, VglImage* dst, VglImage* buff, VglStrEl* strel, int times);
+
+#endif // VGL_CL_FUNCTIONS_HPP

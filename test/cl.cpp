@@ -4,7 +4,7 @@
 #include "cl2cpp_shaders.h"
 #include "cl2cpp_BIN.h"
 #include <visiongl/cl/image.hpp>
-#include "vglClFunctions.h"
+#include <visiongl/cl/functions.hpp>
 #include "vglContext.h"
 
 #include <visiongl/common.hpp>
