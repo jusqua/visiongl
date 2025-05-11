@@ -14,7 +14,7 @@
 #endif
 
 #include <visiongl/context.hpp>
-#include "vglImage.h"
+#include <visiongl/image.hpp>
 
 #define DEBUG_VGLCONTEXT 0
 

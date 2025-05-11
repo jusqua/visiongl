@@ -3,7 +3,7 @@
 
 #ifdef VGL_USE_TIFF
 
-#include <vglImage.h>
+#include <visiongl/image.hpp>
 #include <visiongl/common.hpp>
 
 VglImage* vglLoadTiff(char* inFilename);

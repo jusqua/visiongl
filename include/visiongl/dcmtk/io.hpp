@@ -3,7 +3,7 @@
 
 #ifdef VGL_USE_DCMTK
 
-#include <vglImage.h>
+#include <visiongl/image.hpp>
 #include "dcmtk/dcmdata/dctk.h"
 
 VglImage* vglDcmtkLoadDicom(char* inFilename);

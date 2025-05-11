@@ -1,7 +1,7 @@
 #ifndef VGL_CONTEXT_HPP
 #define VGL_CONTEXT_HPP
 
-#include "vglImage.h"
+#include <visiongl/image.hpp>
 
 #define VGL_BLANK_CONTEXT 0
 #define VGL_RAM_CONTEXT 1

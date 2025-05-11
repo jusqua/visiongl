@@ -21,7 +21,7 @@
 #include <visiongl/common.hpp>
 
 #include <visiongl/context.hpp>
-#include "vglImage.h"
+#include <visiongl/image.hpp>
 #include "vglLoadShader.h"
 
 //vglDilateSq3, vglErodeSq3

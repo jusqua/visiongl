@@ -3,7 +3,7 @@
 
 #ifdef VGL_USE_GDCM
 
-#include <vglImage.h>
+#include <visiongl/image.hpp>
 
 VglImage* vglGdcmLoadDicom(char* inFilename);
 VglImage*  vglGdcmLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mipmap = 0);

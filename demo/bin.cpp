@@ -1,4 +1,4 @@
-#include <vglImage.h>
+#include <visiongl/image.hpp>
 #include <vglContext.h>
 #include <vglClImage.h>
 #include <cl2cpp_BIN.h>

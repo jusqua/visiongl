@@ -1,4 +1,4 @@
-#include "vglImage.h"
+#include <visiongl/image.hpp>
 #include "vglStrEl.h"
 
 int* vglClHistogram(VglImage* img_input);

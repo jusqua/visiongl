@@ -1,5 +1,5 @@
 
-#include <vglImage.h>
+#include <visiongl/image.hpp>
 #include <visiongl/gdcm/io.hpp>
 #include <visiongl/dcmtk/io.hpp>
 

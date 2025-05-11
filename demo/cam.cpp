@@ -7,7 +7,7 @@
 #include "vglLoadShader.h"
 #include "glsl2cpp_shaders.h"
 #include "glsl2cpp_Stereo.h"
-#include "vglImage.h"
+#include <visiongl/image.hpp>
 #include "vglContext.h"
 #include "vglCudaImage.h"
 #include "vglSimpleBGModel.h"

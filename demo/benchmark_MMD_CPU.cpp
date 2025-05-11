@@ -1,4 +1,4 @@
-#include "vglImage.h"
+#include <visiongl/image.hpp>
 #include <visiongl/dcmtk/io.hpp>
 
 #include <opencv2/imgproc/types_c.h>

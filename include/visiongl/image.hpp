@@ -1,16 +1,8 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglImage                                          ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLIMAGE_H__
-#define __VGLIMAGE_H__
-
+#ifndef VGL_IMAGE_HPP
+#define VGL_IMAGE_HPP
 
 #define GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT 0x8CD8
 #define GL_FRAMEBUFFER_STATUS_ERROR_EXT 0x8CDE
-
 
 #define __is_pod(type) 1
 #define __is_empty(type) 1
@@ -373,4 +365,4 @@ void vglInOut_model(VglImage*  dst, VglImage*  dst1);
  
 
 
-#endif
+#endif // VGL_IMAGE_HPP

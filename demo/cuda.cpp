@@ -1,5 +1,5 @@
 
-#include "vglImage.h"
+#include <visiongl/image.hpp>
 #include "vglContext.h"
 #include "kernel2cu_shaders.h"
 

@@ -1,5 +1,5 @@
 
-#include "vglImage.h"
+#include <visiongl/image.hpp>
 #include <visiongl/dcmtk/io.hpp>
 #include "glsl2cpp_shaders.h"
 

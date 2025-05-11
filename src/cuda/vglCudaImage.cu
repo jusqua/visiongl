@@ -4,7 +4,7 @@
 
 #include "vglCudaImage.h"
 #include <visiongl/context.hpp>
-//#include "vglImage.h"
+//#include <visiongl/image.hpp>
 
 //cuda
 //#include <cutil.h>
