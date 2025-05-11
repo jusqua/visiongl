@@ -6,7 +6,7 @@
 #include <visiongl/cl/strel.hpp>
 
 //CL
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 #include <CL/cl.h>
 #endif
 
@@ -36,7 +36,7 @@ class VglStrEl{
   int* getShape();
   int* getOffset();
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
   VglClStrEl* asVglClStrEl();
 #endif
 

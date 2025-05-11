@@ -272,7 +272,7 @@ void vglUpload(VglImage* image, int swapRGB){
   //printf("vglUpload: image context = %d\n", image->inContext);
   if (!vglIsInContext(image, VGL_RAM_CONTEXT)  &&
       !vglIsInContext(image, VGL_BLANK_CONTEXT)    ){
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     fprintf(stderr, "vglUpload: Error: image context = %d not in VGL_RAM_CONTEXT or VGL_BLANK_CONTEXT\n", image->inContext);
 #endif
     return;
@@ -434,7 +434,7 @@ void vglUpload(VglImage* image, int swapRGB){
 VglImage* vglCopyCreateImage(VglImage* img_in)
 {
   VglImage* retval = vglCreateImage(cvSize(img_in->getWidthIn(), img_in->getHeightIn()), img_in->depth, img_in->nChannels, img_in->ndim, img_in->has_mipmap);
-  #ifdef __OPENCL__
+  #ifdef VGL_USE_OPENCL
   if (img_in->clForceAsBuf)
   {
     vglClForceAsBuf(retval);
@@ -458,13 +458,13 @@ VglImage* vglCopyCreateImage(VglImage* img_in)
     {
       vglCopy(img_in, retval);
     }
-#ifdef __CUDA__
+#ifdef VGL_USE_CUDA
     if (vglIsInContext(img_in, VGL_CUDA_CONTEXT))
     {
       vglCudaCopy(img_in, retval);
     }
 #endif
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
     if (vglIsInContext(img_in, VGL_CL_CONTEXT))
     {
       vglClCopy(img_in, retval);
@@ -491,7 +491,7 @@ VglImage* vglCopyCreateImage(IplImage* img_in, int ndim /*=2*/, int has_mipmap /
 VglImage* vglCreateImage(VglImage* img_in)
 {
   VglImage* retval = vglCreateImage(img_in->vglShape->shape, img_in->depth, img_in->ndim, img_in->has_mipmap); 
-  #ifdef __OPENCL__
+  #ifdef VGL_USE_OPENCL
   if (img_in->clForceAsBuf)
   {
     vglClForceAsBuf(retval);
@@ -547,11 +547,11 @@ VglImage* vglCreateImage(int* shape, int depth, int ndim /*=2*/, int has_mipmap 
   vglImage->has_mipmap = has_mipmap;
   vglImage->fbo = -1;
   vglImage->tex = -1;
-#ifdef __CUDA__
+#ifdef VGL_USE_CUDA
   vglImage->cudaPtr = NULL;
   vglImage->cudaPbo = -1;
 #endif
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
   vglImage->oclPtr = NULL;
   vglImage->clForceAsBuf = 0;
 #endif
@@ -1006,7 +1006,7 @@ void vglReleaseImage(VglImage** p_image)
   if (image->tex != -1){
     glDeleteTextures(1, &(image->tex));
   }
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
   if (image->oclPtr != NULL){
     clReleaseMemObject(image->oclPtr);
   }
@@ -1611,11 +1611,11 @@ void vglPrintImageInfo(VglImage* image, char* msg){
     printf("\n");
     printf("TEX = %d\n", image->tex);
     printf("FBO = %d\n", image->fbo);
-#ifdef __CUDA__
+#ifdef VGL_USE_CUDA
     printf("CUDAPtr @ %p\n", image->cudaPtr);
     printf("CUDAPbo = %d\n", image->cudaPbo);
 #endif
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
     printf("OCL @ %p\n", image->oclPtr);
     printf("clForceAsBuf = %d\n", image->clForceAsBuf);
 #endif
@@ -2465,7 +2465,7 @@ void vglBaricenterVga(VglImage* src, double* x_avg /*= NULL*/, double* y_avg /*=
 */
 void vglClForceAsBuf(VglImage*  img)
 {
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
   img->clForceAsBuf = 1;
 #else
   fprintf(stderr, "%s: %s: OpenCL not supported. Please recompile setting WITH_OPENCL to true in the Makefile.\n", __FILE__, __FUNCTION__);

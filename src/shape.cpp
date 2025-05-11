@@ -2,7 +2,7 @@
 #include <visiongl/constants.hpp>
 #include <visiongl/shape.hpp>
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 #include <visiongl/cl/shape.hpp>
 #endif
 
@@ -369,7 +369,7 @@ int VglShape::findWidthStep(int bps, int width, int nChannels)
 
 
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 /** Return shape as VglClShape
 
     Return shape as VglClShape, type suitable for passing shape as parameter
@@ -395,7 +395,7 @@ VglClShape* VglShape::asVglClShape()
     result->offset[VGL_SHAPE_HEIGHT]  = result->shape[VGL_SHAPE_HEIGHT-1] * result->offset[VGL_SHAPE_HEIGHT-1];
   }
 
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
   printf("Inside VglShape::asVglClShape()===============\n");
   printf("ndim    = %d\n", result->ndim);
   printf("shape   = ");

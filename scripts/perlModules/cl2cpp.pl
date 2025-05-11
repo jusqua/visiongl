@@ -754,7 +754,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
     }
     std::string _prog( std::istreambuf_iterator<char>( _file ), ( std::istreambuf_iterator<char>() ) );
     const char *_source_str = _prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf(\"Kernel to be compiled:\\n%s\\n\", _source_str);
 #endif
     _program = clCreateProgramWithSource(cl.context, 1, (const char **) &_source_str, 0, &_err );

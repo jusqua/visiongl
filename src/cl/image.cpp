@@ -1,5 +1,5 @@
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 
 #include <visiongl/cl/image.hpp>
 #include <visiongl/context.hpp>
@@ -837,7 +837,7 @@ int vglClMpIsZero(VglImage* num_a){
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );

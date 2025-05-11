@@ -15,7 +15,7 @@ typedef struct VglClStrEl{
 #endif
 
 // C++
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 typedef struct VglClStrEl{ 
   cl_float data[VGL_ARR_CLSTREL_SIZE];
   cl_int ndim;

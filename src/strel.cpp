@@ -247,7 +247,7 @@ int* VglStrEl::getOffset()
 }
 
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 /** Return shape as VglClStrEl
 
     Return shape as VglClStrEl, type suitable for passing structuring

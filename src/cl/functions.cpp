@@ -65,7 +65,7 @@ int* vglClSumPartialHistogram(cl_mem partial_hist, int size, int nchannels)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -131,7 +131,7 @@ cl_mem vglClPartialHistogram(VglImage* img_input)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -193,7 +193,7 @@ cl_mem vglCl3dPartialHistogram(VglImage* img_input)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -255,7 +255,7 @@ int* vglClCumulativeSum(int* arr, int size)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -315,7 +315,7 @@ int* vglClCumulativeSumNorm(int* arr, int size, int norm_total)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -405,7 +405,7 @@ void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformat
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -474,7 +474,7 @@ void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transform
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -748,7 +748,7 @@ bool vglCl3dEqual(VglImage* input1, VglImage* input2)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -819,7 +819,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -908,7 +908,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2, const char* kernel_name)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -1889,7 +1889,7 @@ void vglCl3dMergeZByMean(VglImage* img_input, VglImage* img_output, int number_o
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -1952,7 +1952,7 @@ void vglCl3dMergeZByMax(VglImage* img_input, VglImage* img_output, int number_of
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -2013,7 +2013,7 @@ float vglCl9root(float number)
 		}
 		std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
 		const char *source_str = prog.c_str();
-#ifdef __DEBUG__
+#ifdef VGL_DEBUG_MODE
 		printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
 		program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );

@@ -1,7 +1,7 @@
 #ifndef VGL_CL_IMAGE_HPP
 #define VGL_CL_IMAGE_HPP
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 
 #include <CL/cl.h>
 

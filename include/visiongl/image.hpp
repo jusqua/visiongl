@@ -19,7 +19,7 @@
 #include <GL/freeglut.h>
 
 //CL
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 #include <CL/cl.h>
 #endif
 
@@ -47,11 +47,11 @@ class VglImage{
   int       has_mipmap;
   GLuint    fbo;
   GLuint    tex;
-#ifdef __CUDA__
+#ifdef VGL_USE_CUDA
   void*     cudaPtr;
   GLuint    cudaPbo;
 #endif
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
   cl_mem    oclPtr;
   int       clForceAsBuf;
 #endif
@@ -297,7 +297,7 @@ void vglErodeSq5Sep(VglImage* src, VglImage* dst, VglImage* buf, int times = 1);
 void vglCErodeCross3(VglImage* src, VglImage* mask, VglImage* dst, VglImage* buf, int times);
 void vglGray2(VglImage*  src, VglImage*  dst, VglImage*  dst1);
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 void vglClForceAsBuf(VglImage*  img);
 #endif
 

@@ -1,5 +1,5 @@
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 //this program requires opencl
 
 #include <visiongl/cl/image.hpp>

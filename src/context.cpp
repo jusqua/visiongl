@@ -5,11 +5,11 @@
 //printf, stdout
 #include <iostream>
 
-#ifdef __CUDA__
+#ifdef VGL_USE_CUDA
 #include <visiongl/cuda/image.hpp>
 #endif
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 #include <visiongl/cl/image.hpp>
 #endif
 
@@ -81,7 +81,7 @@ int vglCheckContext(VglImage* img, int context){
         //printf("%s: case 1\n", __FUNCTION__);
         vglAddContext(img, VGL_RAM_CONTEXT);
       }
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
       else
       if (vglIsInContext(img, VGL_CL_CONTEXT)){
         printf("%s: case 2\n", __FUNCTION__);
@@ -138,7 +138,7 @@ int vglCheckContext(VglImage* img, int context){
         //printf("%s: case 1\n", __FUNCTION__);
         vglAddContext(img, VGL_RAM_CONTEXT);
       }
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
       else
       if (vglIsInContext(img, VGL_CL_CONTEXT)){
         vglClDownload(img);        
@@ -150,7 +150,7 @@ int vglCheckContext(VglImage* img, int context){
       if (vglIsInContext(img, VGL_RAM_CONTEXT)){
         vglUpload(img);
       }
-#ifdef __CUDA__
+#ifdef VGL_USE_CUDA
       else if (vglIsInContext(img, VGL_CUDA_CONTEXT)){
         int ok = vglCudaToGl(img);
         if (!ok){
@@ -163,7 +163,7 @@ int vglCheckContext(VglImage* img, int context){
         vglPrintImageInfo(img);
       }
     break;
-#ifdef __CUDA__
+#ifdef VGL_USE_CUDA
     case VGL_CUDA_CONTEXT:
       vglCheckContext(img, VGL_GL_CONTEXT);
       #if DEBUG_VGLCONTEXT
@@ -180,7 +180,7 @@ int vglCheckContext(VglImage* img, int context){
       }
     break;
 #endif
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
     case VGL_CL_CONTEXT:
       if (vglIsInContext(img, VGL_BLANK_CONTEXT)){
         vglClUpload(img);
@@ -223,7 +223,7 @@ int vglCheckContextForOutput(VglImage* img, int context){
     #if DEBUG_VGLCONTEXT
     printf("vglCheckContextForOutput: img not null\n");
     #endif
-    #ifdef __CUDA__
+    #ifdef VGL_USE_CUDA
     if (context == VGL_CUDA_CONTEXT){
       #if DEBUG_VGLCONTEXT
       printf("vglCheckContextForOutput: context is cuda, pbo = %d ptr = %x\n", img->cudaPbo, img->cudaPtr);

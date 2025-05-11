@@ -14,7 +14,7 @@ typedef struct VglClShape{
 #endif
 
 // API
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 typedef struct VglClShape{ 
   cl_int ndim;
   cl_int shape[VGL_ARR_SHAPE_SIZE];

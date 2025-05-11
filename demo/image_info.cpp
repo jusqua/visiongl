@@ -39,7 +39,7 @@ image_info <input file> -p\n\
   {
 #ifdef VGL_USE_GDCM
     imagevgl = vglGdcmLoadDicom(filename);
-#elif defined __DCMTK__
+#elif defined VGL_USE_DCMTK
     imagevgl = vglDcmtkLoadDicom(filename);
 #else
     fprintf(stderr, "%s: %s: Error: Please recompile the library with GDCM or DCMTK support loading DICOM images\n", __FILE__, __FUNCTION__);

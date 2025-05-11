@@ -4,7 +4,7 @@
 #include <visiongl/constants.hpp>
 
 //CL
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
 #include <CL/cl.h>
 #include <visiongl/cl/shape.hpp>
 #endif
@@ -62,7 +62,7 @@ class VglShape{
   static int findBitsPerSample(int depth);
   static int findWidthStep(int bps, int width, int nChannels);
 
-#ifdef __OPENCL__
+#ifdef VGL_USE_OPENCL
   VglClShape* asVglClShape();
 #endif
 
