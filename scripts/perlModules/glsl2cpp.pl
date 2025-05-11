@@ -360,10 +360,10 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   my $i;
   my $first_framebuffer = "";
 
-  print "Will write to $output.cpp and $output.h\n";
+  print "Will write to $output.cpp and $output.hpp\n";
 
   open CPP, ">>", "$output.cpp";
-  open HEAD, ">>", "$output.h";
+  open HEAD, ">>", "$output.hpp";
 
 
   print CPP "$comment\n";
@@ -571,7 +571,7 @@ Usage:
 glsl2cpp  [-o OutputFile] [-p ShadersPath] InputFileList
 
 OutputFile      Source file to which the output will be written. Two files 
-                are written with this prefix, a \".cpp\" and a \".h\". 
+                are written with this prefix, a \".cpp\" and a \".hpp\". 
                 It is optional and the default is \"glsl2cpp_shaders\".
 
 ShadersPath     Path to shader files, added to cpp source code before the 
@@ -605,7 +605,7 @@ die "morreu";
 for ($i=0; $i<$nargs; $i=$i+2) {
   if    ($ARGV[$i] eq "-o") {  
     $output = $ARGV[$i+1] ;
-    print ("Output Files: $output.cpp and $output.h\n") ;
+    print ("Output Files: $output.cpp and $output.hpp\n") ;
   }
   elsif ($ARGV[$i] eq "-p") {  
     $cpp_read_path = $ARGV[$i+1] ;
@@ -632,7 +632,7 @@ elsif ($cpp_read_path =~ m#[^/]$#){
 $firstInputFile = $i;
 
 unlink("$output.cpp");
-unlink("$output.h");
+unlink("$output.hpp");
 
 $topMsg = "
 /*********************************************************************\
@@ -643,7 +643,7 @@ $topMsg = "
 ***                                                                 ***
 \*********************************************************************/
 ";
-open HEAD, ">>", "$output.h";
+open HEAD, ">>", "$output.hpp";
 print HEAD $topMsg;
 print HEAD "#include <visiongl/image.hpp>\n";
 close HEAD;

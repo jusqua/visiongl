@@ -437,10 +437,10 @@ sub PrintCudaFile { # ($basename, $comment, $semantics, $type, $variable, $defau
   my $j;
   my $first_framebuffer = "";
 
-  print "Will write to $output.cu and $output.h\n";
+  print "Will write to $output.cu and $output.hpp\n";
 
   open CUDA, ">>", "$output.cu";
-  open HEAD, ">>", "$output.h";
+  open HEAD, ">>", "$output.hpp";
 
 
   #print CUDA "$comment\n";
@@ -548,7 +548,7 @@ Usage:
 kernel2cu  [-o OutputFile] InputFileList
 
 OutputFile      Source file to which the output will be written. Two files 
-                are written with this prefix, a \".cu\" and a \".h\". 
+                are written with this prefix, a \".cu\" and a \".hpp\". 
                 It is optional and the default is \"kernel2cu_shaders\".
 
 InputFileList   List of input files. Wildcard characters are allowed.
@@ -579,7 +579,7 @@ die "morreu";
 for ($i=0; $i<$nargs; $i=$i+2) {
   if    ($ARGV[$i] eq "-o") {  
     $output = $ARGV[$i+1] ;
-    print ("Output Files: $output.cu and $output.h\n") ;
+    print ("Output Files: $output.cu and $output.hpp\n") ;
   }
   else {
     last;
@@ -593,7 +593,7 @@ if (!$output){
 $firstInputFile = $i;
 
 unlink("$output.cu");
-unlink("$output.h");
+unlink("$output.hpp");
 
 $topMsg = "
 /*********************************************************************\
@@ -604,9 +604,9 @@ $topMsg = "
 ***                                                                 ***
 \*********************************************************************/
 ";
-open HEAD, ">>", "$output.h";
+open HEAD, ">>", "$output.hpp";
 print HEAD $topMsg;
-open HEAD, ">>", "$output.h";
+open HEAD, ">>", "$output.hpp";
 print HEAD "#include <visiongl/image.hpp>\n";
 close HEAD;
 open CUDA, ">>", "$output.cu";
