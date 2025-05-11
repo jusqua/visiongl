@@ -1,6 +1,6 @@
 #include "vglImage.h"
 #include "vglClImage.h"
-#include "vglDcmtkIo.h"
+#include <visiongl/dcmtk/io.hpp>
 #include "vglClFunctions.h"
 #include "demo/timer.h"
 

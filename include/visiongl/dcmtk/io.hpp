@@ -1,15 +1,7 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglDcmtkIo.h                                      ***
-***                                                                ***
-***                                                                ***
-***                                                                ***
-*********************************************************************/
+#ifndef VGL_DCMTK_IO_HPP
+#define VGL_DCMTK_IO_HPP
 
-#ifndef __VGLDCMTK_H__
-#define __VGLDCMTK_H__
-
-#ifdef __DCMTK__
+#ifdef VGL_USE_DCMTK
 
 #include <vglImage.h>
 #include "dcmtk/dcmdata/dctk.h"
@@ -24,6 +16,6 @@ int convertDepthDcmtkToVgl(int dcmDepth);
 int convertDepthVglToDcmtk(int vglDepth);
 
 
-#endif
+#endif // VGL_USE_DCMTK
 
-#endif
+#endif // VGL_DCMTK_IO_HPP

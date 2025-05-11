@@ -1,5 +1,5 @@
 #include "vglImage.h"
-#include "vglDcmtkIo.h"
+#include <visiongl/dcmtk/io.hpp>
 
 #include <opencv2/imgproc/types_c.h>
 #include <opencv2/imgproc/imgproc_c.h>

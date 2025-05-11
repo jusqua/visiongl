@@ -1,7 +1,7 @@
 
 #include <vglImage.h>
 #include <visiongl/gdcm/io.hpp>
-#include <vglDcmtkIo.h>
+#include <visiongl/dcmtk/io.hpp>
 
 //toupper
 #include <ctype.h>

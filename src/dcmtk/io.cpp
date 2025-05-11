@@ -1,6 +1,4 @@
-#ifdef __DCMTK__
-
-#include <vglDcmtkIo.h>
+#include <visiongl/dcmtk/io.hpp>
 #include <vglContext.h>
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
@@ -511,5 +509,3 @@ int vglDcmtkSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, i
 
   return 0;
 }      
-
-#endif
