@@ -295,3 +295,8 @@ install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
+
+# Install runtime to share directory
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/runtime/
+  DESTINATION ${CMAKE_BINARY_DIR}/share/${PROJECT_NAME}/runtime
+)
