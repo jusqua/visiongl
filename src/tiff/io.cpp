@@ -688,6 +688,8 @@ int vglSaveTiff(char* outFilename, VglImage* image)
   }
  
   TIFFClose(out);
+  
+  return 0;
 }
 
 /** Function for saving 2D TIFF images
