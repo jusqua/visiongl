@@ -1,0 +1,30 @@
+#ifndef VGL_CONFIG_HPP
+#define VGL_CONFIG_HPP
+
+#define VISIONGL_VERSION_MAJOR @visiongl_VERSION_MAJOR@
+#define VISIONGL_VERSION_MINOR @visiongl_VERSION_MINOR@
+#define VISIONGL_VERSION_PATCH 0
+#define VISIONGL_VERSION_STRING "@visiongl_VERSION@"
+
+// Feature configurations
+#cmakedefine01 VGL_DEBUG_MODE
+#cmakedefine01 VGL_USE_CUDA
+#cmakedefine01 VGL_USE_OPENCV
+#cmakedefine01 VGL_USE_OPENCL
+#cmakedefine01 VGL_USE_DCMTK
+#cmakedefine01 VGL_USE_GDCM
+#cmakedefine01 VGL_USE_TIFF
+
+// Configuration summary
+/*
+ * VisionGL v@visiongl_VERSION@
+ * Build configuration:
+ *   - Debug mode: @VGL_DEBUG_MODE@
+ *   - CUDA support: @VGL_USE_CUDA@
+ *   - OpenCL support: @VGL_USE_OPENCL@
+ *   - OpenCV support: @VGL_USE_OPENCV@
+ *   - GDCM support: @VGL_USE_GDCM@
+ *   - TIFF support: @VGL_USE_TIFF@
+ */
+
+#endif // VGL_CONFIG_HPP

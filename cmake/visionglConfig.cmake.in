@@ -1,0 +1,55 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# Find required dependencies
+find_dependency(OpenGL REQUIRED)
+find_dependency(GLEW REQUIRED)
+find_dependency(GLUT REQUIRED)
+
+# Find optional dependencies
+if(@VGL_USE_CUDA@)
+    find_dependency(CUDA REQUIRED)
+endif()
+
+if(@VGL_USE_OPENCL@)
+    find_dependency(OpenCL REQUIRED)
+endif()
+
+if(@VGL_USE_OPENCV@)
+    find_dependency(OpenCV REQUIRED)
+endif()
+
+if(@VGL_USE_DCMTK@)
+    find_dependency(DCMTK REQUIRED)
+endif()
+
+if(@VGL_USE_GDCM@)
+    find_dependency(GDCM REQUIRED)
+endif()
+
+if(@VGL_USE_TIFF@)
+    find_dependency(TIFF REQUIRED)
+endif()
+
+# Import targets
+include("${CMAKE_CURRENT_LIST_DIR}/visionglTargets.cmake")
+
+# Set IMPORTED_LOCATION for shared library targets
+get_target_property(VISIONGL_LIBRARY visiongl::visiongl IMPORTED_LOCATION_RELEASE)
+if(NOT VISIONGL_LIBRARY)
+    get_target_property(VISIONGL_LIBRARY visiongl::visiongl IMPORTED_LOCATION_DEBUG)
+endif()
+
+# Set IMPORTED_IMPLIB for Windows platforms
+if (WIN32)
+    get_target_property(VISIONGL_IMPLIB visiongl::visiongl IMPORTED_IMPLIB_RELEASE)
+    if(NOT VISIONGL_IMPLIB)
+        get_target_property(VISIONGL_IMPLIB visiongl::visiongl IMPORTED_IMPLIB_DEBUG)
+    endif()
+endif()
+
+# Component variables for backward compatibility
+set(VISIONGL_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/visiongl")
+set(VISIONGL_LIBRARIES visiongl::visiongl)
+set(VISIONGL_FOUND TRUE)
