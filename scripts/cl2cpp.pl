@@ -744,7 +744,8 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   static cl_program _program = NULL;
   if (_program == NULL)
   {
-    char* _file_path = (char*) \"$cpp_read_path$basename\.cl\";
+    auto file_path = vgl::get_runtime_path() + \"$cpp_read_path$basename\.cl\";
+    auto _file_path = file_path.c_str();
     printf(\"Compiling %s\\n\", _file_path);
     std::ifstream _file(_file_path);
     if(_file.fail())
@@ -1006,6 +1007,8 @@ close HEAD;
 open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
+#include <visiongl/runtime.hpp>
+
 #include <visiongl/image.hpp>
 #include <visiongl/cl/image.hpp>
 #include <visiongl/context.hpp>
@@ -1017,6 +1020,7 @@ print CPP "
 #include <visiongl/cl/strel.hpp>
 
 #include <fstream>
+#include <string>
 
 extern VglClContext cl;
 
