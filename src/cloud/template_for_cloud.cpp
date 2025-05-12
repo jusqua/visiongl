@@ -1,4 +1,3 @@
-
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <visiongl.h>
@@ -82,8 +81,8 @@ void processArgs(int argc, char* argv[])
         for(int i = 1; i < argc; i++)
         {
             string arg = string(argv[i]);
-            //primeira palavra após o nome do executável deve ser um
-            //argumento e não um valor
+            //primeira palavra apÃ³s o nome do executÃ¡vel deve ser um
+            //argumento e nÃ£o um valor
 	    /*
             if (i == 1 && strcmp(arg.substr(0,2).c_str(),"--") != 0)
             {
