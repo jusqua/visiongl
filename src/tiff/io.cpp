@@ -3,7 +3,7 @@
 #include <visiongl/context.hpp>
 
 //malloc_usable_size
-#include <malloc.h>
+// #include <malloc.h>
 //memcpy, strlen
 #include <string.h>
 
@@ -144,66 +144,66 @@ tsize_t tif_BytesPerPixel(TIFF* tif) // depth
   return pixelSize;
 }
 
-int tif_PrintAsc(TIFF* tif, tdata_t raster, char* filename)
-{
+// int tif_PrintAsc(TIFF* tif, tdata_t raster, char* filename)
+// {
 
-  FILE* outfile;
+//   FILE* outfile;
 
-  char min;
-  char max;
-  char val;
-  char pixel;
+//   char min;
+//   char max;
+//   char val;
+//   char pixel;
 
-  uint32 iw, ih, ic;
-  uint32 w = tif_Width(tif);
-  uint32 h = tif_Height(tif);
-  uint32 c = tif_nChannels(tif);
-  tsize_t pixelSize = tif_BytesPerPixel(tif);
+//   uint32 iw, ih, ic;
+//   uint32 w = tif_Width(tif);
+//   uint32 h = tif_Height(tif);
+//   uint32 c = tif_nChannels(tif);
+//   tsize_t pixelSize = tif_BytesPerPixel(tif);
 
-  char* rasterc;
+//   char* rasterc;
 
-  printf("tif_PrintAsc: w = %d, h = %d, pixelSize = %ld\n", w, h, (long int) pixelSize);
+//   printf("tif_PrintAsc: w = %d, h = %d, pixelSize = %ld\n", w, h, (long int) pixelSize);
 
-      outfile = fopen(filename, "w");
-      if (!outfile)
-        return 1;
+//       outfile = fopen(filename, "w");
+//       if (!outfile)
+//         return 1;
       
-      fprintf(outfile, "ASCII output of %s\n", filename); 
+//       fprintf(outfile, "ASCII output of %s\n", filename); 
 
-      if (raster == NULL)
-        return 1;
-      if (tif == NULL)
-        return 1;
+//       if (raster == NULL)
+//         return 1;
+//       if (tif == NULL)
+//         return 1;
 
-    rasterc = (char*) raster;
-    for (ic = 0; ic < c; ic++){
-      for (ih = 0; ih < h; ih++){
-        for (iw = 0; iw < w; iw++){
-          pixel = rasterc[pixelSize * macro_RasterPos2dRgb + (pixelSize-1)];
-          min = 0; max = 4;
-          if ((pixel >= min) && (pixel < max)) val = ' ';
-          min = max; max = 8;
-          if ((pixel >= min) && (pixel < max)) val = ',';
-          min = max; max = 16;
-          if ((pixel >= min) && (pixel < max)) val = '~';
-          min = max; max = 32;
-          if ((pixel >= min) && (pixel < max)) val = '/';
-          min = max; max = 64;
-          if ((pixel >= min) && (pixel < max)) val = 'o';
-          min = max; max = 128;
-          if ((pixel >= min) && (pixel < max)) val = 's';
-          min = max; max = 192;
-          if ((pixel >= min) && (pixel < max)) val = 'R';
-          min = max; max = 255;
-          if ((pixel >= min) && (pixel <= max)) val = '#';
-          fprintf(outfile, "%c", val);       
-        }
-        fprintf(outfile, "\n");
-      }
-    }
-    fclose(outfile);
-    return 0;
-}
+//     rasterc = (char*) raster;
+//     for (ic = 0; ic < c; ic++){
+//       for (ih = 0; ih < h; ih++){
+//         for (iw = 0; iw < w; iw++){
+//           pixel = rasterc[pixelSize * macro_RasterPos2dRgb + (pixelSize-1)];
+//           min = 0; max = 4;
+//           if ((pixel >= min) && (pixel < max)) val = ' ';
+//           min = max; max = 8;
+//           if ((pixel >= min) && (pixel < max)) val = ',';
+//           min = max; max = 16;
+//           if ((pixel >= min) && (pixel < max)) val = '~';
+//           min = max; max = 32;
+//           if ((pixel >= min) && (pixel < max)) val = '/';
+//           min = max; max = 64;
+//           if ((pixel >= min) && (pixel < max)) val = 'o';
+//           min = max; max = 128;
+//           if ((pixel >= min) && (pixel < max)) val = 's';
+//           min = max; max = 192;
+//           if ((pixel >= min) && (pixel < max)) val = 'R';
+//           min = max; max = 255;
+//           if ((pixel >= min) && (pixel <= max)) val = '#';
+//           fprintf(outfile, "%c", val);       
+//         }
+//         fprintf(outfile, "\n");
+//       }
+//     }
+//     fclose(outfile);
+//     return 0;
+// }
 
 tsize_t tif_NecessaryMem(TIFF* tif)
 {
@@ -263,8 +263,8 @@ tdata_t tif_ReadRGBData(TIFF* tif)
 {
   int* buffer = (int*)tif_Malloc(tif);
   char* raster = (char*)tif_Malloc(tif);
-  printf("sizeof(raster) = %ld\n", malloc_usable_size(raster));
-  printf("sizeof(buffer) = %ld\n", malloc_usable_size(buffer));
+  // printf("sizeof(raster) = %ld\n", malloc_usable_size(raster));
+  // printf("sizeof(buffer) = %ld\n", malloc_usable_size(buffer));
 
   int rgba;
 
@@ -279,13 +279,13 @@ tdata_t tif_ReadRGBData(TIFF* tif)
     return NULL;
 
   if (buffer != NULL) { 
-    printf("Reading raster rgba: w = %d, h = %d, c = %d, tif = %p, buffer = %p, raster = %p\n", w, h, c, tif, buffer, raster);
+    // printf("Reading raster rgba: w = %d, h = %d, c = %d, tif = %p, buffer = %p, raster = %p\n", w, h, c, tif, buffer, raster);
       result = TIFFReadRGBAImage(tif, w, h, (uint32*)buffer, 0);
-      printf("Result = %ld\n", result);
+      // printf("Result = %ld\n", result);
       if (result == 0) {
           printf("Read error on input rgba image.\n");
       }
-      printf("Read ok: result = %ld\n", result);
+      // printf("Read ok: result = %ld\n", result);
   }
   if (raster != NULL) { 
       for(ih = 0; ih < h; ih++){
@@ -318,14 +318,14 @@ tdata_t tif_ReadData(TIFF* tif)
   TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &config);
   if (TIFFIsTiled(tif))
   {
-    printf("is tiled\n");
+    // printf("is tiled\n");
     return tif_ReadRGBData(tif);
   } 
   else
   {
     if ( (config == PLANARCONFIG_CONTIG) && (c > 1) )
     {
-      printf("planar config && c > 1\n");
+      // printf("planar config && c > 1\n");
       return tif_ReadRGBData(tif);
     }
     else
@@ -639,7 +639,7 @@ VglImage* vglLoad4dTiff(char* filename, int lStart, int lEnd, bool has_mipmap /*
   for(int i = lStart; i <= lEnd; i++)
   {
     sprintf(tempFilename, filename, i);
-    printf("filename[%d] = %s\n", i, tempFilename);
+    // printf("filename[%d] = %s\n", i, tempFilename);
     VglImage* tmp = vglLoadTiff(tempFilename);
     memcpy(img->getImageData() + offset, tmp->getImageData(), delta);
     offset += delta;

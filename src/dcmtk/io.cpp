@@ -184,7 +184,7 @@ VglImage* vglDcmtkLoadDicom(char* inFilename)
     int bytesPerFrame = pixelsPerFrame*(depth/8);
     int totalBytes = bytesPerFrame*imagevgl->getLength();
 
-    printf("%s:%s: dims = [%d, %d, %d], nchannels = %d, bytes/pix = %d, totalBytes = %d\n", __FILE__, __FUNCTION__, width, height, layers, nChannels, depth/8, totalBytes);
+    // printf("%s:%s: dims = [%d, %d, %d], nchannels = %d, bytes/pix = %d, totalBytes = %d\n", __FILE__, __FUNCTION__, width, height, layers, nChannels, depth/8, totalBytes);
 	
     //imagevgl->ndarray = (void *) malloc(totalBytes);
     
@@ -469,7 +469,7 @@ VglImage*  vglDcmtkLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mi
   for(int i = lStart; i <= lEnd; i++)
   {
     sprintf(tempFilename, filename, i);
-    printf("filename[%d] = %s\n", i, tempFilename);
+    // printf("filename[%d] = %s\n", i, tempFilename);
     VglImage* tmp = vglDcmtkLoadDicom(tempFilename);
     memcpy(img->getImageData() + offset, tmp->getImageData(), delta);
     offset += delta;

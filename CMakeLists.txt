@@ -24,7 +24,7 @@ endif()
 option(VGL_USE_CUDA "Enable CUDA support" OFF)
 option(VGL_USE_OPENCV "Enable OpenCV support" ON)
 option(VGL_USE_OPENCL "Enable OpenCL support" ON)
-option(VGL_USE_DCMTK "Enable DCMTK support" OFF)
+option(VGL_USE_DCMTK "Enable DCMTK support" OFF) # Unstable, needs futher attention
 option(VGL_USE_GDCM "Enable GDCM support" ON)
 option(VGL_USE_TIFF "Enable TIFF support" ON)
 
@@ -193,5 +193,3 @@ endif()
 
 add_custom_target(generate_wrappers ALL DEPENDS ${GENERATED_FILES})
 add_dependencies(${PROJECT_NAME} generate_wrappers)
-
-# End of CMakeLists.txt
