@@ -193,3 +193,9 @@ endif()
 
 add_custom_target(generate_wrappers ALL DEPENDS ${GENERATED_FILES})
 add_dependencies(${PROJECT_NAME} generate_wrappers)
+
+# Suppress errors that were warnings in past versions of C++
+target_compile_options(${PROJECT_NAME} PRIVATE
+  $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/wd4838 /wd4996>
+  $<$<OR:$<COMPILE_LANG_AND_ID:CXX,GNU>,$<COMPILE_LANG_AND_ID:CXX,Clang>>:-Wno-narrowing -Wno-deprecated-declarations>
+)
