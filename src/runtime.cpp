@@ -32,6 +32,13 @@ std::string get_runtime_path(void) {
             return VGL_RUNTIME_PATH;
         }
     }
+    else if (GetEnvironmentVariableA("ProgramFiles(x86)", program_files_path, MAX_PATH)) {
+        std::string path = std::string(program_files_path) + "\\visiongl\\share\\visiongl\\runtime";
+        if (std::filesystem::exists(path)) {
+            VGL_RUNTIME_PATH = path;
+            return VGL_RUNTIME_PATH;
+        }
+    }
 #else
     // Unix-like: Check /usr/local
     std::string path = "/usr/local/visiongl/share/visiongl/runtime";

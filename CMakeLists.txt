@@ -11,6 +11,17 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# Set default CMAKE_INSTALL_PREFIX to "C:/Program Files" on Windows
+if(WIN32 AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    if(DEFINED ENV{ProgramW6432})
+        set(PROGRAM_FILES_DIR "$ENV{ProgramW6432}")
+    else()
+        # Fallback for 32-bit Windows or if ProgramW6432 is not set
+        set(PROGRAM_FILES_DIR "$ENV{ProgramFiles}")
+    endif()
+    set(CMAKE_INSTALL_PREFIX "${PROGRAM_FILES_DIR}/${PROJECT_NAME}" CACHE PATH "Default installation prefix for ${PROJECT_NAME}")
+endif()
+
 # Installation directory setup
 include(GNUInstallDirs)
 
