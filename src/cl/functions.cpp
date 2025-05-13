@@ -1,3 +1,4 @@
+#include <visiongl/runtime.hpp>
 #include <visiongl/image.hpp>
 #include <visiongl/cl/image.hpp>
 #include <visiongl/context.hpp>
@@ -55,8 +56,11 @@ int* vglClSumPartialHistogram(cl_mem partial_hist, int size, int nchannels)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogram.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -121,8 +125,11 @@ cl_mem vglClPartialHistogram(VglImage* img_input)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogram.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -183,8 +190,11 @@ cl_mem vglCl3dPartialHistogram(VglImage* img_input)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogram.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -245,8 +255,11 @@ int* vglClCumulativeSum(int* arr, int size)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClMath.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClMath.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -305,8 +318,11 @@ int* vglClCumulativeSumNorm(int* arr, int size, int norm_total)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClMath.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClMath.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -395,8 +411,11 @@ void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformat
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogramEq.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogramEq.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -464,8 +483,11 @@ void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transform
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogramEq.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogramEq.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -898,8 +920,11 @@ bool vglClEqual(VglImage* input1, VglImage* input2, const char* kernel_name)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClEqual.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClEqual.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -1878,8 +1903,11 @@ void vglCl3dMergeZByMean(VglImage* img_input, VglImage* img_output, int number_o
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL/vglCl3dMergeZByMean.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL/vglCl3dMergeZByMean.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -1941,8 +1969,11 @@ void vglCl3dMergeZByMax(VglImage* img_input, VglImage* img_output, int number_of
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL/vglCl3dMergeZByMax.cl";
+    auto _file_path = vgl::get_runtime_path() + "CL/vglCl3dMergeZByMax.cl";
+    auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {
@@ -2002,8 +2033,11 @@ float vglCl9root(float number)
 	static cl_program program = NULL;
 	if (program == NULL)
 	{
-		char* file_path = (char*) "CL/roottest.cl";
+    	auto _file_path = vgl::get_runtime_path() + "CL/roottest.cl";
+        auto file_path = _file_path.c_str();
+#ifdef VGL_DEBUG_MODE
 		printf("Compiling %s\n", file_path);
+#endif
 		std::ifstream file(file_path);
 		if(file.fail())
 		{

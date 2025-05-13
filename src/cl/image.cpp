@@ -828,7 +828,9 @@ int vglClMpIsZero(VglImage* num_a){
   if (program == NULL)
   {
     char* file_path = (char*) "CL_MP/vglClMpIsZero.cl";
+#ifdef VGL_DEBUG_MODE
     printf("Compiling %s\n", file_path);
+#endif
     std::ifstream file(file_path);
     if(file.fail())
     {

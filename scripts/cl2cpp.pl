@@ -746,7 +746,9 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   {
     auto file_path = vgl::get_runtime_path() + \"$cpp_read_path$basename\.cl\";
     auto _file_path = file_path.c_str();
+#ifdef VGL_DEBUG_MODE
     printf(\"Compiling %s\\n\", _file_path);
+#endif
     std::ifstream _file(_file_path);
     if(_file.fail())
     {
