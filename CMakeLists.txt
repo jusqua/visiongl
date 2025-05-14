@@ -211,7 +211,7 @@ if(VGL_USE_DCMTK)
 endif()
 
 if(VGL_USE_GDCM)
-    target_link_libraries(${PROJECT_NAME} PUBLIC gdcmCommon gdcmDICT gdcmDSED gdcmIOD gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmMEXD gdcmMSFF socketxx)
+    target_link_libraries(${PROJECT_NAME} PUBLIC gdcmCommon gdcmDICT gdcmDSED gdcmIOD gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmMEXD gdcmMSFF)
     target_compile_definitions(${PROJECT_NAME} PUBLIC VGL_USE_GDCM)
 endif()
 
