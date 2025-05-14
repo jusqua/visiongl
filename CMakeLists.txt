@@ -169,7 +169,13 @@ if(VGL_USE_TIFF)
     move_module_headers(TIFF tiff)
 endif()
 
-add_library(${PROJECT_NAME} SHARED ${ALL_LIBRARY_SOURCES})
+# Use static linking on Windows, shared on other platforms.
+# Error occours when trying to execute shared library on windows, needs futher investigation
+if (WIN32)
+    add_library(${PROJECT_NAME} STATIC ${ALL_LIBRARY_SOURCES})
+else()
+    add_library(${PROJECT_NAME} SHARED ${ALL_LIBRARY_SOURCES})
+endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
