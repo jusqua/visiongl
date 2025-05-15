@@ -641,16 +641,14 @@ VglImage* vglCreateNdImage(int ndim, int* shape, int depth, int has_mipmap /*=0*
 }
 
 /** Save images with any dimension to disk
-
-    TODO: fix 2d.
 */
 void vglSaveImage(char* filename, VglImage* image)
 {
   vglCheckContext(image, VGL_RAM_CONTEXT);
 
-  if (image->ndim <= 2 && image->ipl != NULL)
+  if (image->ndim == 2 && image->ipl != NULL)
   {
-    //vglSaveNdImage(filename, image, 0, 0);
+    cvSaveImage(filename, image->ipl);
   }
   else if (image->ndim == 3)
   {
