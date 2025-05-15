@@ -35,8 +35,10 @@
     Reset();
     int curr_id = Cycle();
     if (split < VGL_MIN_WINDOW_SPLIT || split > VGL_MAX_WINDOW_SPLIT){
+#ifndef NDEBUG
       printf("VglNamedWindowList::RefreshAll(): Error: split = %d not between %d and %d. Using default, %d",
 	     split, VGL_MIN_WINDOW_SPLIT, VGL_MAX_WINDOW_SPLIT, VGL_DEFAULT_WINDOW_SPLIT);
+#endif
       split = VGL_DEFAULT_WINDOW_SPLIT;
     }
     while (curr_id >= 0){
@@ -56,15 +58,19 @@ void VglNamedWindowList::Refresh(int win_index, int split){
     vglCheckContext(WindowList[win_index].image, VGL_GL_CONTEXT);
 
     if (split < VGL_MIN_WINDOW_SPLIT || split > VGL_MAX_WINDOW_SPLIT){
+#ifndef NDEBUG
       printf("VglNamedWindowList::Refresh(): Error: split = %d not between %d and %d. Using default, %d",
 	     split, VGL_MIN_WINDOW_SPLIT, VGL_MAX_WINDOW_SPLIT, VGL_DEFAULT_WINDOW_SPLIT);
+#endif
       split = VGL_DEFAULT_WINDOW_SPLIT;
     }
 
     if (!FreePosition[win_index]){
       glutSetWindow(main_window_id);
       if (!WindowList[win_index].image){
+#ifndef NDEBUG
         printf("VglNamedWindowList::Refresh(%d): Warning: image not set\n", win_index);
+#endif
         return;
       }
 
@@ -154,11 +160,15 @@ void VglNamedWindowList::Refresh(int win_index, int split){
     int win_id = WindowIdByName(name);
     if (win_id >= 0){
       WindowList[win_id].image = image;
+#ifndef NDEBUG
       printf("VglNamedWindowList::ShowImage: win_id = %d image = %p\n", win_id, image);
+#endif
     }
+#ifndef NDEBUG
     else{
       printf("VglNamedWindowList::ShowImage: window %s not found\n", name);
     }
+#endif
     return win_id;
   }
 
@@ -204,13 +214,17 @@ int vglInit(int w, int h)
     int window_id = 0;
 
     int hasDisplay = vglHasDisplay();
+#ifndef NDEBUG
     if (!hasDisplay)
     {
       fprintf(stdout, "%s: %s: Warning: No display available. You should not call vglInit from a machine without X or with $DISPLAY variable not set. You can try to set DISPLAY environment variable to a suitable value. You can also call vglClInit and use OpenCL functions.\n", __FILE__, __FUNCTION__);
     }
+#endif
 
+#ifndef NDEBUG
     int glut_time = glutGet(GLUT_ELAPSED_TIME);
     printf("Glut elapsed time = %dms\n", glut_time);
+#endif
     static int started = 0;
     if(!started)
     {
@@ -272,7 +286,7 @@ void vglUpload(VglImage* image, int swapRGB){
   //printf("vglUpload: image context = %d\n", image->inContext);
   if (!vglIsInContext(image, VGL_RAM_CONTEXT)  &&
       !vglIsInContext(image, VGL_BLANK_CONTEXT)    ){
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     fprintf(stderr, "vglUpload: Error: image context = %d not in VGL_RAM_CONTEXT or VGL_BLANK_CONTEXT\n", image->inContext);
 #endif
     return;
@@ -751,7 +765,9 @@ void vglNdarray3To4Channels(VglImage* img)
 
     if (img->nChannels == 4)
     {
+#ifndef NDEBUG
         fprintf(stdout, "%s:%s: Warning: image already has 4 channels\n", __FILE__, __FUNCTION__);
+#endif
         return;
     }
     else if (img->nChannels != 3)
@@ -809,9 +825,13 @@ void vglNdarray3To4Channels(VglImage* img)
             offset++;
         }
     }
+#ifndef NDEBUG
     printf("freeing ndarray inside 3to4 channels\n");
+#endif
     free(img->ndarray);
+#ifndef NDEBUG
     printf("freeing ndarray inside 3to4 channels OK\n");
+#endif
 
     img->vglShape->shape[0] = 4;
     VglShape* vglShape = new VglShape(img->vglShape->shape, img->vglShape->ndim);
@@ -828,7 +848,9 @@ void vglNdarray4To3Channels(VglImage* img)
 {
     if (img->nChannels == 3)
     {
+#ifndef NDEBUG
         fprintf(stdout, "%s:%s: Warning: image already has 3 channels\n", __FILE__, __FUNCTION__);
+#endif
         return;
     }
     else if (img->nChannels != 4)
@@ -889,7 +911,9 @@ void vglIpl3To4Channels(VglImage* img)
 
     if (img->nChannels == 4)
     {
+#ifndef NDEBUG
         fprintf(stdout, "%s:%s: Warning: image already has 4 channels\n", __FILE__, __FUNCTION__);
+#endif
         return;
     }
     else if (img->nChannels != 3)
@@ -906,10 +930,8 @@ void vglIpl3To4Channels(VglImage* img)
 
     img->vglShape->shape[0] = 4;
     VglShape* vglShape = new VglShape(img->vglShape->shape, img->vglShape->ndim);
-    vglShape->print();
     delete(img->vglShape);
     img->vglShape = vglShape;
-    img->vglShape->print();
 }
 
 /** Convert ipl field of VglImage from 4 to 3 channels
@@ -921,7 +943,9 @@ void vglIpl4To3Channels(VglImage* img)
     }
     if (img->nChannels == 3)
     {
+#ifndef NDEBUG
         fprintf(stdout, "%s:%s: Warning: image already has 3 channels\n", __FILE__, __FUNCTION__);
+#endif
         return;
     }
     else if (img->nChannels != 4)
@@ -966,7 +990,9 @@ void vglImage4To3Channels(VglImage* img)
 {
     if (img->nChannels == 3)
     {
+#ifndef NDEBUG
         fprintf(stdout, "%s:%s: Warning: image already has 3 channels\n", __FILE__, __FUNCTION__);
+#endif
         return;
     }
     else if (img->nChannels != 4)
@@ -991,7 +1017,7 @@ void vglReleaseImage(VglImage** p_image)
 {
   VglImage* image = *p_image;
   if (!image){
-    fprintf(stdout, "%s:%s: Warning: image is null\n", __FILE__, __FUNCTION__);
+    fprintf(stdout, "%s:%s: Error: no image provided\n", __FILE__, __FUNCTION__);
     return;
   }
   if (image->ipl){
@@ -1444,7 +1470,9 @@ VglImage* vglLoadNdImage(char* filename, int lStart, int lEnd, int* shape, int n
   int n = lEnd - lStart + 1;
   if (ipl->nChannels == 1 && ipl->widthStep != (ipl->width * bpp))
   {
+#ifndef NDEBUG
     fprintf(stderr,"%s: %s: Warning: OpenCV added %d px of padding to the image\n", __FILE__, __FUNCTION__, ipl->widthStep - (ipl->width * bpp));
+#endif
     width = ipl->widthStep / bpp;
   }
 
@@ -1770,8 +1798,6 @@ void vglCopyImageTexFS(VglImage* src, VglImage* dst)
 
   static GLuint f = 0;
   if (f == 0){
-    fprintf(stdout, "FRAGMENT SHADER\n====================\n");
-    //f = vglShaderLoad(GL_FRAGMENT_SHADER, (char*)"FS/shader_15_1.frag");
     f = vglShaderLoad(GL_FRAGMENT_SHADER, (char*)"FS/vglCopy.frag");
     if (!f){
       fprintf(stderr, "%s: %s: Error loading fragment shader.\n", __FILE__, __FUNCTION__);
@@ -1832,7 +1858,6 @@ void vglCopyImageTexVFS(VglImage* src, VglImage* dst)
 
   static GLuint p = 0;
   if (p == 0){
-    fprintf(stdout, "VERTEX SHADER\n====================\n");
     p = vglShaderLoad(GL_VERTEX_SHADER, (char*)"VS/vglPassThrough.vert");
     if (!p){
       fprintf(stderr, "%s: %s: Error loading vertex shader.\n", __FILE__, __FUNCTION__);
@@ -1840,7 +1865,6 @@ void vglCopyImageTexVFS(VglImage* src, VglImage* dst)
     }
     ERRCHECK()
 
-    fprintf(stdout, "FRAGMENT SHADER\n====================\n");
     p = vglShaderLoad(GL_FRAGMENT_SHADER, (char*)"FS/vglNot.frag");
     if (!p){
       fprintf(stderr, "%s: %s: Error loading fragment shader.\n", __FILE__, __FUNCTION__);
@@ -2158,7 +2182,9 @@ void vglCErodeCross3(VglImage* src, VglImage* mask, VglImage* dst, VglImage* buf
 */
 int SavePPM(char* filename, int w, int h, void* savebuf){
     FILE *fp = fopen(filename, "wb");
+#ifndef NDEBUG
     fprintf(fp, "P6\n%d %d\n255\n", w, h);
+#endif
     fwrite(savebuf, w * h * 3, 1, fp);
     fclose(fp);
     return 0;
@@ -2217,13 +2243,19 @@ int vglHasDisplay()
   pDisplay = getenv ("DISPLAY");
   if (pDisplay == NULL)
   {
+#ifndef NDEBUG
     printf ("No display available.\n");
+#endif
     return 0;
   }
+#ifndef NDEBUG
   printf ("The current display is: %s\n", pDisplay);
+#endif
   return 1;
 #elif defined WIN32
+#ifndef NDEBUG
   printf ("Check not implemented for Windows. Assuming that display is available.\n");
+#endif
   return 1;
 #endif
 }
@@ -2236,7 +2268,9 @@ int vglHasDisplay()
 int SaveYUV411(char* filename, int w, int h, void* savebuf){
     w = (int) 1.5 * w;
     FILE *fp = fopen(filename, "wb");
+#ifndef NDEBUG
     fprintf(fp, "P5\n%d %d\n255\n", w, h);
+#endif
     fwrite(savebuf, w * h, 1, fp);
     fclose(fp);
     return 0;
@@ -2432,8 +2466,10 @@ void vglBaricenterVga(VglImage* src, double* x_avg /*= NULL*/, double* y_avg /*=
   vglDownload(img[10]);
 
   float* data = (float*) img[10]->ipl->imageData;
+#ifndef NDEBUG
   printf("MOMENTS = (%f, %f, %f)\n", data[0], data[1], data[2]);
   printf("(x, y)  = (%f, %f)\n", data[1]/data[2], data[0]/data[2]);
+#endif
   if (x_avg != NULL){
     *x_avg = data[1]/data[2];
   }
@@ -2488,7 +2524,6 @@ void vglMultiOutput_model(VglImage*  src, VglImage*  dst, VglImage*  dst1){
 
   static GLuint f = 0;
   if (f == 0){
-    fprintf(stdout, "FRAGMENT SHADER\n====================\n");
     f = vglShaderLoad(GL_FRAGMENT_SHADER, (char*)"FS/vglMultiOutput.frag");
     if (!f){
       fprintf(stderr, "%s: %s: Error loading fragment shader.\n", __FILE__, __FUNCTION__);
@@ -2565,7 +2600,6 @@ void vglInOut_model(VglImage*  dst, VglImage*  dst1){
 
   static GLuint f = 0;
   if (f == 0){
-    fprintf(stdout, "FRAGMENT SHADER\n====================\n");
     f = vglShaderLoad(GL_FRAGMENT_SHADER, (char*)"FS/vglInOut.frag");
     if (!f){
       fprintf(stderr, "%s: %s: Error loading fragment shader.\n", __FILE__, __FUNCTION__);
@@ -2644,7 +2678,6 @@ void vglMultiInput_model(VglImage*  src0, VglImage*  src1, VglImage*  dst){
 
   static GLuint f = 0;
   if (f == 0){
-    fprintf(stdout, "VERTEX SHADER\n====================\n");
     f = vglShaderLoad(GL_VERTEX_SHADER, (char*)"VS/vglPassThrough.vert");
     if (!f){
       fprintf(stderr, "%s: %s: Error loading vertex shader.\n", __FILE__, __FUNCTION__);
@@ -2652,7 +2685,6 @@ void vglMultiInput_model(VglImage*  src0, VglImage*  src1, VglImage*  dst){
     }
     ERRCHECK()
 
-    fprintf(stdout, "FRAGMENT SHADER\n====================\n");
     f = vglShaderLoad(GL_FRAGMENT_SHADER, (char*)"FS/vglMultiInput_model.frag");
     if (!f){
       fprintf(stderr, "%s: %s: Error loading fragment shader.\n", __FILE__, __FUNCTION__);

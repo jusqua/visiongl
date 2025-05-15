@@ -27,7 +27,9 @@
  */
 int vglAddContext(VglImage* img, int context){
   if (!vglIsContextUnique(context)){
+#ifndef NDEBUG
     fprintf(stderr, "vglAddContext: Error: context = %d is not unique or invalid\n", context);
+#endif
     return 0;
   }
   img->inContext = img->inContext | context;
@@ -41,12 +43,14 @@ int vglAddContext(VglImage* img, int context){
  */
 int vglSetContext(VglImage* img, int context){
   if (!vglIsContextUnique(context) && context != 0){
+#ifndef NDEBUG
     fprintf(stderr, "vglSetContext: Error: context = %d is not unique\n", context);
+#endif
     return 0;
   }
-  #if DEBUG_VGLCONTEXT
+#ifndef NDEBUG
   printf("vglSetContext: context = %d\n", context);
-  #endif
+#endif
   img->inContext = context;
   return img->inContext;
 }
@@ -70,9 +74,9 @@ int vglCheckContext(VglImage* img, int context){
     return 0;
   }
   if (vglIsInContext(img, context)){
-    #if DEBUG_VGLCONTEXT
+#ifndef NDEBUG
     printf("vglCheckContext: image already in context %d\n", context);
-    #endif
+#endif
     return context;
   }
   switch (context){
@@ -84,7 +88,9 @@ int vglCheckContext(VglImage* img, int context){
 #ifdef VGL_USE_OPENCL
       else
       if (vglIsInContext(img, VGL_CL_CONTEXT)){
+#ifndef NDEBUG
         printf("%s: case 2\n", __FUNCTION__);
+#endif
 	/*
         if (img->getBitsPerSample() == 1 && VGL_PACK_SIZE_BYTES > 1)
 	{
@@ -166,9 +172,9 @@ int vglCheckContext(VglImage* img, int context){
 #ifdef VGL_USE_CUDA
     case VGL_CUDA_CONTEXT:
       vglCheckContext(img, VGL_GL_CONTEXT);
-      #if DEBUG_VGLCONTEXT
+#ifndef NDEBUG
       printf("vglCheckContext: will transfer from gl to cuda\n");
-      #endif
+#endif
       if (vglIsInContext(img, VGL_GL_CONTEXT)){
         int ok = vglGlToCuda(img);
         if (!ok){
@@ -187,9 +193,9 @@ int vglCheckContext(VglImage* img, int context){
       }
       else{
         vglCheckContext(img, VGL_RAM_CONTEXT);
-        #if DEBUG_VGLCONTEXT
+#ifndef NDEBUG
         printf("vglCheckContext: will transfer from ram to cl\n");
-        #endif
+#endif
         if (vglIsInContext(img, VGL_RAM_CONTEXT) || vglIsInContext(img, VGL_BLANK_CONTEXT)){
           vglClUpload(img);
           //if (!ok){
@@ -216,22 +222,22 @@ int vglCheckContext(VglImage* img, int context){
 
  */
 int vglCheckContextForOutput(VglImage* img, int context){
-  #if DEBUG_VGLCONTEXT
+#ifndef NDEBUG
   printf("vglCheckContextForOutput: started\n");
-  #endif
+#endif
   if (img){
-    #if DEBUG_VGLCONTEXT
+#ifndef NDEBUG
     printf("vglCheckContextForOutput: img not null\n");
-    #endif
+#endif
     #ifdef VGL_USE_CUDA
     if (context == VGL_CUDA_CONTEXT){
-      #if DEBUG_VGLCONTEXT
+#ifndef NDEBUG
       printf("vglCheckContextForOutput: context is cuda, pbo = %d ptr = %x\n", img->cudaPbo, img->cudaPtr);
-      #endif
+#endif
       if (img->cudaPbo == -1 || img->cudaPtr == 0){
-        #if DEBUG_VGLCONTEXT
+#ifndef NDEBUG
         printf("vglCheckContextForOutput: pbo == -1 so will allocate\n");
-        #endif
+#endif
         return vglCudaAlloc(img);
       }
     }

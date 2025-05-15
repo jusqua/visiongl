@@ -14,7 +14,9 @@
 void iplReleaseImage(IplImage **p_ipl) {
   IplImage *ipl = *p_ipl;
   if (!ipl) {
-    fprintf(stdout, "%s:%s: Warning: image is null\n", __FILE__, __FUNCTION__);
+#ifndef NDEBUG
+      fprintf(stdout, "%s:%s: Warning: image is null\n", __FILE__, __FUNCTION__);
+#endif
     return;
   }
   free(ipl->imageDataOrigin);
@@ -778,9 +780,13 @@ int iplGenericSavePgm(char *filename, char *buf, int w, int h, int widthStep,
   }
 
   char *msg = (char *)"Created with VisionGL iplGenericSavePgm";
+#ifndef NDEBUG
   fprintf(fp, "P%d\n#%s\n%d %d\n", id, msg, w, h);
+#endif
   if (id != 4) {
+#ifndef NDEBUG
     fprintf(fp, "%d\n", L);
+#endif
   }
   for (int i = 0; i < h; i++) {
     fwrite(buf + i * widthStep, widthStep, 1, fp);

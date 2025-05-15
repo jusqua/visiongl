@@ -7,7 +7,6 @@
 #define VISIONGL_VERSION_STRING "@visiongl_VERSION@"
 
 // Feature configurations
-#cmakedefine01 VGL_DEBUG_MODE
 #cmakedefine01 VGL_USE_CUDA
 #cmakedefine01 VGL_USE_OPENCV
 #cmakedefine01 VGL_USE_OPENCL
@@ -19,7 +18,6 @@
 /*
  * VisionGL v@visiongl_VERSION@
  * Build configuration:
- *   - Debug mode: @VGL_DEBUG_MODE@
  *   - CUDA support: @VGL_USE_CUDA@
  *   - OpenCL support: @VGL_USE_OPENCL@
  *   - OpenCV support: @VGL_USE_OPENCV@

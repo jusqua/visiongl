@@ -58,7 +58,7 @@ int* vglClSumPartialHistogram(cl_mem partial_hist, int size, int nchannels)
   {
     auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -69,7 +69,7 @@ int* vglClSumPartialHistogram(cl_mem partial_hist, int size, int nchannels)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -127,7 +127,7 @@ cl_mem vglClPartialHistogram(VglImage* img_input)
   {
     auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -138,7 +138,7 @@ cl_mem vglClPartialHistogram(VglImage* img_input)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -169,9 +169,11 @@ cl_mem vglClPartialHistogram(VglImage* img_input)
     clEnqueueNDRangeKernel( cl.commandQueue, kernel, 1, NULL, worksize, 0, 0, 0, 0 );
     vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
   }
+#ifndef NDEBUG
   else{
     printf("More than 2 dimensions, try to use the 3d version of the function\n");
   }
+#endif
 
   return mobj_histogram;
 }
@@ -192,7 +194,7 @@ cl_mem vglCl3dPartialHistogram(VglImage* img_input)
   {
     auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -203,7 +205,7 @@ cl_mem vglCl3dPartialHistogram(VglImage* img_input)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -234,9 +236,11 @@ cl_mem vglCl3dPartialHistogram(VglImage* img_input)
     clEnqueueNDRangeKernel( cl.commandQueue, kernel, 1, NULL, worksize, 0, 0, 0, 0 );
     vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
   }
+#ifndef NDEBUG
   else{
     printf("dimension different of 3 not supported by this function, try to use another version of the function\n");
   }
+#endif
 
   return mobj_histogram;
 }
@@ -257,7 +261,7 @@ int* vglClCumulativeSum(int* arr, int size)
   {
     auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClMath.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -268,7 +272,7 @@ int* vglClCumulativeSum(int* arr, int size)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -320,7 +324,7 @@ int* vglClCumulativeSumNorm(int* arr, int size, int norm_total)
   {
     auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClMath.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -331,7 +335,7 @@ int* vglClCumulativeSumNorm(int* arr, int size, int norm_total)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -413,7 +417,7 @@ void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformat
   {
     auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogramEq.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -424,7 +428,7 @@ void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformat
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -485,7 +489,7 @@ void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transform
   {
     auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogramEq.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -496,7 +500,7 @@ void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transform
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -770,7 +774,7 @@ bool vglCl3dEqual(VglImage* input1, VglImage* input2)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -841,7 +845,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -922,7 +926,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2, const char* kernel_name)
   {
     auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClEqual.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -933,7 +937,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2, const char* kernel_name)
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -1373,7 +1377,9 @@ void vglClFuzzyErode(VglImage* src, VglImage* dst, float* strel, int strel_size_
       vglClFuzzyStdErode(src, dst, strel, strel_size_x, strel_size_y);
       break;
     default:
+#ifndef NDEBUG
       printf("%s: %s : Warning: Not a valid type of operation\n", __FILE__, __FUNCTION__);
+#endif
   }
 }
 
@@ -1413,7 +1419,9 @@ void vglClFuzzyDilate(VglImage* src, VglImage* dst, float* strel, int strel_size
     vglClFuzzyStdDilate(src, dst, strel, strel_size_x, strel_size_y);
     break;
   default:
+#ifndef NDEBUG
     printf("%s: %s : Warning: Not a valid type of operation\n", __FILE__, __FUNCTION__);
+#endif
   }
 }
 
@@ -1453,7 +1461,9 @@ void vglCl3dFuzzyErode(VglImage* src, VglImage* dst, float* strel, int strel_siz
     vglCl3dFuzzyStdErode(src, dst, strel, strel_size_x, strel_size_y, strel_size_z);
     break;
   default:
+#ifndef NDEBUG
     printf("%s: %s : Warning: Not a valid type of operation\n", __FILE__, __FUNCTION__);
+#endif
   }
 }
 
@@ -1493,7 +1503,9 @@ void vglCl3dFuzzyDilate(VglImage* src, VglImage* dst, float* strel, int strel_si
     vglCl3dFuzzyStdDilate(src, dst, strel, strel_size_x, strel_size_y, strel_size_z);
     break;
   default:
+#ifndef NDEBUG
     printf("%s: %s : Warning: Not a valid type of operation. type = %d\n", __FILE__, __FUNCTION__, type);
+#endif
   }
 }
 
@@ -1905,7 +1917,7 @@ void vglCl3dMergeZByMean(VglImage* img_input, VglImage* img_output, int number_o
   {
     auto _file_path = vgl::get_runtime_path() + "CL/vglCl3dMergeZByMean.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -1917,7 +1929,7 @@ void vglCl3dMergeZByMean(VglImage* img_input, VglImage* img_output, int number_o
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -1944,14 +1956,18 @@ void vglCl3dMergeZByMean(VglImage* img_input, VglImage* img_output, int number_o
   vglClCheckError( err, (char*) "clSetKernelArg 1" );
 
   if (img_input->ndim <= 2){
+#ifndef NDEBUG
     printf("2D images not supported by this operation\n");
+#endif
   }
   else if (img_input->ndim == 3){
     size_t worksize[] = { img_input->getWidth(), img_input->getHeight(), img_input->getLength() };
     clEnqueueNDRangeKernel( cl.commandQueue, kernel, 3, NULL, worksize, 0, 0, 0, 0 );
   }
   else{
+#ifndef NDEBUG
     printf("More than 3 dimensions not yet supported\n");
+#endif
   }
 
   vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
@@ -1971,7 +1987,7 @@ void vglCl3dMergeZByMax(VglImage* img_input, VglImage* img_output, int number_of
   {
     auto _file_path = vgl::get_runtime_path() + "CL/vglCl3dMergeZByMax.cl";
     auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -1983,7 +1999,7 @@ void vglCl3dMergeZByMax(VglImage* img_input, VglImage* img_output, int number_of
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -2010,14 +2026,18 @@ void vglCl3dMergeZByMax(VglImage* img_input, VglImage* img_output, int number_of
   vglClCheckError( err, (char*) "clSetKernelArg 1" );
 
   if (img_input->ndim <= 2){
+#ifndef NDEBUG
     printf("2D images not supported by this operation\n");
+#endif
   }
   else if (img_input->ndim == 3){
     size_t worksize[] = { img_input->getWidth(), img_input->getHeight(), img_input->getLength() };
     clEnqueueNDRangeKernel( cl.commandQueue, kernel, 3, NULL, worksize, 0, 0, 0, 0 );
   }
   else{
+#ifndef NDEBUG
     printf("More than 3 dimensions not yet supported\n");
+#endif
   }
 
   vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
@@ -2035,7 +2055,7 @@ float vglCl9root(float number)
 	{
     	auto _file_path = vgl::get_runtime_path() + "CL/roottest.cl";
         auto file_path = _file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
 		printf("Compiling %s\n", file_path);
 #endif
 		std::ifstream file(file_path);
@@ -2047,7 +2067,7 @@ float vglCl9root(float number)
 		}
 		std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
 		const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
 		printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
 		program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );

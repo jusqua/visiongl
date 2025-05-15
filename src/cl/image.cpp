@@ -301,15 +301,19 @@ void vglClInit()
     err = clGetPlatformIDs(num_platforms, cl.platformId, NULL);
     vglClCheckError(err, (char*) "clGetPlatformIDs get platforms id");	
 
+#ifndef NDEBUG
     if (num_platforms == 0)
         printf("found no platform for opencl\n\n");
     else if (num_platforms >= 1)
         printf("found %d platform(s) for opencl\n\n", num_platforms);
+#endif
 
     for (plat = 0; plat < num_platforms; plat++)
     {
       err = clGetDeviceIDs(cl.platformId[plat], device_type, 0, NULL, &num_devices);
+#ifndef NDEBUG
       printf("platform[%d]: found %d device(s) for opencl\n\n", plat, num_devices);
+#endif
       if (err == CL_SUCCESS)
       {
 	break;
@@ -322,8 +326,9 @@ void vglClInit()
         printf("unable to find OpenCL devices, halting the program");
         exit(1);
     }
-    else
-        printf("found %d device(s)\n\n",num_devices);
+#ifndef NDEBUG
+    printf("found %d device(s)\n\n",num_devices);
+#endif
 
     cl.deviceId = (cl_device_id*)malloc(sizeof(cl_device_id)*num_devices);
     err = clGetDeviceIDs(cl.platformId[plat], device_type, num_devices, cl.deviceId, NULL);
@@ -347,7 +352,9 @@ void vglClInit()
         {
             if (strcmp(search, "cl_khr_gl_sharing") == 0)
             {
+#ifndef NDEBUG
                 printf("FOUND INTEROPERABILITY\n");
+#endif
                 Interop = true;
             }
             search = strtok(NULL, " ");
@@ -357,8 +364,10 @@ void vglClInit()
     int hasDisplay = vglHasDisplay();
 	
 #ifdef __linux__
+#ifndef NDEBUG
     printf("glXGetCurrentContext() = %p\n", glXGetCurrentContext() );
     printf("glXGetCurrentDisplay() = %p\n", glXGetCurrentDisplay() );
+#endif
     if (not glXGetCurrentDisplay())
     {
       vglClInteropSetFalse();
@@ -392,6 +401,7 @@ void vglClInit()
     cl.commandQueue = clCreateCommandQueue( cl.context, *cl.deviceId, 0, &err );
     vglClCheckError( err, (char*) "clCreateCommandQueue" );
 
+#ifndef NDEBUG
     printf("%s: %s: VGL_PACK_SIZE_BITS:  %d\n", __FILE__, __FUNCTION__, VGL_PACK_SIZE_BITS);
     printf("%s: %s: VGL_PACK_SIZE_BYTES: %d\n", __FILE__, __FUNCTION__, VGL_PACK_SIZE_BYTES);
     
@@ -424,9 +434,7 @@ void vglClInit()
     printf("%s: %s: CL_DEVICE_MAX_PARAMETER_SIZE: %ld bytes\n", __FILE__, __FUNCTION__, val);
     err = clGetDeviceInfo(cl.deviceId[id], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &val, NULL);
     printf("%s: %s: CL_DEVICE_MAX_WORK_GROUP_SIZE: %ld bytes\n", __FILE__, __FUNCTION__, val);
-
-
-    //vglClPrintSupportedImageFormats();
+#endif
 }
 
 void vglClFlush()
@@ -829,7 +837,7 @@ int vglClMpIsZero(VglImage* num_a){
   if (program == NULL)
   {
     char* file_path = (char*) "CL_MP/vglClMpIsZero.cl";
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Compiling %s\n", file_path);
 #endif
     std::ifstream file(file_path);
@@ -840,7 +848,7 @@ int vglClMpIsZero(VglImage* num_a){
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
     const char *source_str = prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf("Kernel to be compiled:\n%s\n", source_str);
 #endif
     program = clCreateProgramWithSource(cl.context, 1, (const char **) &source_str, 0, &err );
@@ -872,7 +880,9 @@ int vglClMpIsZero(VglImage* num_a){
     clEnqueueNDRangeKernel( cl.commandQueue, kernel, 3, NULL, worksize, 0, 0, 0, 0 );
   }
   else{
+#ifndef NDEBUG
     printf("More than 3 dimensions not yet supported\n");
+#endif
   }
 
   vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );

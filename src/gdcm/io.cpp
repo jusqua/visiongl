@@ -157,7 +157,9 @@ VglImage* vglGdcmLoadDicom(char* inFilename)
     image.GetBuffer(buffer);
     imagevgl->ndarray = buffer; // pixels of image
 
+#ifndef NDEBUG
     printf("%s:%s: getbitsallocated = %d\n", __FILE__, __FUNCTION__, pixelformat.GetBitsAllocated());
+#endif
        
     /*printf("\n\nColumns: %d\nRows: %d\nFrames: %d\nDepth: %d\nChannels: %d\nndim: %d\n\n", imagevgl->getWidth(), imagevgl->getHeight(), imagevgl->getLength(), imagevgl->depth, imagevgl->nChannels, imagevgl->ndim);*/
 
@@ -174,9 +176,11 @@ VglImage* vglGdcmLoadDicom(char* inFilename)
 	        //printf("i = %d, imag.ndarray = %d , %d, %d ; rgb = %d , %d, %d\n\n", i, ybr[0], ybr[1], ybr[2], rgb[0], rgb[1], rgb[2]);
 	        memcpy((unsigned char*)imagevgl->ndarray+3*i, rgb, 3);
 	    }
+#ifndef NDEBUG
        else
             if(!(PI == gdcm::PhotometricInterpretation::RGB))
 	        printf("This format is not supported"); 
+#endif
   
     vglSetContext(imagevgl, VGL_RAM_CONTEXT);
     return imagevgl;
@@ -244,9 +248,11 @@ int vglGdcmSaveDicom(char* outFilename, VglImage* imagevgl, int compress)
   if(imagevgl->nChannels == 3)
      if(PI == gdcm::PhotometricInterpretation::YBR_FULL)
         image->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::RGB);
+#ifndef NDEBUG
      else
         if(!(PI == gdcm::PhotometricInterpretation::RGB))
 	   printf("This format is not supported");  
+#endif
 
   if(imagevgl->filename)
     if(compress == 1)
@@ -341,7 +347,6 @@ VglImage*  vglGdcmLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mip
   for(int i = lStart; i <= lEnd; i++)
   {
     sprintf(tempFilename, filename, i);
-    printf("filename[%d] = %s\n", i, tempFilename);
     VglImage* tmp = vglGdcmLoadDicom(tempFilename);
     memcpy(img->getImageData() + offset, tmp->getImageData(), delta);
     offset += delta;

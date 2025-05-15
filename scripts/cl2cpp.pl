@@ -746,7 +746,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   {
     auto file_path = vgl::get_runtime_path() + \"$cpp_read_path$basename\.cl\";
     auto _file_path = file_path.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf(\"Compiling %s\\n\", _file_path);
 #endif
     std::ifstream _file(_file_path);
@@ -757,7 +757,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
     }
     std::string _prog( std::istreambuf_iterator<char>( _file ), ( std::istreambuf_iterator<char>() ) );
     const char *_source_str = _prog.c_str();
-#ifdef VGL_DEBUG_MODE
+#ifndef NDEBUG
     printf(\"Kernel to be compiled:\\n%s\\n\", _source_str);
 #endif
     _program = clCreateProgramWithSource(cl.context, 1, (const char **) &_source_str, 0, &_err );

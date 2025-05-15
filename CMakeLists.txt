@@ -20,12 +20,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Installation directory setup
 include(GNUInstallDirs)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(VGL_DEBUG_MODE ON CACHE BOOL "Enable debug mode" FORCE)
-else()
-    set(VGL_DEBUG_MODE OFF CACHE BOOL "Enable debug mode" FORCE)
-endif()
-
 option(VGL_USE_CUDA "Enable CUDA support" OFF)
 option(VGL_USE_OPENCV "Enable OpenCV support" ON)
 option(VGL_USE_OPENCL "Enable OpenCL support" ON)
@@ -35,7 +29,6 @@ option(VGL_USE_TIFF "Enable TIFF support" ON)
 
 message(STATUS "${PROJECT_NAME} v${PROJECT_VERSION}")
 message(STATUS "Build configuration:")
-message(STATUS "  - Debug mode: ${VGL_DEBUG_MODE}")
 message(STATUS "  - CUDA support: ${VGL_USE_CUDA}")
 message(STATUS "  - OpenCL support: ${VGL_USE_OPENCL}")
 message(STATUS "  - OpenCV support: ${VGL_USE_OPENCV}")

@@ -64,11 +64,15 @@ int invertMatrix3x3(double *mNorm, double *mInv)
   value[2] = mNormal[0][2]*((mNormal[1][0]*mNormal[2][1])-(mNormal[1][1]*mNormal[2][0]));
   detmNormal = value[0]+value[1]+value[2];
   
+#ifndef NDEBUG
   printf("\nDeterminant = %f\n", detmNormal);
+#endif
 
   if(detmNormal == 0)
   {
+#ifndef NDEBUG
     printf("\nMatrix not invertible\n");
+#endif
     return 1;
   }
 
@@ -80,6 +84,7 @@ int invertMatrix3x3(double *mNorm, double *mInv)
 
 
   // Show Transposed Matrix
+#ifndef NDEBUG
   printf("\nTransposed Matrix:\n");
   for(int row = 0; row < 3; row++)
   {
@@ -87,6 +92,7 @@ int invertMatrix3x3(double *mNorm, double *mInv)
       printf("%f ", mTranspose[row][col]);
     printf("\n");
   }
+#endif
 
 
   // Composition of the Adjunct Matrix
@@ -105,6 +111,7 @@ int invertMatrix3x3(double *mNorm, double *mInv)
   mAdjunct[2][2] = (mTranspose[0][0]*mTranspose[1][1])-(mTranspose[0][1]*mTranspose[1][0]);
   
   // Show Adjunct Matrix     
+#ifndef NDEBUG
   printf("\nAdjunct Matrix:\n");
   for(int row = 0; row < 3; row++)
   {
@@ -112,6 +119,7 @@ int invertMatrix3x3(double *mNorm, double *mInv)
       printf("%f ", mAdjunct[row][col]);
     printf("\n");
   }
+#endif
 
   // Composition of the Inverse Matrix
   for(int row = 0; row < 3; row++)
@@ -126,6 +134,7 @@ int invertMatrix3x3(double *mNorm, double *mInv)
       i++;
     }
   
+#ifndef NDEBUG
   // Show Inverse Matrix 
   printf("\nInverse Matrix:\n");
   for(int i = 0; i < 9; i++)
@@ -136,6 +145,7 @@ int invertMatrix3x3(double *mNorm, double *mInv)
   }
 
   printf("\n");
+#endif
   return 0;
 }
 
@@ -178,11 +188,15 @@ int rightInverseMatrix2x3(double *mNorm, double *mInv)
 
   //Calculation of determinant matrix 2x2
   detmAux = mAux[0][0] * mAux[1][1] - (mAux[0][1] * mAux[1][0]);
+#ifndef NDEBUG
   printf("\nDeterminant matrix 2x2= %f\n", detmAux);
+#endif
 
   if(detmAux == 0)
   {
+#ifndef NDEBUG
     printf("\nMatrix not invertible\n");
+#endif
     return 1;
   }
 
@@ -226,7 +240,6 @@ int rightInverseMatrix2x3(double *mNorm, double *mInv)
       i++;
     }
   
-  printf("\n");
   return 0;
 }
 
@@ -263,7 +276,9 @@ int normalizeMatrix3x3(double *mIni, double *mNorm)
   {
     if((pow(mNormal[0][0], 2.0) + pow(mNormal[0][1], 2.0)) > 1)
     {  
+#ifndef NDEBUG
       printf("Color 3 has a negative R component.");
+#endif
       mNormal[0][2] = 0.0;
     }
     else
@@ -271,7 +286,9 @@ int normalizeMatrix3x3(double *mIni, double *mNorm)
 
     if((pow(mNormal[1][0], 2.0) + pow(mNormal[1][1], 2.0)) > 1)
     {  
+#ifndef NDEBUG
       printf("Color 3 has a negative G component.");
+#endif
       mNormal[1][2] = 0.0;
     }
     else
@@ -279,7 +296,9 @@ int normalizeMatrix3x3(double *mIni, double *mNorm)
 
     if((pow(mNormal[2][0], 2.0) + pow(mNormal[2][1], 2.0)) > 1)
     {  
+#ifndef NDEBUG
       printf("Color 3 has a negative B component.");
+#endif
       mNormal[2][2] = 0.0;
     }
     else
@@ -305,6 +324,7 @@ int normalizeMatrix3x3(double *mIni, double *mNorm)
       i++;
     }
 
+#ifndef NDEBUG
   // Show Initial Matrix
   printf("\nInitial Matrix:\n");
   for(int i = 0; i < 9; i++)
@@ -322,6 +342,7 @@ int normalizeMatrix3x3(double *mIni, double *mNorm)
     if((i != 0) & (((i+1) % 3) == 0))
       printf("\n");
   }
+#endif
   
   return 0;
 }
@@ -365,6 +386,7 @@ int normalizeMatrix(double *mIni, double *mNorm)
       i++;
     }
 
+#ifndef NDEBUG
   // Show Initial Matrix
   printf("\nInitial Matrix:\n");
   for(int i = 0; i < 9; i++)
@@ -382,6 +404,7 @@ int normalizeMatrix(double *mIni, double *mNorm)
     if((i != 0) & (((i+1) % 3) == 0))
       printf("\n");
   }
+#endif
 
   return 0;
 }
