@@ -470,18 +470,22 @@ void vglClBuildDebug(cl_int err, cl_program program)
 
 
 /** vglClUpload branch3d
-
-    TODO: eliminate call to deprecated functions: clCreateImage2D, clCreateImage3d
  */
 void vglClUpload(VglImage* img)
 {
     if (cl.context == 0)
     {
+#ifndef NDEBUG
+        fprintf(stderr, "%s: %s: Warning: OpenCL context not initialized.\n", __FILE__, __FUNCTION__);
+#endif
       vglClInit();
     }
 
     if (Interop && img->nChannels > 1)
     {
+#ifndef NDEBUG
+        fprintf(stderr, "%s: %s: Info: Using GL interop.\n", __FILE__, __FUNCTION__);
+#endif
         vglClUploadInterop(img);
     }
     else
@@ -544,6 +548,9 @@ void vglClUpload(VglImage* img)
 	    }
 
 
+#ifndef NDEBUG
+        fprintf(stderr, "%s: %s: Info: Setting CL memory.\n", __FILE__, __FUNCTION__);
+#endif
             // TODO: Generalize to higher dimensions
             int w = img->getWidth();
             if (img->depth == IPL_DEPTH_1U)
@@ -553,50 +560,37 @@ void vglClUpload(VglImage* img)
 
             if ( (img->ndim == 2) && !(img->clForceAsBuf) )
             {
-                img->oclPtr = clCreateImage2D(cl.context, CL_MEM_READ_WRITE, &format, w, img->getHeight(), 0, NULL, &err);
-                vglClCheckError( err, (char*) "clCreateImage2D" );
+#ifndef NDEBUG
+                fprintf(stderr, "%s: %s: Info: Creating 2D image object.\n", __FILE__, __FUNCTION__);
+#endif
+                cl_image_desc desc = {0};
+                desc.image_type = CL_MEM_OBJECT_IMAGE2D;
+                desc.image_width = w;
+                desc.image_height = img->getHeight();
+                img->oclPtr = clCreateImage(cl.context, CL_MEM_READ_WRITE, &format, &desc, NULL, &err);
+                vglClCheckError( err, (char*) "clCreateImage (2D)" );
             }
             else if ( (img->ndim == 3) && !(img->clForceAsBuf) )
             {
-                img->oclPtr = clCreateImage3D(cl.context, CL_MEM_READ_WRITE, &format, w, img->getHeight(), img->getLength(), 0, 0, NULL, &err);
-                vglClCheckError( err, (char*) "clCreateImage3D" );
+#ifndef NDEBUG
+                fprintf(stderr, "%s: %s: Info: Creating 3D image object.\n", __FILE__, __FUNCTION__);
+#endif
+                cl_image_desc desc = {0};
+                desc.image_type = CL_MEM_OBJECT_IMAGE3D;
+                desc.image_width = w;
+                desc.image_height = img->getHeight();
+                desc.image_depth = img->getLength();
+                img->oclPtr = clCreateImage(cl.context, CL_MEM_READ_WRITE, &format, &desc, NULL, &err);
+                vglClCheckError( err, (char*) "clCreateImage (3D)" );
             }
             else
             {
+#ifndef NDEBUG
+                fprintf(stderr, "%s: %s: Info: Creating buffer object.\n", __FILE__, __FUNCTION__);
+#endif
                 img->oclPtr = clCreateBuffer(cl.context, CL_MEM_READ_WRITE, img->getTotalSizeInBytes(), NULL, &err);
                 vglClCheckError( err, (char*) "clCreateNDImage" );
             }
-            /*
-            cl_image_desc desc;
-            if (img->ndim == 2)
-            {
-                desc.image_type = CL_MEM_OBJECT_IMAGE2D;
-                desc.image_width = img->getWidth();
-                desc.image_height = img->getHeight();
-                desc.image_depth = 0;
-                desc.image_array_size = 1;
-                desc.image_row_pitch = 0;
-                desc.image_slice_pitch = 0;
-                desc.num_mip_levels = 0;
-                desc.num_samples = 0;
-                desc.buffer = NULL;
-            }
-            else
-            {
-                desc.image_type = CL_MEM_OBJECT_IMAGE3D;
-                desc.image_width = img->getWidth();
-                desc.image_height = img->getHeight();
-                desc.image_depth = img->getLength();
-                desc.image_array_size = 0;
-                desc.image_row_pitch = 0;
-                desc.image_slice_pitch = 0;
-                desc.num_mip_levels = 0;
-                desc.num_samples = 0;
-                desc.buffer = NULL;
-            }            
-            img->oclPtr = clCreateImage(cl.context,CL_MEM_READ_WRITE, &format, &desc,NULL,&err);
-            vglClCheckError(err, (char*) "clCreateImage");
-*/
         }
 
         if (vglIsInContext(img, VGL_RAM_CONTEXT))
