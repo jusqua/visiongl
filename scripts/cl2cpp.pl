@@ -496,6 +496,7 @@ sub ProcessClFile { # ($filename, $output, $cpp_read_path) {
   print "type size = $#type\n";
   print "variable size = $#variable\n";
 
+  $filename = $filename;
   open CL, $filename;
   @list = <CL>;
   $line = join("", @list);
@@ -744,33 +745,33 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   static cl_program _program = NULL;
   if (_program == NULL)
   {
-    auto file_path = vgl::get_runtime_path() + \"$cpp_read_path$basename\.cl\";
-    auto _file_path = file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / \"$cpp_read_path\" / \"$basename\.cl\").string();
+    auto build_flags = \"-I '\" + vgl::get_include_path().string() +  \"'\";
 #ifndef NDEBUG
-    printf(\"Compiling %s\\n\", _file_path);
+    printf(\"Compiling %s\\n\", file_path.c_str());
 #endif
-    std::ifstream _file(_file_path);
+    std::ifstream _file(file_path);
     if(_file.fail())
     {
-      fprintf(stderr, \"%s:%s: Error: File %s not found.\\n\", __FILE__, __FUNCTION__, _file_path);
+      fprintf(stderr, \"%s:%s: Error: File %s not found.\\n\", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
-    std::string _prog( std::istreambuf_iterator<char>( _file ), ( std::istreambuf_iterator<char>() ) );
+    std::string _prog(std::istreambuf_iterator<char>(_file), (std::istreambuf_iterator<char>()));
     const char *_source_str = _prog.c_str();
 #ifndef NDEBUG
     printf(\"Kernel to be compiled:\\n%s\\n\", _source_str);
 #endif
-    _program = clCreateProgramWithSource(cl.context, 1, (const char **) &_source_str, 0, &_err );
+    _program = clCreateProgramWithSource(cl.context, 1, (const char **) &_source_str, 0, &_err);
     vglClCheckError(_err, (char*) \"clCreateProgramWithSource\" );
-    _err = clBuildProgram(_program, 1, cl.deviceId, \"-I $cpp_read_path\", NULL, NULL );
+    _err = clBuildProgram(_program, 1, cl.deviceId, build_flags.c_str(), NULL, NULL);
     vglClBuildDebug(_err, _program);
   }
 
   static cl_kernel _kernel = NULL;
   if (_kernel == NULL)
   {
-    _kernel = clCreateKernel( _program, \"$basename\", &_err );
-    vglClCheckError(_err, (char*) \"clCreateKernel\" );
+    _kernel = clCreateKernel(_program, \"$basename\", &_err);
+    vglClCheckError(_err, (char*) \"clCreateKernel\");
   }
 
 ";
@@ -968,8 +969,12 @@ if (!$output){
 if (!$cpp_read_path){
   $cpp_read_path = "";
 }
-elsif ($cpp_read_path =~ m#[^/]$#){
-  $cpp_read_path = "$cpp_read_path/";
+else {
+  # Replace backslashes with forward slashes
+  $cpp_read_path =~ s#\\#/#g;
+  
+  # Remove trailing slash if it exists
+  $cpp_read_path =~ s#/$##;
 }
 
 
@@ -1023,6 +1028,7 @@ print CPP "
 
 #include <fstream>
 #include <string>
+#include <filesystem>
 
 extern VglClContext cl;
 
@@ -1035,7 +1041,7 @@ for ($i=0; $i<=$#files; $i++) {
     $fullname = $files[$i];
 
     print "====================\n";
-    print "$files[$i]\n";
+    print "$fullname\n";
     print "i = $i\n";
     print "nargs = $nargs\n";
     ($a, $b, $c) = fileparse($fullname, ".cl");

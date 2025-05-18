@@ -56,15 +56,14 @@ int* vglClSumPartialHistogram(cl_mem partial_hist, int size, int nchannels)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL_UTIL" /"vglClHistogram.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
     {
-      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path);
+      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
@@ -125,15 +124,14 @@ cl_mem vglClPartialHistogram(VglImage* img_input)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL_UTIL" / "vglClHistogram.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
     {
-      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path);
+      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
@@ -192,15 +190,14 @@ cl_mem vglCl3dPartialHistogram(VglImage* img_input)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogram.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL_UTIL" / "vglClHistogram.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
     {
-      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path);
+      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
@@ -259,15 +256,14 @@ int* vglClCumulativeSum(int* arr, int size)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClMath.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL_UTIL" / "vglClMath.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
     {
-      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path);
+      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
@@ -322,15 +318,14 @@ int* vglClCumulativeSumNorm(int* arr, int size, int norm_total)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClMath.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL_UTIL" / "vglClMath.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
     {
-      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path);
+      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
@@ -415,15 +410,14 @@ void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformat
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogramEq.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL_UTIL" / "vglClHistogramEq.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
     {
-      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path);
+      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
@@ -487,15 +481,14 @@ void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transform
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClHistogramEq.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL_UTIL" / "vglClHistogramEq.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
     {
-      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path);
+      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
@@ -924,15 +917,14 @@ bool vglClEqual(VglImage* input1, VglImage* input2, const char* kernel_name)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL_UTIL/vglClEqual.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL_UTIL" / "vglClEqual.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
     {
-      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path);
+      fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, file_path.c_str());
       exit(1);
     }
     std::string prog( std::istreambuf_iterator<char>( file ), ( std::istreambuf_iterator<char>() ) );
@@ -1915,10 +1907,9 @@ void vglCl3dMergeZByMean(VglImage* img_input, VglImage* img_output, int number_o
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL/vglCl3dMergeZByMean.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL" / "vglCl3dMergeZByMean.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
@@ -1985,10 +1976,9 @@ void vglCl3dMergeZByMax(VglImage* img_input, VglImage* img_output, int number_of
   static cl_program program = NULL;
   if (program == NULL)
   {
-    auto _file_path = vgl::get_runtime_path() + "CL/vglCl3dMergeZByMax.cl";
-    auto file_path = _file_path.c_str();
+    auto file_path = (vgl::get_runtime_path() / "CL" / "vglCl3dMergeZByMax.cl").string();
 #ifndef NDEBUG
-    printf("Compiling %s\n", file_path);
+    printf("Compiling %s\n", file_path.c_str());
 #endif
     std::ifstream file(file_path);
     if(file.fail())
@@ -2053,10 +2043,9 @@ float vglCl9root(float number)
 	static cl_program program = NULL;
 	if (program == NULL)
 	{
-    	auto _file_path = vgl::get_runtime_path() + "CL/roottest.cl";
-        auto file_path = _file_path.c_str();
+    	auto file_path = (vgl::get_runtime_path() / "CL" / "roottest.cl").string();
 #ifndef NDEBUG
-		printf("Compiling %s\n", file_path);
+		printf("Compiling %s\n", file_path.c_str());
 #endif
 		std::ifstream file(file_path);
 		if(file.fail())

@@ -399,8 +399,8 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   print CPP "
   static GLuint _f = 0;
   if (_f == 0){
-    printf(\"FRAGMENT SHADER\\n====================\\n\");
-    _f = vglShaderLoad(GL_FRAGMENT_SHADER, (char*) \"$cpp_read_path$basename\.frag\");
+    auto file_path = (vgl::get_runtime_path() / \"$cpp_read_path\" / \"$basename\.frag\").string();
+    _f = vglShaderLoad(GL_FRAGMENT_SHADER, (char*) file_path.c_str());
     if (!_f){
       printf(\"%s: %s: Error loading fragment shader.\\n\", __FILE__, __FUNCTION__);
       exit(1);
@@ -624,10 +624,13 @@ if (!$output){
 if (!$cpp_read_path){
   $cpp_read_path = "";
 }
-elsif ($cpp_read_path =~ m#[^/]$#){
-  $cpp_read_path = "$cpp_read_path/";
+else {
+  # Replace backslashes with forward slashes
+  $cpp_read_path =~ s#\\#/#g;
+  
+  # Remove trailing slash if it exists
+  $cpp_read_path =~ s#/$##;
 }
-
 
 $firstInputFile = $i;
 
@@ -651,9 +654,12 @@ open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
 #include <visiongl/image.hpp>
+#include <visiongl/runtime.hpp>
 #include <visiongl/shader_loader.hpp>
-#include <visiongl/context.hpp>\n
+#include <visiongl/context.hpp>
+
 #include <iostream>
+#include <filesystem>
 ";
 close HEAD;
 close CPP;

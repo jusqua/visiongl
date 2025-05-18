@@ -6,6 +6,7 @@
 #include <visiongl/context.hpp>
 #include <visiongl/cl/cl2cpp_shaders.hpp>
 #include <visiongl/constants.hpp>
+#include <visiongl/runtime.hpp>
 
 
 //ifstream
@@ -435,6 +436,9 @@ void vglClInit()
     err = clGetDeviceInfo(cl.deviceId[id], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &val, NULL);
     printf("%s: %s: CL_DEVICE_MAX_WORK_GROUP_SIZE: %ld bytes\n", __FILE__, __FUNCTION__, val);
 #endif
+    // Cache the OpenCL runtime path and include path
+    vgl::get_runtime_path();
+    vgl::get_include_path();
 }
 
 void vglClFlush()

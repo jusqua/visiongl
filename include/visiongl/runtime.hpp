@@ -1,10 +1,12 @@
 #ifndef VGL_RUNTIME_HPP
 #define VGL_RUNTIME_HPP
-#include <string>
+
+#include <filesystem>
 
 namespace vgl {
 
-std::string get_runtime_path(void);
+const std::filesystem::path& get_runtime_path(void);
+const std::filesystem::path& get_include_path(void);
 
 } // namespace vgl
 
