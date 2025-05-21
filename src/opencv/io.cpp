@@ -1,3 +1,4 @@
+#include <visiongl/context.hpp>
 #include <visiongl/opencv/io.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -83,6 +84,8 @@ VglImage* mat_to_vgl(const cv::Mat& mat_img, int ndim, int has_mipmap)
         }
     }
     
+    vglSetContext(vgl_img, VGL_RAM_CONTEXT);
+    
     return vgl_img;
 }
 
@@ -95,9 +98,8 @@ cv::Mat vgl_to_mat(VglImage* image)
         fprintf(stderr, "%s:%s: Error: NULL image.\n", __FILE__, __FUNCTION__);
         return cv::Mat();
     }
-
-    // Ensure image data is in CPU memory
-    vglDownload(image);
+    
+    vglCheckContext(image, VGL_RAM_CONTEXT);
 
     // Map VGL depth to OpenCV depth
     int cv_depth;
