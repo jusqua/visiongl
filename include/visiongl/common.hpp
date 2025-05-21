@@ -1,15 +1,6 @@
 #ifndef VGL_COMMON_HPP
 #define VGL_COMMON_HPP
 
-#ifndef VGL_USE_OPENCV
-
-// Include OpenCV headers instead of create compatibility types
-#include <opencv2/highgui/highgui_c.h>
-#include <opencv2/imgproc/imgproc_c.h>
-#include <opencv2/imgproc/types_c.h>
-
-#else
-
 enum {
   CV_BGR2BGRA = 0,
   CV_RGB2RGBA = CV_BGR2BGRA,
@@ -143,7 +134,5 @@ IplImage *cvCopy(IplImage *src, IplImage *dst);
 void cvCvtColor(IplImage *src, IplImage *dst, int code);
 IplImage *cvLoadImage(char *filename, int iscolor = CV_LOAD_IMAGE_UNCHANGED);
 int cvSaveImage(char *filename, IplImage *image, int *params = 0);
-
-#endif // VGL_USE_OPENCV
 
 #endif // VGL_COMMON_HPP
