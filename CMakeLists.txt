@@ -24,8 +24,8 @@ option(VGL_USE_CUDA "Enable CUDA support" OFF)
 option(VGL_USE_OPENCV "Enable OpenCV support" ON)
 option(VGL_USE_OPENCL "Enable OpenCL support" ON)
 option(VGL_USE_DCMTK "Enable DCMTK support" OFF) # Unstable, needs futher attention
-option(VGL_USE_GDCM "Enable GDCM support" ON)
-option(VGL_USE_TIFF "Enable TIFF support" ON)
+option(VGL_USE_GDCM "Enable GDCM support" OFF)
+option(VGL_USE_TIFF "Enable TIFF support" OFF)
 
 message(STATUS "${PROJECT_NAME} v${PROJECT_VERSION}")
 message(STATUS "Build configuration:")
