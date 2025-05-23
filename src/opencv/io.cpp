@@ -1,7 +1,6 @@
 #include <visiongl/context.hpp>
 #include <visiongl/opencv/io.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include <cstring>
 
 namespace vgl {
