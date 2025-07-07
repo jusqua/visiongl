@@ -1,8 +1,6 @@
 #ifndef VGL_CL_IMAGE_HPP
 #define VGL_CL_IMAGE_HPP
 
-#ifdef VGL_USE_OPENCL
-
 #include <CL/cl.h>
 
 #include <visiongl/image.hpp>
@@ -32,7 +30,5 @@ void vglClDownloadInterop(VglImage* img);
 void vglClToGl(VglImage* img);
 void vglGlToCl(VglImage* img);
 void vglClAlloc(VglImage* img);
-
-#endif
 
 #endif // VGL_CL_IMAGE_HPP

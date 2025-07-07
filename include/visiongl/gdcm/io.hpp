@@ -1,8 +1,6 @@
 #ifndef VGL_GDCM_IO_HPP
 #define VGL_GDCM_IO_HPP
 
-#ifdef VGL_USE_GDCM
-
 #include <visiongl/image.hpp>
 
 VglImage* vglGdcmLoadDicom(char* inFilename);
@@ -14,8 +12,4 @@ int vglGdcmSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, in
 int convertDepthGdcmToVgl(int dcmDepth);
 int convertDepthVglToGdcm(int vglDepth);
 
-#endif // VGL_USE_GDCM
-
 #endif // VGL_GDCM_IO_HPP
-
-

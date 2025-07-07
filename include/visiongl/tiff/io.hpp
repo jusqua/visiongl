@@ -1,8 +1,6 @@
 #ifndef VGL_TIFF_IO_HPP
 #define VGL_TIFF_IO_HPP
 
-#ifdef VGL_USE_TIFF
-
 #include <visiongl/image.hpp>
 #include <visiongl/common.hpp>
 
@@ -15,7 +13,5 @@ int iplSaveTiff(char* outFilename, IplImage* image);
 int vglSave4dTiff(char* filename, VglImage* image, int lStart, int lEnd);
 
 int vglPrintTiffInfo(char* inFilename, char* msg = NULL);
-
-#endif // VGL_USE_TIFF
 
 #endif // VGL_TIFF_IO_HPP

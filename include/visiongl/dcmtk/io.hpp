@@ -1,8 +1,6 @@
 #ifndef VGL_DCMTK_IO_HPP
 #define VGL_DCMTK_IO_HPP
 
-#ifdef VGL_USE_DCMTK
-
 #include <visiongl/image.hpp>
 #include "dcmtk/dcmdata/dctk.h"
 
@@ -14,8 +12,5 @@ int vglDcmtkSaveDicomCompressed(char* outFilename, VglImage* imagevgl);
 int vglDcmtkSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, int compress = 0);
 int convertDepthDcmtkToVgl(int dcmDepth);
 int convertDepthVglToDcmtk(int vglDepth);
-
-
-#endif // VGL_USE_DCMTK
 
 #endif // VGL_DCMTK_IO_HPP
