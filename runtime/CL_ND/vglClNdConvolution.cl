@@ -1,7 +1,7 @@
 /** N-dimensional convolution
 
     SHAPE directive passes a structure with size of each dimension, offsets and number of dimensions. Parameter does not appear in wrapper parameter list. The C expression between parenthesis returns the desired shape of type VglClShape.
-    
+
   */
 
 //SHAPE img_shape (img_input->vglShape->asVglClShape())
@@ -9,19 +9,12 @@
 #include <visiongl/cl/shape.hpp>
 #include <visiongl/cl/strel.hpp>
 
-__kernel void vglClNdConvolution(__global unsigned char* img_input, 
-                            __global unsigned char* img_output,  
+__kernel void vglClNdConvolution(__global unsigned char* img_input,
+                            __global unsigned char* img_output,
                             __constant VglClShape* img_shape,
                             __constant VglClStrEl* window)
 {
-#if __OPENCL_VERSION__ < 200
-  int coord = (  (get_global_id(2) - get_global_offset(2)) * get_global_size(1) * get_global_size(0)) +
-              (  (get_global_id(1) - get_global_offset(1)) * get_global_size (0)  ) +
-                 (get_global_id(0) - get_global_offset(0));
-#else
   int coord = get_global_linear_id();
-#endif
-
 
   int ires;
   int idim;
@@ -66,5 +59,4 @@ __kernel void vglClNdConvolution(__global unsigned char* img_input,
     //barrier(CLK_LOCAL_MEM_FENCE);
   }
   img_output[coord] = result;
-
 }

@@ -12,13 +12,7 @@ __kernel void vglClNdBinEqual(__global VGL_PACK_CL_SHADER_TYPE* img_input1,
 {
   if(output[0] == 1) return;
 
-#if __OPENCL_VERSION__ < 200
-  int coord = (  (get_global_id(2) - get_global_offset(2)) * get_global_size(1) * get_global_size(0)) +
-              (  (get_global_id(1) - get_global_offset(1)) * get_global_size (0)  ) +
-                 (get_global_id(0) - get_global_offset(0));
-#else
   int coord = get_global_linear_id();
-#endif
 
   VGL_PACK_CL_SHADER_TYPE p1 = img_input1[coord];
   VGL_PACK_CL_SHADER_TYPE p2 = img_input2[coord];
@@ -119,8 +113,8 @@ __kernel void vglCl3dEqual(__read_only image3d_t img_input1,__read_only image3d_
         output[0] = 1;
     }
 }
-		
-	
+
+
 __kernel void vglClEqual(__read_only image2d_t img_input1,__read_only image2d_t img_input2, __global bool* output)
 {
     if(output[0] == 1) return;

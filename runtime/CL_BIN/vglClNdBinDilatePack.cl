@@ -1,7 +1,7 @@
 /** N-dimensional dilation
 
     SHAPE directive passes a structure with size of each dimension, offsets and number of dimensions. Parameter does not appear in wrapper parameter list. The C expression between parenthesis returns the desired shape of type VglClShape.
-    
+
   */
 
 //SHAPE img_shape (img_input->vglShape->asVglClShape())
@@ -9,18 +9,12 @@
 #include <visiongl/cl/shape.hpp>
 #include <visiongl/cl/strel.hpp>
 
-__kernel void vglClNdBinDilatePack(__global VGL_PACK_CL_SHADER_TYPE* img_input, 
-                                   __global VGL_PACK_CL_SHADER_TYPE* img_output,  
+__kernel void vglClNdBinDilatePack(__global VGL_PACK_CL_SHADER_TYPE* img_input,
+                                   __global VGL_PACK_CL_SHADER_TYPE* img_output,
                                    __constant VglClShape* img_shape,
                                    __constant VglClStrEl* window)
 {
-#if __OPENCL_VERSION__ < 200
-  int coord = (  (get_global_id(2) - get_global_offset(2)) * get_global_size(1) * get_global_size(0)) +
-              (  (get_global_id(1) - get_global_offset(1)) * get_global_size (0)  ) +
-                 (get_global_id(0) - get_global_offset(0));
-#else
   int coord = get_global_linear_id();
-#endif
 
   int ires;
   int idim;
@@ -81,7 +75,7 @@ __kernel void vglClNdBinDilatePack(__global VGL_PACK_CL_SHADER_TYPE* img_input,
         if (d == VGL_SHAPE_WIDTH)
         {
             int j_w = idim - win_radius[VGL_SHAPE_WIDTH];
-            VGL_PACK_CL_SHADER_TYPE p; 
+            VGL_PACK_CL_SHADER_TYPE p;
             if (j_w < 0)
             {
               p = img_input[conv_coord];
