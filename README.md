@@ -12,20 +12,23 @@ The library provides wrapper code generators for all the three languages.
 - [CMake](https://cmake.org/)
 - [Clang](https://clang.llvm.org/) or other C++17 compiler
 - [Ninja](https://ninja-build.org/) or other build system
+- [Perl](https://www.perl.org/)
 
 #### Libraries
 
 Required:
+
 - [freeglut](https://freeglut.sourceforge.net/) for OpenGL support
 - [GLEW](https://glew.sourceforge.net/) for OpenGL support and window management
 
 Optional:
-  - [OpenCL](https://github.com/KhronosGroup/OpenCL-SDK) (enabled by default) (unsafe to disable)
-  - [OpenCV](https://opencv.org/) for image loading and conversion (enabled by default)
-  - [libtiff](https://libtiff.gitlab.io/libtiff/) for TIFF support
-  - [GDCM](https://sourceforge.net/projects/gdcm/) for DICOM support
-  - [DCMTK](https://git.dcmtk.org/) for DICOM support (unsafe to enable)
-  - [CUDA](https://developer.nvidia.com/cuda-toolkit) for CUDA support, only for NVIDIA (unsafe to enable)
+
+- [OpenCL](https://github.com/KhronosGroup/OpenCL-SDK) (enabled by default) (unsafe to disable)
+- [OpenCV](https://opencv.org/) for image loading and conversion (enabled by default)
+- [libtiff](https://libtiff.gitlab.io/libtiff/) for TIFF support
+- [GDCM](https://sourceforge.net/projects/gdcm/) for DICOM support
+- [DCMTK](https://git.dcmtk.org/) for DICOM support (unsafe to enable)
+- [CUDA](https://developer.nvidia.com/cuda-toolkit) for CUDA support, only for NVIDIA (unsafe to enable)
 
 > [!IMPORTANT]
 > If OpenCV support is disabled, at least enable TIFF or GDCM support to load images. Otherwise, the library will not be able to load images.
@@ -38,6 +41,7 @@ cmake --build build
 ```
 
 ### Install
+
 ```shell
 # Setup install path in the first step, /usr/local is the default
 sudo cmake --install build # or without sudo if install path is set to a non-protected folder
