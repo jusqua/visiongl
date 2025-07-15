@@ -5,7 +5,11 @@
 .DS_store
 
 # build folder
-/build/
+build/
+
+# sample images
+images/
+results/
 
 # generated files
 cl2cpp_*.*
