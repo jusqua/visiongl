@@ -29,3 +29,4 @@ kernel2cu_*.*
 CMakeSettings.json
 CMakeUserPresets.json
 cmake-build*
+__cmake_systeminformation

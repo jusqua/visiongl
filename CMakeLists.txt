@@ -9,7 +9,6 @@ project(visiongl LANGUAGES CXX VERSION 0.2)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -216,6 +215,7 @@ endif()
 
 add_custom_target(generate_wrappers ALL DEPENDS ${GENERATED_FILES})
 add_dependencies(${PROJECT_NAME} generate_wrappers)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 # Suppress errors that were warnings in past versions of C++
 target_compile_options(${PROJECT_NAME} PRIVATE
