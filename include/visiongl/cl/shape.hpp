@@ -13,6 +13,7 @@ typedef struct VglClShape {
 } VglClShape;
 // API
 #else
+#include <CL/cl.h>
 typedef struct VglClShape {
   cl_int ndim;
   cl_int shape[VGL_ARR_SHAPE_SIZE];

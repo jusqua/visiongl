@@ -14,6 +14,7 @@ typedef struct VglClStrEl {
 } VglClStrEl;
 // API
 #else
+#include <CL/cl.h>
 typedef struct VglClStrEl {
   cl_float data[VGL_ARR_CLSTREL_SIZE];
   cl_int ndim;
