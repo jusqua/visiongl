@@ -746,7 +746,7 @@ sub PrintCppFile { # ($basename, $comment, $semantics, $type, $variable, $defaul
   if (_program == NULL)
   {
     auto file_path = (vgl::get_runtime_path() / \"$cpp_read_path\" / \"$basename\.cl\").string();
-    auto build_flags = \"-I '\" + vgl::get_include_path().string() +  \"' -cl-std=CL3.0\";
+    auto build_flags = \"-I \\\"\" + vgl::get_include_path().string() +  \"\\\" -cl-std=CL3.0\";
 #ifndef NDEBUG
     printf(\"Compiling %s\\n\", file_path.c_str());
 #endif
