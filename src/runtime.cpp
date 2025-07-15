@@ -52,7 +52,7 @@ const std::filesystem::path& get_root_path(void) {
     
     for (const auto& path : paths) {
         if (std::filesystem::exists(path)) {
-            root_path = path;
+            root_path = static_cast<std::filesystem::path>(path).make_preferred();
             return root_path;
         }
     }
@@ -66,7 +66,7 @@ const std::filesystem::path& get_runtime_path(void) {
     
     if (!runtime_path.empty()) return runtime_path;
     
-    runtime_path = get_root_path() / "share" / "visiongl" / "runtime";
+    runtime_path = (get_root_path() / "share" / "visiongl" / "runtime").make_preferred();
     
     return runtime_path;
 }
@@ -76,7 +76,7 @@ const std::filesystem::path& get_include_path(void) {
     
     if (!include_path.empty()) return include_path;
     
-    include_path = get_root_path() / "include";
+    include_path = (get_root_path() / "include").make_preferred();
     
     return include_path;
 }
