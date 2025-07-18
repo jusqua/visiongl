@@ -1,3 +1,4 @@
+#include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
 #include "utils.hpp"
@@ -16,15 +17,18 @@ int main(int argc, char* argv[])
     char* inFilename = argv[1];
     char* outPath = argv[3];
     char* outFilename = (char*) malloc(strlen(outPath) + 200);
-    cv::Mat img = cv::imread(inFilename, 1);
+    auto base = cv::imread(inFilename, 1);
 
-    if (img.data == NULL)
+    if (base.data == NULL)
     {
         std::string str("Error: File not found: ");
         str.append(inFilename);
         printf("%s",str.c_str());
     }
-    cv::Mat out(img.cols, img.rows, CV_8UC3);
+
+    auto img = base.getUMat(cv::ACCESS_READ);
+    auto out = cv::UMat(base.cols, base.rows, CV_8UC3, cv::ACCESS_RW);
+    auto base_out = cv::Mat(base.cols, base.rows, CV_8UC3);
 
     cv::Mat cvkernel33 = (cv::Mat_<float>(3,3) << 1/9.0, 1/9.0, 1/9.0,
                                                   1/9.0, 1/9.0, 1/9.0,
@@ -106,11 +110,29 @@ int main(int argc, char* argv[])
     });
 
     builder.attach({
-        .name = "Copy",
+        .name = "Copy Device to Device",
         .func = [&] { img.copyTo(out); },
         .post = [&] {
             sprintf(outFilename, "%s%s", outPath, "/out_cv_copy.tif");
             cv::imwrite(outFilename, out);
+        }
+    });
+
+    builder.attach({
+        .name = "Copy Host to Device",
+        .func = [&] { img = base.getUMat(cv::ACCESS_READ); },
+        .post = [&] {
+            sprintf(outFilename, "%s%s", outPath, "/out_cv_upload.tif");
+            cv::imwrite(outFilename, img);
+        }
+    });
+
+    builder.attach({
+        .name = "Copy Device to Host",
+        .func = [&] { base_out = img.getMat(cv::ACCESS_READ); },
+        .post = [&] {
+            sprintf(outFilename, "%s%s", outPath, "/out_cv_download.tif");
+            cv::imwrite(outFilename, base_out);
         }
     });
 
