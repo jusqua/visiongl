@@ -114,7 +114,7 @@ if(VGL_USE_CUDA)
     set(CUDA_MODULE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/cuda)
     file(GLOB_RECURSE CUDA_MODULE_SOURCES CONFIGURE_DEPENDS ${CUDA_MODULE_DIR}/*.cu)
     list(APPEND ALL_LIBRARY_SOURCES ${CUDA_MODULE_SOURCES})
-    add_wrapper_generation(kernel2cu kernel2cu_shaders CUDA ${RUNTIME_PATH}/CUDA/*.kernel cuda)
+    add_wrapper_generation(cu2cpp cu2cpp_shaders CUDA ${RUNTIME_PATH}/CUDA/*.kernel cuda)
     move_module_headers(CUDA cuda)
 endif()
 

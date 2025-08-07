@@ -13,9 +13,9 @@ results/
 
 # generated files
 cl2cpp_*.*
+cu2cpp_*.*
 cl2cloud_*.*
 glsl2cpp_*.*
-kernel2cu_*.*
 
 # editors config files
 .vscode
