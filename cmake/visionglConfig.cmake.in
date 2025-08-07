@@ -7,11 +7,6 @@ find_dependency(OpenGL REQUIRED)
 find_dependency(GLEW REQUIRED)
 find_dependency(GLUT REQUIRED)
 
-# Find optional dependencies
-if(@VGL_USE_CUDA@)
-    find_dependency(CUDA REQUIRED)
-endif()
-
 if(@VGL_USE_OPENCL@)
     find_dependency(OpenCL REQUIRED)
 endif()
