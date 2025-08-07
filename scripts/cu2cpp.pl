@@ -574,12 +574,14 @@ else {
 die "morreu";
 ';
 
-
-
 for ($i=0; $i<$nargs; $i=$i+2) {
   if    ($ARGV[$i] eq "-o") {  
     $output = $ARGV[$i+1] ;
     print ("Output Files: $output.cu and $output.hpp\n") ;
+  }
+  elsif ($ARGV[$i] eq "-p") {  
+    $cpp_read_path = $ARGV[$i+1] ;
+    print ("Shader files search path: $cpp_read_path\n") ;
   }
   else {
     last;
