@@ -5,7 +5,12 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 endif()
 
-project(visiongl LANGUAGES CXX VERSION 0.2)
+if(VGL_USE_CUDA)
+    project(visiongl LANGUAGES CXX CUDA VERSION 0.2)
+else()
+    project(visiongl LANGUAGES CXX VERSION 0.2)
+endif()
+
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -110,11 +115,10 @@ add_wrapper_generation(glsl2cpp glsl2cpp_BG FS_BG ${RUNTIME_PATH}/FS_BG/*.frag "
 add_wrapper_generation(glsl2cpp glsl2cpp_Stereo FS_Stereo ${RUNTIME_PATH}/FS_Stereo/*.frag "")
 
 if(VGL_USE_CUDA)
-    find_package(CUDA REQUIRED)
     set(CUDA_MODULE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/cuda)
     file(GLOB_RECURSE CUDA_MODULE_SOURCES CONFIGURE_DEPENDS ${CUDA_MODULE_DIR}/*.cu)
     list(APPEND ALL_LIBRARY_SOURCES ${CUDA_MODULE_SOURCES})
-    add_wrapper_generation(cu2cpp cu2cpp_shaders CUDA ${RUNTIME_PATH}/CUDA/*.kernel cuda)
+    add_wrapper_generation(cu2cpp cu2cpp_shaders CUDA ${RUNTIME_PATH}/CUDA/*.cu cuda)
     move_module_headers(CUDA cuda)
 endif()
 
@@ -186,6 +190,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 if(VGL_USE_CUDA)
     target_link_libraries(${PROJECT_NAME} PUBLIC ${CUDA_LIBRARIES})
     target_compile_definitions(${PROJECT_NAME} PUBLIC VGL_USE_CUDA)
+    set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CUDA CUDA_SEPARABLE_COMPILATION ON)
+    set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_ARCHITECTURES "native")
 endif()
 
 if(VGL_USE_OPENCL)
