@@ -52,7 +52,7 @@ __kernel void vglClNdErode (__global unsigned char* img_input,
 
         conv_coord += img_shape->offset[d] * win_coord[d];
       }
-      pin = min(pmin, img_input[conv_coord]);
+      pmin = min(pmin, img_input[conv_coord]);
     }
   }
   img_output[coord] = pmin;
