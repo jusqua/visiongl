@@ -1543,11 +1543,12 @@ int vglReshape(VglImage* img, VglShape* newShape)
   if ( (img->ipl != NULL) && (newShape->ndim > 2) )
   {
     int ws = newShape->findWidthStep(newShape->getBps(), newShape->getWidth(), newShape->getNChannels());
-    if (img->ipl->widthStep != ws)
-    {
-      fprintf(stderr, "%s: %s: Error: ipl widthStep = %d != %d = new widthStep.\n", __FILE__, __FUNCTION__, ws, img->ipl->widthStep);
-      //exit(1);
-    }
+    // NOTE: Why?
+    // if (img->ipl->widthStep != ws)
+    // {
+    //   fprintf(stderr, "%s: %s: Error: ipl widthStep = %d != %d = new widthStep.\n", __FILE__, __FUNCTION__, ws, img->ipl->widthStep);
+    //   exit(1);
+    // }
     img->vglShape = new VglShape(newShape);
     int size = img->getTotalSizeInBytes();
     img->ndarray = malloc(size);    

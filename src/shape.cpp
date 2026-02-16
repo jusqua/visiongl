@@ -35,10 +35,11 @@ void VglShape::vglCreateShape(int* shape, int ndim, int bps /*= 8*/)
   int maxi = ndim;
   int c = shape[VGL_SHAPE_NCHANNELS];
   int w = shape[VGL_SHAPE_WIDTH];
-  if (ndim == 1)
-  {
-    maxi = 2;
-  }
+  // NOTE: Why?
+  // if (ndim == 1)
+  // {
+  //   maxi = 2;
+  // }
   for (int i = 0; i <= VGL_MAX_DIM; i++)
   {
     if (i <= maxi)
