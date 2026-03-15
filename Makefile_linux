@@ -35,14 +35,12 @@ ROOTPATH           = .
 INCLUDE_PATH       = $(ROOTPATH)/src
 INCLUDE_DIR        = -I $(INCLUDE_PATH)
 
-OUTPUT_ROOTPATH    = $(ROOTPATH)
+OUTPUT_ROOTPATH    = $(ROOTPATH)/build
 OUTPUT_INCLUDEPATH = $(OUTPUT_ROOTPATH)/include
 OUTPUT_LIBPATH     = $(OUTPUT_ROOTPATH)/lib
 OUTPUT_BINPATH     = $(OUTPUT_ROOTPATH)/bin
 OUTPUT_INCLUDEDIR  = -I $(OUTPUT_INCLUDEPATH)
 OUTPUT_LIBDIR      = -L $(OUTPUT_LIBPATH)
-
-
 
 WITH_CUDA = 0
 WITH_OPENCL = 1
@@ -351,21 +349,23 @@ LINUXAMD64_DEMO_COLORDECONV = $(CC) $(COMPILER_FLAGS) \
 GENERATE_HEADER = cat $(INCLUDE_PATH)/vglHead.h $(INCLUDE_PATH)/vglImage.h $(INCLUDE_PATH)/vglCudaImage.h $(INCLUDE_PATH)/vglClImage.h $(INCLUDE_PATH)/vglGdcmIo.h $(INCLUDE_PATH)/vglDcmtkIo.h $(INCLUDE_PATH)/vglTiffIo.h $(INCLUDE_PATH)/vglContext.h $(INCLUDE_PATH)/vglSimpleBGModel.h $(INCLUDE_PATH)/glsl2cpp*.h $(INCLUDE_PATH)/kernel2cu*.h $(INCLUDE_PATH)/cl2cpp*.h $(INCLUDE_PATH)/vglClFunctions*.h $(INCLUDE_PATH)/iplImage*.h $(INCLUDE_PATH)/vglOpencv*.h $(INCLUDE_PATH)/vglTail.h $(INCLUDE_PATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
 
 
-all:
-	echo $(LD_LIBRARY_PATH)
+all: lib
+	mkdir -p $(OUTPUT_INCLUDEPATH)
 	$(GENERATE_HEADER)
-	$(LINUXAMD64_LIB)
 
+.PHONY: lib
 lib:
+	mkdir -p $(OUTPUT_LIBPATH)
+	echo '*' > $(OUTPUT_ROOTPATH)/.gitignore
 	$(LINUXAMD64_LIB)
 
 install: all
-	mkdir -p $(OUTPUT_INCLUDEPATH)
-	mkdir -p $(OUTPUT_LIBPATH)
 	mkdir -p $(INSTALL_INCLUDEPATH)
 	mkdir -p $(INSTALL_LIBPATH)
 	cp $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h $(INSTALL_INCLUDEPATH)
 	cp $(OUTPUT_LIBPATH)/lib$(BINARY_NAME).so $(INSTALL_LIBPATH)
+
+# TODO: Audit the following instructions
 
 dox: all
 	doxygen $(BINARY_NAME).dox
@@ -430,9 +430,6 @@ demobenchmarkclnd:
 
 democolordeconv:
 	$(LINUXAMD64_DEMO_COLORDECONV)
-
-.PHONY: lib
-
 
 runtestcore:
 	cd $(OUTPUT_BINPATH); ./test_$(CORE_NAME) ../images/dicom/0003.dcm.%d.PGM 0 16 /tmp
