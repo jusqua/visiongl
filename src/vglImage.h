@@ -1,16 +1,8 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglImage                                          ***
-***                                                                ***
-*********************************************************************/
-
 #ifndef __VGLIMAGE_H__
 #define __VGLIMAGE_H__
 
-
 #define GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT 0x8CD8
 #define GL_FRAMEBUFFER_STATUS_ERROR_EXT 0x8CDE
-
 
 #define __is_pod(type) 1
 #define __is_empty(type) 1
@@ -18,15 +10,13 @@
 //extern void* __builtin_memchr(const void*__s, int __a, unsigned int __n);
 #include <stdarg.h>
 
-#include <cstdio>
-
 //opencv IplImage
 #ifdef __OPENCV__
   #undef __SSE2__
   #include <opencv2/imgproc/types_c.h>
   #include <opencv2/highgui/highgui_c.h>
 #else
-  #include <vglOpencv.h>
+  #include "vglOpencv.h"
 #endif
 
 //GL
@@ -41,14 +31,9 @@
 //assert
 #include <assert.h>
 
-// VGL HEADER - Vision with OpenGL
-
-
 //VisionGL
 #include "vgl_constants.h"
-#include <vglShape.h>
-
-////////// VglImage
+#include "vglShape.h"
 
 class VglImage{
  public:
@@ -201,50 +186,7 @@ class VglImage{
   {
     return this->vglShape->getNFrames();
   }
-
-
 };
-
-////////// VglNamedWindow
-
-class VglNamedWindow  {
-public:
-  VglImage* image;
-  char* name;
-};
-
-////////// vglNamedWindowList
-
-
-class VglNamedWindowList  {
-
-public:
-  VglNamedWindowList(void);
-  ~VglNamedWindowList(void);
-  //void Init();
-  int MaxWindows();
-  int CreateNamedSubwindow(char* winname);
-  int CreateSubwindow(void);
-  int ShowImage(char* name, VglImage* image);
-  void Reset(void);
-  int Cycle(void);
-  void Refresh(int win_index, int split = VGL_DEFAULT_WINDOW_SPLIT);
-  void RefreshAll(int split = VGL_DEFAULT_WINDOW_SPLIT);
-  int main_window_id;
-  int NamedWindow(char* winname);
-
-private:
-  VglNamedWindow WindowList[VGL_MAX_WINDOWS];
-  int FreePosition[VGL_MAX_WINDOWS];
-  int WindowIdByName(char* name);
-  int current_window;
-};
-
-////////// vglImage functions
-
-//void vglShowImage(char* winname, VglImage* image)
-//int vglNamedWindow(char* winname);
-
 
 int vglInit();
 int vglInit(int w, int h);
@@ -377,7 +319,5 @@ void vglInOut_model(VglImage*  dst, VglImage*  dst1);
 	exit(1); \
   } \
 } \
-
-
 
 #endif
