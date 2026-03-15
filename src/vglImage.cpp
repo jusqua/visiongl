@@ -86,7 +86,7 @@ void VglNamedWindowList::Refresh(int win_index, int split){
       //glColor3f((float)win_index/2.0, 1.0 - (float)win_index/2.0, 0.0);
       glBindTexture(GL_TEXTURE_2D, WindowList[win_index].image->tex);
       //printf("VglNamedWindowList::Refresh(%d) Binding texture %d\n", win_index, WindowList[win_index].image->tex);
-        
+
       glBegin(GL_QUADS);
           glTexCoord2f( 0.0,  0.0);
         //glVertex3f ( -1.0, -1.0, 0.0);
@@ -113,7 +113,7 @@ void VglNamedWindowList::Refresh(int win_index, int split){
       if (!FreePosition[i]){
         current_window = -1;
       }
-    }    
+    }
     //printf("VglNamedWindowList::Reset: current_window = %d\n", current_window);
   }
 
@@ -206,7 +206,7 @@ int vglInit()
   */
 int vglInit(int w, int h)
 {
-    char* argv = new char[255];  
+    char* argv = new char[255];
     int argc = 0;
     int window_id = 0;
 
@@ -248,7 +248,7 @@ int vglInit(int w, int h)
       {
         fprintf(stderr, "%s: %s: OpenGL 1.3 not supported. The program may not work.\n", __FILE__, __FUNCTION__);
       }
- 
+
       started = 1;
 
       //glutDisplayFunc(display);
@@ -371,14 +371,14 @@ void vglUpload(VglImage* image, int swapRGB){
   ERRCHECK()
 
   switch (depth){
-          case IPL_DEPTH_8U:  glType = GL_UNSIGNED_BYTE;  break; 
-          case IPL_DEPTH_16U: glType = GL_UNSIGNED_SHORT; break; 
-          case IPL_DEPTH_32F: glType = GL_FLOAT; break; 
-          case IPL_DEPTH_8S:  glType = GL_BYTE; exit(1);  break; 
-          case IPL_DEPTH_16S: glType = GL_SHORT; exit(1); break; 
-          case IPL_DEPTH_32S: glType = GL_INT; break; 
+          case IPL_DEPTH_8U:  glType = GL_UNSIGNED_BYTE;  break;
+          case IPL_DEPTH_16U: glType = GL_UNSIGNED_SHORT; break;
+          case IPL_DEPTH_32F: glType = GL_FLOAT; break;
+          case IPL_DEPTH_8S:  glType = GL_BYTE; exit(1);  break;
+          case IPL_DEPTH_16S: glType = GL_SHORT; exit(1); break;
+          case IPL_DEPTH_32S: glType = GL_INT; break;
           case IPL_DEPTH_1U:
-          default: 
+          default:
             fprintf(stderr, "vglUpload: Error: uploading unsupported image depth\n");
             vglPrintImageInfo(image);
             exit(1);
@@ -416,12 +416,12 @@ void vglUpload(VglImage* image, int swapRGB){
     glGenFramebuffersEXT(1, &image->fbo);
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, image->fbo);
     if (glTarget == GL_TEXTURE_3D){
-      int layer = 0; // will render only to layer 0 
-      glFramebufferTexture3DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT, 
+      int layer = 0; // will render only to layer 0
+      glFramebufferTexture3DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,
 				glTarget, image->tex, 0, layer);
     }
     else{
-      glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT, 
+      glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,GL_COLOR_ATTACHMENT0_EXT,
                               glTarget, image->tex, 0);
     }
     CHECK_FRAMEBUFFER_STATUS()
@@ -497,7 +497,7 @@ VglImage* vglCopyCreateImage(IplImage* img_in, int ndim /*=2*/, int has_mipmap /
  */
 VglImage* vglCreateImage(VglImage* img_in)
 {
-  VglImage* retval = vglCreateImage(img_in->vglShape->shape, img_in->depth, img_in->ndim, img_in->has_mipmap); 
+  VglImage* retval = vglCreateImage(img_in->vglShape->shape, img_in->depth, img_in->ndim, img_in->has_mipmap);
   #ifdef __OPENCL__
   if (img_in->clForceAsBuf)
   {
@@ -575,7 +575,7 @@ VglImage* vglCreateImage(int* shape, int depth, int ndim /*=2*/, int has_mipmap 
   }
 
   vglSetContext(vglImage, VGL_BLANK_CONTEXT);
-  
+
   return vglImage;
 }
 
@@ -617,9 +617,9 @@ VglImage* vglCreate3dImage(CvSize size, int depth, int nChannels, int layers, in
   shape[1] = size.width;
   shape[2] = size.height;
   shape[3] = layers;
-  
+
   vglImage = vglCreateImage(shape, depth, 3, has_mipmap);
-  
+
   return vglImage;
 }
 
@@ -698,7 +698,7 @@ void vglSave3dImage(char* filename, VglImage* image, int lStart, int lEnd)
 #else
   iplSaveImage(temp_filename, ipl);
 #endif
-  
+
   int c = image->getHeight()*image->getWidth()*d*image->nChannels;
   for(int i = lStart+1; i <= lEnd; i++)
   {
@@ -714,7 +714,7 @@ void vglSave3dImage(char* filename, VglImage* image, int lStart, int lEnd)
   }
   cvReleaseImage(&ipl);
   free(temp_image);
-}                
+}
 */
 
 void vglSaveNdImage(char* filename, VglImage* image, int lStart, int lEndParam /*= -1*/)
@@ -753,7 +753,7 @@ void vglSaveNdImage(char* filename, VglImage* image, int lStart, int lEndParam /
   }
   cvReleaseImage(&ipl);
   free(temp_image);
-}                
+}
 
 /** Converts ndarray from 3 channels to 4 channels
   */
@@ -773,7 +773,7 @@ void vglNdarray3To4Channels(VglImage* img)
 
     int d = img->depth / 8;
     if (d < 1) d = 1; //d is the byte size of the depth color format
-        
+
     int datasize = img->getHeight() * img->getWidth() * 4 * d * img->getLength();
 
     void* newndarray = (char*)malloc(img->getHeight() * img->getWidth() * 4 * d * img->getLength());
@@ -850,7 +850,7 @@ void vglNdarray4To3Channels(VglImage* img)
 
     int d = img->depth / 8;
     if (d < 1) d = 1;
-        
+
     int datasize = img->getHeight() * img->getWidth() * img->nChannels * d * img->getLength();
 
     void* newndarray = malloc(img->getHeight() * img->getWidth() * 3 * d * img->getLength());
@@ -908,7 +908,7 @@ void vglIpl3To4Channels(VglImage* img)
         fprintf(stderr, "%s:%s: Error: image should have 3 channels but has %d channels\n", __FILE__, __FUNCTION__, img->nChannels);
         return;
     }
-  
+
     IplImage* iplRGBA = cvCreateImage(cvGetSize(img->ipl), img->ipl->depth, 4);
     cvCvtColor(img->ipl, iplRGBA, CV_RGB2RGBA);
     cvReleaseImage(&(img->ipl));
@@ -940,7 +940,7 @@ void vglIpl4To3Channels(VglImage* img)
         fprintf(stderr, "%s:%s: Error: image should have 4 channels but has %d channels\n", __FILE__, __FUNCTION__, img->nChannels);
         return;
     }
-  
+
     IplImage* iplRGB = cvCreateImage(cvGetSize(img->ipl), img->ipl->depth, 3);
     cvCvtColor(img->ipl, iplRGB, CV_RGBA2RGB);
     cvReleaseImage(&(img->ipl));
@@ -1012,7 +1012,7 @@ void vglReleaseImage(VglImage** p_image)
     free(image->ndarray);
   }
   if (image->fbo != -1){
-    glDeleteFramebuffersEXT(1, &(image->fbo)); 
+    glDeleteFramebuffersEXT(1, &(image->fbo));
   }
   if (image->tex != -1){
     glDeleteTextures(1, &(image->tex));
@@ -1058,7 +1058,7 @@ void vglReplaceIpl(VglImage* image, IplImage* new_ipl)
     Transfer done by glReadPixels. Color order is compatible with iplImage, that is, BGR.
 
     Time to transfer a VGA image = 1.0 to 1.5ms
- */ 
+ */
 void vglDownloadFaster(VglImage* image/*, VglImage* aux*/){
   IplImage* ipl = image->ipl;
   GLenum glFormat;
@@ -1084,7 +1084,7 @@ void vglDownloadFaster(VglImage* image/*, VglImage* aux*/){
   // Old version needs aux image
   //glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, aux->fbo);
   //glViewport(0, 0, 2*aux->width, 2*aux->height);
-  
+
   ERRCHECK()
       glBegin(GL_QUADS);
           glTexCoord2f( 0.0,  0.0);
@@ -1101,14 +1101,14 @@ void vglDownloadFaster(VglImage* image/*, VglImage* aux*/){
       glEnd();
 
   switch (depth){
-          case IPL_DEPTH_8U:  glType = GL_UNSIGNED_BYTE;  break; 
-          case IPL_DEPTH_16U: glType = GL_UNSIGNED_SHORT; break; 
-          case IPL_DEPTH_32F: glType = GL_FLOAT; break; 
-          case IPL_DEPTH_8S:  glType = GL_BYTE;  break; 
-          case IPL_DEPTH_16S: glType = GL_SHORT; break; 
-          case IPL_DEPTH_32S: glType = GL_INT; break; 
+          case IPL_DEPTH_8U:  glType = GL_UNSIGNED_BYTE;  break;
+          case IPL_DEPTH_16U: glType = GL_UNSIGNED_SHORT; break;
+          case IPL_DEPTH_32F: glType = GL_FLOAT; break;
+          case IPL_DEPTH_8S:  glType = GL_BYTE;  break;
+          case IPL_DEPTH_16S: glType = GL_SHORT; break;
+          case IPL_DEPTH_32S: glType = GL_INT; break;
           case IPL_DEPTH_1U:
-          default: 
+          default:
             fprintf(stderr, "vglDownload: Error: downloading unsupported image depth\n");
             vglPrintImageInfo(image);
             exit(1);
@@ -1143,7 +1143,7 @@ void vglDownloadFaster(VglImage* image/*, VglImage* aux*/){
     Transfer done by glGetTexImage. Color order is compatible with iplImage, that is, BGR.
 
     Time to transfer a VGA image = 2.5ms
- */ 
+ */
 void vglDownload(VglImage* image){
   IplImage* ipl = image->ipl;
   GLenum glFormat;
@@ -1156,14 +1156,14 @@ void vglDownload(VglImage* image){
 
 
   switch (depth){
-          case IPL_DEPTH_8U:  glType = GL_UNSIGNED_BYTE;  break; 
-          case IPL_DEPTH_16U: glType = GL_UNSIGNED_SHORT; break; 
-          case IPL_DEPTH_32F: glType = GL_FLOAT; break; 
-          case IPL_DEPTH_8S:  glType = GL_BYTE;  break; 
-          case IPL_DEPTH_16S: glType = GL_SHORT; break; 
-          case IPL_DEPTH_32S: glType = GL_INT; break; 
+          case IPL_DEPTH_8U:  glType = GL_UNSIGNED_BYTE;  break;
+          case IPL_DEPTH_16U: glType = GL_UNSIGNED_SHORT; break;
+          case IPL_DEPTH_32F: glType = GL_FLOAT; break;
+          case IPL_DEPTH_8S:  glType = GL_BYTE;  break;
+          case IPL_DEPTH_16S: glType = GL_SHORT; break;
+          case IPL_DEPTH_32S: glType = GL_INT; break;
           case IPL_DEPTH_1U:
-          default: 
+          default:
             fprintf(stderr, "vglDownload: Error: downloading unsupported image depth\n");
             vglPrintImageInfo(image);
             exit(1);
@@ -1212,7 +1212,7 @@ void vglDownload(VglImage* image){
 
     Transfer done by glReadPixels. Color order is compatible with iplImage, that is, BGR.
 
- */ 
+ */
 void vglDownloadFBO(VglImage* image){
   IplImage* ipl = image->ipl;
   GLenum glFormat;
@@ -1223,14 +1223,14 @@ void vglDownloadFBO(VglImage* image){
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, image->fbo);
 
   switch (depth){
-          case IPL_DEPTH_8U:  glType = GL_UNSIGNED_BYTE;  break; 
-          case IPL_DEPTH_16U: glType = GL_UNSIGNED_SHORT; break; 
-          case IPL_DEPTH_32F: glType = GL_FLOAT; break; 
-          case IPL_DEPTH_8S:  glType = GL_BYTE;  break; 
-          case IPL_DEPTH_16S: glType = GL_SHORT; break; 
-          case IPL_DEPTH_32S: glType = GL_INT; break; 
+          case IPL_DEPTH_8U:  glType = GL_UNSIGNED_BYTE;  break;
+          case IPL_DEPTH_16U: glType = GL_UNSIGNED_SHORT; break;
+          case IPL_DEPTH_32F: glType = GL_FLOAT; break;
+          case IPL_DEPTH_8S:  glType = GL_BYTE;  break;
+          case IPL_DEPTH_16S: glType = GL_SHORT; break;
+          case IPL_DEPTH_32S: glType = GL_INT; break;
           case IPL_DEPTH_1U:
-          default: 
+          default:
             fprintf(stderr, "vglDownload: Error: downloading unsupported image depth\n");
             vglPrintImageInfo(image);
             exit(1);
@@ -1258,12 +1258,12 @@ void vglDownloadFBO(VglImage* image){
 
 /** Transfer image from GPU to RAM in format suitable for saving as PPM.
 
-    Use it imediately before vglSavePPM. It is different from 
-    vglDownload in two points. The unpack alignment is 1 and 
+    Use it imediately before vglSavePPM. It is different from
+    vglDownload in two points. The unpack alignment is 1 and
     color order is RGB
 
     Time to transfer a VGA image = 3ms
- */ 
+ */
 void vglDownloadPPM(VglImage* image){
   IplImage* ipl = image->ipl;
   GLint pack;
@@ -1286,12 +1286,12 @@ void vglDownloadPPM(VglImage* image){
 
 /** Transfer image from GPU to RAM in format suitable for saving as PGM.
 
-    Use it imediately before vglSavePGM. It is different from 
-    vglDownload in two points. The unpack alignment is 1 and 
+    Use it imediately before vglSavePGM. It is different from
+    vglDownload in two points. The unpack alignment is 1 and
     color is grayscale
 
     Time to transfer a VGA image = 10ms
- */ 
+ */
 void vglDownloadPGM(VglImage* image){
   IplImage* ipl = image->ipl;
   GLint pack;
@@ -1411,7 +1411,7 @@ VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap /
   img->ndarray = (char*)malloc(img->getTotalSizeInBytes());
 
   int delta = ipl->height*ipl->width*ipl->nChannels*bpp;
-  int offset = delta;  
+  int offset = delta;
   memcpy(img->ndarray, (void*)ipl->imageData, delta);
 	cvReleaseImage(&ipl);
   for(int i = lStart+1; i <= lEnd; i++)
@@ -1488,7 +1488,7 @@ VglImage* vglLoadNdImage(char* filename, int lStart, int lEnd, int* shape, int n
   int shapeSize = vglShape->getSize();
 
   VglImage* tmp = vglCreateImage(ipl);
-  int imgSize = tmp->vglShape->getSize() * n;  
+  int imgSize = tmp->vglShape->getSize() * n;
   vglReleaseImage(&tmp);
 
   if (imgSize != shapeSize)
@@ -1555,7 +1555,7 @@ int vglReshape(VglImage* img, VglShape* newShape)
     }
     img->vglShape = new VglShape(newShape);
     int size = img->getTotalSizeInBytes();
-    img->ndarray = malloc(size);    
+    img->ndarray = malloc(size);
     memcpy(img->ndarray, (void*)img->ipl->imageData, size);
     cvReleaseImage(&img->ipl);
     /*
@@ -1581,19 +1581,19 @@ void iplPrintImageInfo(IplImage* ipl, char* msg){
 	{
             printf("====== iplPrintImageInfo:\n");
 	}
-        printf("Image @ %p: w x h = %d(%d) x %d\n", 
+        printf("Image @ %p: w x h = %d(%d) x %d\n",
                 ipl, ipl->width, ipl->widthStep, ipl->height);
-        printf("imageData @ %p\n", ipl->imageData); 
+        printf("imageData @ %p\n", ipl->imageData);
         printf("nChannels = %d\n", ipl->nChannels);
         printf("depth = ");
         switch (ipl->depth){
-          case IPL_DEPTH_1U:  printf("IPL_DEPTH_1U");  break; 
-          case IPL_DEPTH_8U:  printf("IPL_DEPTH_8U");  break; 
-          case IPL_DEPTH_16U: printf("IPL_DEPTH_16U"); break; 
-          case IPL_DEPTH_32F: printf("IPL_DEPTH_32F"); break; 
-          case IPL_DEPTH_8S:  printf("IPL_DEPTH_8S");  break; 
-          case IPL_DEPTH_16S: printf("IPL_DEPTH_16S"); break; 
-          case IPL_DEPTH_32S: printf("IPL_DEPTH_32S"); break; 
+          case IPL_DEPTH_1U:  printf("IPL_DEPTH_1U");  break;
+          case IPL_DEPTH_8U:  printf("IPL_DEPTH_8U");  break;
+          case IPL_DEPTH_16U: printf("IPL_DEPTH_16U"); break;
+          case IPL_DEPTH_32F: printf("IPL_DEPTH_32F"); break;
+          case IPL_DEPTH_8S:  printf("IPL_DEPTH_8S");  break;
+          case IPL_DEPTH_16S: printf("IPL_DEPTH_16S"); break;
+          case IPL_DEPTH_32S: printf("IPL_DEPTH_32S"); break;
           default: printf("unknown");
 	}
         printf("\n");
@@ -1601,7 +1601,7 @@ void iplPrintImageInfo(IplImage* ipl, char* msg){
 
 /** Print information about image.
 
-    Print width, height, depth, number of channels, OpenGL texture handler, 
+    Print width, height, depth, number of channels, OpenGL texture handler,
     OpenGL FBO handler, and current valid context (RAM, GPU or FBO).
 
  */
@@ -1614,7 +1614,7 @@ void vglPrintImageInfo(VglImage* image, char* msg){
     {
         printf("====== vglPrintImageInfo:\n");
     }
-    printf("Image @ %p: w x h x l = %d(%d) x %d x %d\n", 
+    printf("Image @ %p: w x h x l = %d(%d) x %d x %d\n",
 	    image, image->getWidth(), image->getWidthStep(), image->getHeight(), image->getLength());
     printf("ndim = %d\n", image->ndim);
     printf("size = %d\n", image->vglShape->getSize());
@@ -1626,17 +1626,17 @@ void vglPrintImageInfo(VglImage* image, char* msg){
     }
     printf("}\n");
     printf("Ipl @ %p\n", image->ipl);
-    printf("ndarray @ %p\n", image->ndarray); 
+    printf("ndarray @ %p\n", image->ndarray);
     printf("nChannels = %d\n", image->nChannels);
     printf("depth = ");
     switch (image->depth){
-        case IPL_DEPTH_1U:  printf("IPL_DEPTH_1U");  break; 
-        case IPL_DEPTH_8U:  printf("IPL_DEPTH_8U");  break; 
-        case IPL_DEPTH_16U: printf("IPL_DEPTH_16U"); break; 
-        case IPL_DEPTH_32F: printf("IPL_DEPTH_32F"); break; 
-        case IPL_DEPTH_8S:  printf("IPL_DEPTH_8S");  break; 
-        case IPL_DEPTH_16S: printf("IPL_DEPTH_16S"); break; 
-        case IPL_DEPTH_32S: printf("IPL_DEPTH_32S"); break; 
+        case IPL_DEPTH_1U:  printf("IPL_DEPTH_1U");  break;
+        case IPL_DEPTH_8U:  printf("IPL_DEPTH_8U");  break;
+        case IPL_DEPTH_16U: printf("IPL_DEPTH_16U"); break;
+        case IPL_DEPTH_32F: printf("IPL_DEPTH_32F"); break;
+        case IPL_DEPTH_8S:  printf("IPL_DEPTH_8S");  break;
+        case IPL_DEPTH_16S: printf("IPL_DEPTH_16S"); break;
+        case IPL_DEPTH_32S: printf("IPL_DEPTH_32S"); break;
         default: printf("unknown");
     }
     printf("\n");
@@ -1844,7 +1844,7 @@ void vglCopyImageTexFS(VglImage* src, VglImage* dst)
   vglSetContext(dst, VGL_GL_CONTEXT);
 }
 
-/** Copy data from src texture to dst texture using a 
+/** Copy data from src texture to dst texture using a
     fragment shader and a vertex shader
  */
 void vglCopyImageTexVFS(VglImage* src, VglImage* dst)
@@ -1864,7 +1864,7 @@ void vglCopyImageTexVFS(VglImage* src, VglImage* dst)
   static GLuint p = 0;
   if (p == 0){
     fprintf(stdout, "VERTEX SHADER\n====================\n");
-    p = vglShaderLoad(GL_VERTEX_SHADER, (char*)"VS/vglPassThrough.vert");
+    p = vglShaderLoad(GL_VERTEX_SHADER, (char*)"kernel/util/vglPassThrough.vert");
     if (!p){
       fprintf(stderr, "%s: %s: Error loading vertex shader.\n", __FILE__, __FUNCTION__);
       exit(1);
@@ -2034,11 +2034,11 @@ void vglClear(VglImage* image, float r, float g, float b, float a){
 }
 
 
-/** Morphological opening by square structuring element. Opening is an 
-    erosion followed by a dilation. A buffer is required. Source 
+/** Morphological opening by square structuring element. Opening is an
+    erosion followed by a dilation. A buffer is required. Source
     and destination may be the same.
 
-    The structuring element is a 3x3 square. The parameter 
+    The structuring element is a 3x3 square. The parameter
     "times" indicates how many times the erosion will be applied.
 
 */
@@ -2074,10 +2074,10 @@ void vglOpenSq3(VglImage* src, VglImage* dst, VglImage* buf, int times){
   vglSetContext(dst, VGL_GL_CONTEXT);
 }
 
-/** Morphological closing by square structuring element. A buffer 
+/** Morphological closing by square structuring element. A buffer
     is required. Source and destination may be the same.
 
-    The structuring element is a 3x3 square. The parameter 
+    The structuring element is a 3x3 square. The parameter
     "times" indicates how many times the closing will be applied.
 
 */
@@ -2113,10 +2113,10 @@ void vglCloseSq3(VglImage* src, VglImage* dst, VglImage* buf, int times){
   vglSetContext(dst, VGL_GL_CONTEXT);
 }
 
-/** Morphological erosion by square structuring element 3x3. A buffer is 
+/** Morphological erosion by square structuring element 3x3. A buffer is
     required. Source and destination may be the same.
 
-    The structuring element is a 3x3 square. The parameter 
+    The structuring element is a 3x3 square. The parameter
     "times" indicates how many times the erosion will be applied.
 
 */
@@ -2136,10 +2136,10 @@ void vglErodeSq3Sep(VglImage* src, VglImage* dst, VglImage* buf, int times){
   vglSetContext(dst, VGL_GL_CONTEXT);
 }
 
-/** Morphological erosion by square structuring element 5x5. A buffer is 
+/** Morphological erosion by square structuring element 5x5. A buffer is
     required. Source and destination may be the same.
 
-    The structuring element is a 5x5 square. The parameter 
+    The structuring element is a 5x5 square. The parameter
     "times" indicates how many times the erosion will be applied.
 
 */
@@ -2159,11 +2159,11 @@ void vglErodeSq5Sep(VglImage* src, VglImage* dst, VglImage* buf, int times){
   vglSetContext(dst, VGL_GL_CONTEXT);
 }
 
-/** Morphological conditional erosion by cross structuring 
-    element 3x3. A buffer is required. Source and destination 
+/** Morphological conditional erosion by cross structuring
+    element 3x3. A buffer is required. Source and destination
     may be the same.
 
-    The structuring element is a 3x3 cross. The parameter 
+    The structuring element is a 3x3 cross. The parameter
     "times" indicates how many times the erosion will be applied.
 
 */
@@ -2275,7 +2275,7 @@ int SaveYUV411(char* filename, int w, int h, void* savebuf){
 
 /** Distance transform given by elementary cross.
 
-    Perform successive erosions on input image thresholded to 1/256. The sum of 
+    Perform successive erosions on input image thresholded to 1/256. The sum of
 the erosions results is returned as the distance transform result.
 
   */
@@ -2296,7 +2296,7 @@ void vglDistTransformCross3(VglImage* src, VglImage* dst, VglImage* buf, VglImag
 
 /** Distance transform given by square 3x3.
 
-    Perform successive erorions on input image thresholded to 1/256. The sum of 
+    Perform successive erorions on input image thresholded to 1/256. The sum of
 the erosions results is returned as the distance transform result.
 
   */
@@ -2317,7 +2317,7 @@ void vglDistTransformSq3(VglImage* src, VglImage* dst, VglImage* buf, VglImage* 
 
 /** Distance transform given by alternating an elementary cross and a square 3x3.
 
-    Perform successive erorions on input image thresholded to 1/256. The sum of 
+    Perform successive erorions on input image thresholded to 1/256. The sum of
 the erosions results is returned as the distance transform result.
 
   */
@@ -2339,8 +2339,8 @@ void vglDistTransform5(VglImage* src, VglImage* dst, VglImage* buf, VglImage* bu
 
 /** Get level curve of distance transform5
 
-    Perform successive erorions on input image thresholded to 1/256. 
-The returned image is the difference between the results obtained in 
+    Perform successive erorions on input image thresholded to 1/256.
+The returned image is the difference between the results obtained in
 the iterations "times" and "times" - 1.
 
   */
@@ -2361,7 +2361,7 @@ void vglGetLevelDistTransform5(VglImage* src, VglImage* dst, VglImage* buf, VglI
 
 /** Structuring element thinning. Algorithm by Bernard and Manzanera 1999.
 
-    Receive as input the image to be thinned. The second image is an auxiliary 
+    Receive as input the image to be thinned. The second image is an auxiliary
 image. The third image stores the result. Both the second and third images must
 have the same size and type as the first input image.
 
@@ -2386,7 +2386,7 @@ void vglThinBernard(VglImage* src, VglImage* dst, VglImage* buf, int times /*=1*
 /** Structuring element thinning. Algorithm by Chin, Wan
 Stover and Iverson, 1987.
 
-    Receive as input the image to be thinned, buffer image and number 
+    Receive as input the image to be thinned, buffer image and number
 of times to iterate.
 
     Neighborhood pixels are indexed as follows:
@@ -2405,7 +2405,7 @@ of times to iterate.
 
     M. Couprie, Note on fifteen 2D parallel thinning algorithms, 2006
 
-    R. T. Chin et al., A one-pass thinning algorithm and its parallel 
+    R. T. Chin et al., A one-pass thinning algorithm and its parallel
         implementation, 1987
   */
 void vglThinChin(VglImage* src, VglImage* dst, VglImage* buf, int times /*=1*/){
@@ -2480,14 +2480,14 @@ void vglBaricenterVga(VglImage* src, double* x_avg /*= NULL*/, double* y_avg /*=
 
 /** Force image to be traated as buffer
 
-    Data with 2 and 3 dimensions are, by default, treated as images, i.e. are created 
+    Data with 2 and 3 dimensions are, by default, treated as images, i.e. are created
     and transferred by the API functions
     clCreate2DImage, clCreate3DImage, clEnqueueWriteImage, clEnqueueReadImage.
 
     To treat data as images has as advantage the possibility of automatic clamping to edge
     in window operations.
 
-    Data with 1, 4 or more dimensions are always treated as buffers, i.e. are created 
+    Data with 1, 4 or more dimensions are always treated as buffers, i.e. are created
     and transferred by the API functions
     clCreateBuffer, clEnqueueWriteBuffer, clEnqueueReadBuffer.
 
@@ -2676,7 +2676,7 @@ void vglMultiInput_model(VglImage*  src0, VglImage*  src1, VglImage*  dst){
   static GLuint f = 0;
   if (f == 0){
     fprintf(stdout, "VERTEX SHADER\n====================\n");
-    f = vglShaderLoad(GL_VERTEX_SHADER, (char*)"VS/vglPassThrough.vert");
+    f = vglShaderLoad(GL_VERTEX_SHADER, (char*)"kernel/util/vglPassThrough.vert");
     if (!f){
       fprintf(stderr, "%s: %s: Error loading vertex shader.\n", __FILE__, __FUNCTION__);
       exit(1);
@@ -2692,7 +2692,7 @@ void vglMultiInput_model(VglImage*  src0, VglImage*  src1, VglImage*  dst){
   }
   ERRCHECK()
 
-    // funciona sem shader 
+    // funciona sem shader
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, src0->tex);
 
@@ -2755,5 +2755,3 @@ void vglMultiInput_model(VglImage*  src0, VglImage*  src1, VglImage*  dst){
 
   vglSetContext(dst, VGL_GL_CONTEXT);
 }
-
-

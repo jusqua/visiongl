@@ -55,7 +55,7 @@ int* vglClSumPartialHistogram(cl_mem partial_hist, int size, int nchannels)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogram.cl";
+    char* file_path = (char*) "kernel/util/vglClHistogram.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -77,7 +77,7 @@ int* vglClSumPartialHistogram(cl_mem partial_hist, int size, int nchannels)
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglClSumPartialHistogram", &err ); 
+    kernel = clCreateKernel( program, "vglClSumPartialHistogram", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -96,7 +96,7 @@ int* vglClSumPartialHistogram(cl_mem partial_hist, int size, int nchannels)
   size_t worksize[] = { 256, size, nchannels };
   clEnqueueNDRangeKernel( cl.commandQueue, kernel, 2, NULL, worksize, 0, 0, 0, 0 );
   vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
-  
+
   int* histogram = (int*) malloc(nchannels*256*sizeof(int));
   err = clEnqueueReadBuffer(cl.commandQueue,mobj_histogram,CL_TRUE, 0, nchannels*256*sizeof(int), histogram, 0, NULL, NULL);
   vglClCheckError(err, (char*) "ReadBuffer histogram");
@@ -121,7 +121,7 @@ cl_mem vglClPartialHistogram(VglImage* img_input)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogram.cl";
+    char* file_path = (char*) "kernel/util/vglClHistogram.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -143,7 +143,7 @@ cl_mem vglClPartialHistogram(VglImage* img_input)
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglCl2dPartialHistogram", &err ); 
+    kernel = clCreateKernel( program, "vglCl2dPartialHistogram", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -183,7 +183,7 @@ cl_mem vglCl3dPartialHistogram(VglImage* img_input)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogram.cl";
+    char* file_path = (char*) "kernel/util/vglClHistogram.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -205,7 +205,7 @@ cl_mem vglCl3dPartialHistogram(VglImage* img_input)
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglCl3dPartialHistogram", &err ); 
+    kernel = clCreateKernel( program, "vglCl3dPartialHistogram", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -245,7 +245,7 @@ int* vglClCumulativeSum(int* arr, int size)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClMath.cl";
+    char* file_path = (char*) "kernel/util/vglClMath.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -267,7 +267,7 @@ int* vglClCumulativeSum(int* arr, int size)
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglClCumSum", &err ); 
+    kernel = clCreateKernel( program, "vglClCumSum", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -280,7 +280,7 @@ int* vglClCumulativeSum(int* arr, int size)
   size_t worksize[] = { nsize/2, 1, 1 };
   clEnqueueNDRangeKernel( cl.commandQueue, kernel, 1, NULL, worksize, 0, 0, 0, 0 );
   vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
-  
+
   int* cumsum = (int*) malloc(size*sizeof(int));
   err = clEnqueueReadBuffer(cl.commandQueue,mobj_arr,CL_TRUE, 0, size*sizeof(int), cumsum, 0, NULL, NULL);
   vglClCheckError(err, (char*) "ReadBuffer histogram");
@@ -305,7 +305,7 @@ int* vglClCumulativeSumNorm(int* arr, int size, int norm_total)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClMath.cl";
+    char* file_path = (char*) "kernel/util/vglClMath.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -327,7 +327,7 @@ int* vglClCumulativeSumNorm(int* arr, int size, int norm_total)
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglClCumSumNorm", &err ); 
+    kernel = clCreateKernel( program, "vglClCumSumNorm", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -343,7 +343,7 @@ int* vglClCumulativeSumNorm(int* arr, int size, int norm_total)
   size_t worksize[] = { nsize/2, 1, 1 };
   clEnqueueNDRangeKernel( cl.commandQueue, kernel, 1, NULL, worksize, 0, 0, 0, 0 );
   vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
-  
+
   int* cumsum = (int*) malloc(size*sizeof(int));
   err = clEnqueueReadBuffer(cl.commandQueue,mobj_arr,CL_TRUE, 0, size*sizeof(int), cumsum, 0, NULL, NULL);
   vglClCheckError(err, (char*) "ReadBuffer histogram");
@@ -374,7 +374,7 @@ void vglCl3dHistogramEq(VglImage* input, VglImage* output)
 
 void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformation)
 {
-  
+
   if (input->nChannels > 1 || output->nChannels > 1)
   {
      fprintf(stderr, "%s: %s: Error: image with more than 1 channel not supported. Please convert to 1 channel.\n", __FILE__, __FUNCTION__);
@@ -395,7 +395,7 @@ void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformat
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogramEq.cl";
+    char* file_path = (char*) "kernel/util/vglClHistogramEq.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -417,7 +417,7 @@ void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformat
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglClGrayLevelTransform", &err ); 
+    kernel = clCreateKernel( program, "vglClGrayLevelTransform", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -438,12 +438,12 @@ void vglClGrayLevelTransform(VglImage* input, VglImage* output, int* transformat
   err = clReleaseMemObject( mobj_arr );
   vglClCheckError(err, (char*) "clReleaseMemObject mobj_arr");
 
-  
+
 }
 
 void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transformation)
 {
-  
+
   if (input->nChannels > 1 || output->nChannels > 1)
   {
      fprintf(stderr, "%s: %s: Error: image with more than 1 channel not supported. Please convert to 1 channel.\n", __FILE__, __FUNCTION__);
@@ -464,7 +464,7 @@ void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transform
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClHistogramEq.cl";
+    char* file_path = (char*) "kernel/util/vglClHistogramEq.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -486,7 +486,7 @@ void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transform
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglCl3dGrayLevelTransform", &err ); 
+    kernel = clCreateKernel( program, "vglCl3dGrayLevelTransform", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -507,7 +507,7 @@ void vglCl3dGrayLevelTransform(VglImage* input, VglImage* output, int* transform
   err = clReleaseMemObject( mobj_arr );
   vglClCheckError(err, (char*) "clReleaseMemObject mobj_arr");
 
-  
+
 }
 
 void vglCl3dErode(VglImage* input, VglImage* output, VglImage* buff, float* strel, int strel_size_x, int strel_size_y, int strel_size_z, int times)
@@ -523,7 +523,7 @@ void vglCl3dErode(VglImage* input, VglImage* output, VglImage* buff, float* stre
   {
 
     vglCl3dErode(input, buff, strel, strel_size_x, strel_size_y, strel_size_z);
-  
+
     for(int i = 1; i < times; i++)
     {
       if (i % 2 == 0)
@@ -550,7 +550,7 @@ void vglClErode(VglImage* input, VglImage* output, VglImage* buff, float* strel,
   if (times > 0)
   {
     vglClErode(input, buff, strel, strel_size_x, strel_size_y);
-  
+
     for(int i = 1; i < times; i++)
     {
       if (i % 2 == 0)
@@ -558,7 +558,7 @@ void vglClErode(VglImage* input, VglImage* output, VglImage* buff, float* strel,
       else
         vglClErode(buff, output, strel, strel_size_x, strel_size_y);
     }
-  
+
     if (times % 2 == 1)
       vglCl3dCopy(buff, output);
   }
@@ -575,9 +575,9 @@ void vglCl3dDilate(VglImage* input, VglImage* output, VglImage* buff, float* str
 
   if (times > 0)
   {
-  
+
     vglCl3dDilate(input, buff, strel, strel_size_x, strel_size_y, strel_size_z);
-  
+
     for(int i = 1; i < times; i++)
     {
       if (i % 2 == 0)
@@ -604,7 +604,7 @@ void vglClDilate(VglImage* input, VglImage* output, VglImage* buff, float* strel
   {
 
     vglClDilate(input, buff, strel, strel_size_x, strel_size_y);
-  
+
     for(int i = 1; i < times; i++)
     {
       if (i % 2 == 0)
@@ -643,7 +643,7 @@ void vglCl3dDistTransform5(VglImage* src, VglImage* dst, VglImage* buf, VglImage
   float strel2[3] = {1,1,0};
   for(int i = 0; i < times; i++){
     if (i % 6 == 0){
-      vglCl3dErode(buf, buf2, strel1, 3, 1, 1);      
+      vglCl3dErode(buf, buf2, strel1, 3, 1, 1);
       vglCl3dSum(buf2, dst, dst);
     }
     else if (i % 6 == 1){
@@ -670,13 +670,13 @@ void vglCl3dDistTransform5(VglImage* src, VglImage* dst, VglImage* buf, VglImage
 }
 
 void vglClDistTransform5(VglImage* src, VglImage* dst, VglImage* buf, VglImage* buf2, int times){
-  
+
   if(src->ndim > 2)
   {
     fprintf(stderr, "%s: %s: Error: image with more than 2 dimensions not supported. Use vglCl3dDistTransform instead.\n", __FILE__, __FUNCTION__);
     return;
   }
-  
+
   vglClThreshold(src, buf, 0.0, 1.0f/256.0);
   vglClCopy(buf, dst);
   float square_strel[9] = {1,1,1,1,1,1,1,1,1};
@@ -738,7 +738,7 @@ bool vglCl3dEqual(VglImage* input1, VglImage* input2)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClEqual.cl";
+    char* file_path = (char*) "kernel/util/vglClEqual.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -760,7 +760,7 @@ bool vglCl3dEqual(VglImage* input1, VglImage* input2)
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglCl3dEqual", &err ); 
+    kernel = clCreateKernel( program, "vglCl3dEqual", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -776,10 +776,10 @@ bool vglCl3dEqual(VglImage* input1, VglImage* input2)
   size_t worksize[] = { input1->getWidthIn(), input1->getHeightIn(), input1->getLength() };
   clEnqueueNDRangeKernel( cl.commandQueue, kernel, 3, NULL, worksize, 0, 0, 0, 0 );
   vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
-  
+
   err = clEnqueueReadBuffer(cl.commandQueue,mobj_equal,CL_TRUE,0,sizeof(char),&e,0,NULL,NULL);
   vglClCheckError( err, (char*) "clEnqueueReadBuffer" );
-  
+
   return e != 1;
 }
 
@@ -809,7 +809,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClEqual.cl";
+    char* file_path = (char*) "kernel/util/vglClEqual.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -831,7 +831,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2)
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglClEqual", &err ); 
+    kernel = clCreateKernel( program, "vglClEqual", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -847,7 +847,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2)
   size_t worksize[] = { input1->getWidthIn(), input1->getHeightIn(), 0 };
   clEnqueueNDRangeKernel( cl.commandQueue, kernel, 2, NULL, worksize, 0, 0, 0, 0 );
   vglClCheckError( err, (char*) "clEnqueueNDRangeKernel" );
-  
+
   err = clEnqueueReadBuffer(cl.commandQueue,mobj_equal,CL_TRUE,0,sizeof(char),&e,0,NULL,NULL);
   vglClCheckError( err, (char*) "clEnqueueReadBuffer" );
 
@@ -898,7 +898,7 @@ bool vglClEqual(VglImage* input1, VglImage* input2, const char* kernel_name)
   static cl_program program = NULL;
   if (program == NULL)
   {
-    char* file_path = (char*) "CL_UTIL/vglClEqual.cl";
+    char* file_path = (char*) "kernel/util/vglClEqual.cl";
     printf("Compiling %s\n", file_path);
     std::ifstream file(file_path);
     if(file.fail())
@@ -975,10 +975,10 @@ void vglCl3dConditionalDilate(VglImage* src, VglImage* mask, VglImage* dst, floa
 
   vglCl3dDilate(src, dst, strel, strel_size_x, strel_size_y, strel_size_z);
   vglCl3dMin(mask, dst, dst);
-  
+
 }
 
-/** Conditional dilation by parameterized structuring element. 
+/** Conditional dilation by parameterized structuring element.
     All input images must not be the same.
     Image in src is dilated by strel. The minimum between the result and mask is returned.
 
@@ -995,7 +995,7 @@ void vglClConditionalDilate(VglImage* src, VglImage* mask, VglImage* dst, float*
 
   vglClDilate(src, dst, strel, strel_size_x, strel_size_y);
   vglClMin(mask, dst, dst);
-  
+
 }
 
 /** Conditional erosion by parameterized structuring element.
@@ -1015,10 +1015,10 @@ void vglCl3dConditionalErode(VglImage* src, VglImage* mask, VglImage* dst,  floa
 
   vglCl3dErode(src, dst, strel, strel_size_x, strel_size_y, strel_size_z);
   vglCl3dMax(mask, dst, dst);
-  
+
 }
 
-/** Conditional erosion by parameterized structuring element. 
+/** Conditional erosion by parameterized structuring element.
     All input images must not be the same.
     Image in src is eroded by strel. The maximum between the result and mask is returned.
 
@@ -1064,7 +1064,7 @@ void vglCl3dConditionalDilate(VglImage* src, VglImage* mask, VglImage* dst, VglI
     }
 }
 
-/** Conditional dilation by parameterized structuring element. 
+/** Conditional dilation by parameterized structuring element.
     A buffer is required.
     All input images must not be the same.
     Image in src is dilated by strel. The minimum between the result and mask is returned.
@@ -1118,7 +1118,7 @@ void vglCl3dConditionalErode(VglImage* src, VglImage* mask, VglImage* dst, VglIm
     }
 }
 
-/** Conditional erosion by parameterized structuring element. 
+/** Conditional erosion by parameterized structuring element.
     A buffer is required.
     All input images must not be the same.
     Image in src is eroded by strel. The maximum between the result and mask is returned.
@@ -1258,7 +1258,7 @@ void vglClReconstructionByErosion(VglImage* src, VglImage* marker, VglImage* dst
 
     Two buffers are required.
     All input images must not be the same.
-    Image in src is eroded by strel. The result is stored in buff. 
+    Image in src is eroded by strel. The result is stored in buff.
     Inage in buff is then used as marker in a reconstruction by dilation.
 
     The structuring element is a strel_size_x by strel_size_y by strel_size_z parallelepiped.
@@ -1273,7 +1273,7 @@ void vglCl3dReconstructionByOpening(VglImage* src, VglImage* dst, VglImage* buff
 
     Two buffers are required.
     All input images must not be the same.
-    Image in src is eroded by strel. The result is stored in buff. 
+    Image in src is eroded by strel. The result is stored in buff.
     Inage in buff is then used as marker in a reconstruction by dilation.
 
     The structuring element is a strel_size_x by strel_size_y rectangle.
@@ -1287,7 +1287,7 @@ void vglClReconstructionByOpening(VglImage* src, VglImage* dst, VglImage* buff, 
 /** Reconstruction by closing by parameterized structuring element.
     Two buffers are required.
     All input images must not be the same.
-    Image in src is dilated by strel. The result is stored in buff. 
+    Image in src is dilated by strel. The result is stored in buff.
     Inage in buff is then used as marker in a reconstruction by erosion.
 
     The structuring element is a strel_size_x by strel_size_y by strel_size_z parallelepiped.
@@ -1301,7 +1301,7 @@ void vglCl3dReconstructionByClosing(VglImage* src, VglImage* dst, VglImage* buff
 /** Reconstruction by closing by parameterized structuring element.
     Two buffers are required.
     All input images must not be the same.
-    Image in src is dilated by strel. The result is stored in buff. 
+    Image in src is dilated by strel. The result is stored in buff.
     Inage in buff is then used as marker in a reconstruction by erosion.
 
     The structuring element is a strel_size_x by strel_size_y rectangle.
@@ -1584,7 +1584,7 @@ void vglClBinNErode(VglImage* src, VglImage* dst, VglImage* buff, VglStrEl* stre
   else
   {
     BIN_ERODE(vglClNdBinErode, vglClNdBinCopy)
-  }    
+  }
 }
 
 
