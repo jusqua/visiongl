@@ -12,11 +12,8 @@
 //#include <cvaux.h>
 
 #include "vglSimpleBGModel.h"
-#include "glsl2cpp_shaders.h"
+#include "vgl_opengl_kernels.g.h"
 #include "vglContext.h"
-
-//Shaders
-#include "glsl2cpp_BG.h"
 
 //opencv IplImage
 #ifdef __OPENCV__
@@ -34,7 +31,7 @@ VglSimpleBGModel::VglSimpleBGModel(VglImage* img_in, float std_thresh, int windo
     this->height    = img_in->getHeight();
     this->nChannels = img_in->nChannels;
     this->depth     = img_in->depth;
-    
+
 
     if (depth != IPL_DEPTH_8U){
       printf("VglSimpleBGModel: Error: depth must be IPL_DEPTH_8U\n");
@@ -157,12 +154,12 @@ void VglSimpleBGModel::UpdateSimpleBGModel(VglImage* img_in){
       //vglDilateSq3(foreground,      foregroundClose);
       vglCloseSq3(foreground,      foregroundClose, buf, 1);
       vglOpenSq3 (foregroundClose, foregroundClose, buf, 1);
-      // Devido a incorporacao pelo fundo adicionada dilatacao inexistente no SimpleBgModel 
-      /*vglDilateSq3(foregroundClose,      buf            ); 
-      vglDilateSq3(buf            ,      foregroundClose); 
-      vglDilateSq3(foregroundClose,      buf            ); 
-      vglDilateSq3(buf            ,      foregroundClose); 
-      vglDilateSq3(foregroundClose,      buf            ); 
+      // Devido a incorporacao pelo fundo adicionada dilatacao inexistente no SimpleBgModel
+      /*vglDilateSq3(foregroundClose,      buf            );
+      vglDilateSq3(buf            ,      foregroundClose);
+      vglDilateSq3(foregroundClose,      buf            );
+      vglDilateSq3(buf            ,      foregroundClose);
+      vglDilateSq3(foregroundClose,      buf            );
       vglDilateSq3(buf            ,      foregroundClose); */
       UpdatePartialSimpleBGModel(img_in);
     }
@@ -170,7 +167,7 @@ void VglSimpleBGModel::UpdateSimpleBGModel(VglImage* img_in){
 
 /*
 void VglSimpleBGModel::UpdateSimpleBGModelXGY(VglImage* img_in){
-  if (!sobel) 
+  if (!sobel)
           sobel = cvCreateImage(cvSize(img_in->width, img_in->height), IPL_DEPTH_16S, img_in->nChannels);
   if (!color)
           color = cvCreateImage(cvSize(img_in->width, img_in->height), IPL_DEPTH_8U, img_in->nChannels);
@@ -211,11 +208,11 @@ void VglSimpleBGModel::UpdateSimpleBGModelXGY(VglImage* img_in){
 
 
 void VglSimpleBGModel::UpdateSimpleBGModelRGL(VglImage* img_in){
-  if (!sobel) 
+  if (!sobel)
           sobel = cvCreateImage(cvSize(img_in->width, img_in->height), IPL_DEPTH_16S, img_in->nChannels);
-  if (!color) 
+  if (!color)
           color = cvCreateImage(cvSize(img_in->width, img_in->height), IPL_DEPTH_8U, 3);
-  if (!grayx) 
+  if (!grayx)
           grayx = cvCreateImage(cvSize(img_in->width, img_in->height), IPL_DEPTH_8U, 1);
 
           printf("chk laplaca\n");
@@ -238,4 +235,3 @@ void VglSimpleBGModel::UpdateSimpleBGModelRGL(VglImage* img_in){
 }
 
 */
-

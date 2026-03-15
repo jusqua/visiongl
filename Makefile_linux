@@ -75,7 +75,7 @@ ifeq ($(WITH_CUDA), 1)
 	CUDA_LIBDIR      = -L $(CUDA_LIBPATH)
 	CUDA_LIBRARIES   = -lcudart
 	CUDA_OPTIONS     =
-	CUDA_FILES       = src/*.cu
+	CUDA_FILES       = src/vgl_cuda_kernels.g.cu
 	CC               = $(CUDA_PATH)/bin/nvcc
 	FPIC             = -Xcompiler -fPIC
 else
@@ -94,7 +94,7 @@ ifeq ($(WITH_OPENCL), 1)
         OPENCL_INCLUDEDIR  = -I $(OPENCL_INCLUDEPATH)
         OPENCL_LIBDIR      = -L $(OPENCL_LIBPATH)
         OPENCL_LIBRARIES   = -lOpenCL
-        OPENCL_FILES = src/cl2cpp_shaders.cpp src/vglClFunctions.cpp src/vglClImage.cpp src/cl2cpp_MM.cpp src/cl2cpp_ND.cpp src/cl2cpp_BIN.cpp
+        OPENCL_FILES = src/vgl_opencl_kernels.g.cpp src/vglClFunctions.cpp src/vglClImage.cpp
 
         OPENGL_INCLUDEPATH = $(OPENCL_INCLUDEPATH)
         OPENGL_INCLUDEDIR  = $(OPENCL_INCLUDEDIR)
@@ -133,11 +133,7 @@ ifeq ($(WITH_TIFF), 1)
 	TIFF_LIBRARIES   = -ltiff
 endif
 
-
-
-
-VGL_FILES = src/glsl2cpp_shaders.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/glsl2cpp_BG.cpp src/glsl2cpp_Stereo.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
-
+VGL_FILES = src/vgl_opengl_kernels.g.cpp src/vglContext.cpp src/vglSimpleBGModel.cpp src/vglImage.cpp src/vglLoadShader.cpp src/vglGdcmIo.cpp src/vglDcmtkIo.cpp src/vglTiffIo.cpp src/vglDeconv.cpp src/iplImage.cpp src/vglOpencv.cpp src/vglShape.cpp src/vglStrEl.cpp
 
 INSTALL_PATH        = $(HOME)/script
 INSTALL_INCLUDEPATH = $(INSTALL_PATH)/include
@@ -346,7 +342,7 @@ LINUXAMD64_DEMO_COLORDECONV = $(CC) $(COMPILER_FLAGS) \
 
 
 
-GENERATE_HEADER = cat $(INCLUDE_PATH)/vglHead.h $(INCLUDE_PATH)/vglImage.h $(INCLUDE_PATH)/vglCudaImage.h $(INCLUDE_PATH)/vglClImage.h $(INCLUDE_PATH)/vglGdcmIo.h $(INCLUDE_PATH)/vglDcmtkIo.h $(INCLUDE_PATH)/vglTiffIo.h $(INCLUDE_PATH)/vglContext.h $(INCLUDE_PATH)/vglSimpleBGModel.h $(INCLUDE_PATH)/glsl2cpp*.h $(INCLUDE_PATH)/kernel2cu*.h $(INCLUDE_PATH)/cl2cpp*.h $(INCLUDE_PATH)/vglClFunctions*.h $(INCLUDE_PATH)/iplImage*.h $(INCLUDE_PATH)/vglOpencv*.h $(INCLUDE_PATH)/vglTail.h $(INCLUDE_PATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
+GENERATE_HEADER = cat $(INCLUDE_PATH)/vglHead.h $(INCLUDE_PATH)/vglImage.h $(INCLUDE_PATH)/vglCudaImage.h $(INCLUDE_PATH)/vglClImage.h $(INCLUDE_PATH)/vglGdcmIo.h $(INCLUDE_PATH)/vglDcmtkIo.h $(INCLUDE_PATH)/vglTiffIo.h $(INCLUDE_PATH)/vglContext.h $(INCLUDE_PATH)/vglSimpleBGModel.h $(INCLUDE_PATH)/vgl_cuda_kernels.g.h $(INCLUDE_PATH)/vgl_opengl_kernels.g.h $(INCLUDE_PATH)/vgl_opencl_kernels.g.h $(INCLUDE_PATH)/vglClFunctions*.h $(INCLUDE_PATH)/iplImage*.h $(INCLUDE_PATH)/vglOpencv*.h $(INCLUDE_PATH)/vglTail.h $(INCLUDE_PATH)/vglDeconv.h > /tmp/$(BINARY_NAME).h; grep -v vglImage\.h /tmp/$(BINARY_NAME).h > $(OUTPUT_INCLUDEPATH)/$(BINARY_NAME).h
 
 
 all: lib
@@ -354,10 +350,21 @@ all: lib
 	$(GENERATE_HEADER)
 
 .PHONY: lib
-lib:
+lib: wrapper
 	mkdir -p $(OUTPUT_LIBPATH)
 	echo '*' > $(OUTPUT_ROOTPATH)/.gitignore
 	$(LINUXAMD64_LIB)
+
+wrapper: cuda_wrapper opengl_wrapper opencl_wrapper
+
+cuda_wrapper:
+	./perlModules/kernel2cu.pl -o src/vgl_cuda_kernels.g src/kernel/cuda/*.kernel
+
+opengl_wrapper:
+	./perlModules/glsl2cpp.pl -o src/vgl_opengl_kernels.g -p kernel/opengl src/kernel/opengl/*.frag
+
+opencl_wrapper:
+	./perlModules/cl2cpp.pl -o src/vgl_opencl_kernels.g -p kernel/opencl src/kernel/opencl/*.cl
 
 install: all
 	mkdir -p $(INSTALL_INCLUDEPATH)
@@ -555,35 +562,33 @@ rundemobenchmarkclbin:
 rundemocolordeconv:
 	cd $(OUTPUT_BINPATH); ./demo_$(COLORDECONV_NAME) ../images/Emphysema_H_and_E.jpg 1 /tmp/image.%d.pgm 0.0 1.0 1.0 1.0 0.0 1.0 1.0 1.0 0.0
 
-cuda:
-	./perlModules/kernel2cu.pl -o src/kernel2cu_shaders src/CUDA/*.kernel
+# Migrated to "cuda_wrapper" make instruction
+# cuda_wrapper:
+# 	./perlModules/kernel2cu.pl -o src/kernel2cu_shaders src/CUDA/*.kernel
 
-frag:
-	./perlModules/glsl2cpp.pl -o src/glsl2cpp_shaders -p FS src/FS/*.frag
+# Migrated to "opengl_wrapper" make instruction
+# frag:
+# 	./perlModules/glsl2cpp.pl -o src/glsl2cpp_shaders -p FS src/FS/*.frag
+# frag_bg:
+# 	./perlModules/glsl2cpp.pl -o src/glsl2cpp_BG -p FS_BG src/FS_BG/*.frag
+# frag_stereo:
+# 	./perlModules/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo src/FS_Stereo/*.frag
 
-frag_bg:
-	./perlModules/glsl2cpp.pl -o src/glsl2cpp_BG -p FS_BG src/FS_BG/*.frag
+# Does not exist
+# frag_diffeq:
+# 	./perlModules/glsl2cpp.pl -o src/glsl2cpp_DiffEq -p FS_DiffEq src/FS_DiffEq/*.frag
+# cloud_cl:
+# 	./perlModules/cl2cloud.pl -o src/cloud_CL src/CL/*.cl
 
-frag_stereo:
-	./perlModules/glsl2cpp.pl -o src/glsl2cpp_Stereo -p FS_Stereo src/FS_Stereo/*.frag
-
-frag_diffeq:
-	./perlModules/glsl2cpp.pl -o src/glsl2cpp_DiffEq -p FS_DiffEq src/FS_DiffEq/*.frag
-
-cl:
-	./perlModules/cl2cpp.pl -o src/cl2cpp_shaders -p CL src/CL/*.cl
-
-cl_nd:
-	./perlModules/cl2cpp.pl -o src/cl2cpp_ND -p CL_ND src/CL_ND/*.cl
-
-cloud_cl:
-	./perlModules/cl2cloud.pl -o src/cloud_CL src/CL/*.cl
-
-cl_mm:
-	./perlModules/cl2cpp.pl -o src/cl2cpp_MM -p CL_MM src/CL_MM/*.cl
-
-cl_bin:
-	./perlModules/cl2cpp.pl -o src/cl2cpp_BIN -p CL_BIN src/CL_BIN/*.cl
+# Migrated to "opencl_wrapper" make instruction
+# cl:
+# 	./perlModules/cl2cpp.pl -o src/cl2cpp_shaders -p CL src/CL/*.cl
+# cl_nd:
+# 	./perlModules/cl2cpp.pl -o src/cl2cpp_ND -p CL_ND src/CL_ND/*.cl
+# cl_mm:
+# 	./perlModules/cl2cpp.pl -o src/cl2cpp_MM -p CL_MM src/CL_MM/*.cl
+# cl_bin:
+# 	./perlModules/cl2cpp.pl -o src/cl2cpp_BIN -p CL_BIN src/CL_BIN/*.cl
 
 run:
 	cd $(OUTPUT_BINPATH); ./$(BINARY_NAME)

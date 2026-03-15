@@ -32,7 +32,7 @@
 #include "iplImage.h"
 
 //vglDilateSq3, vglErodeSq3
-#include "glsl2cpp_shaders.h"
+#include "vgl_opengl_kernels.g.h"
 
 
   /** \brief Refresh all output images.

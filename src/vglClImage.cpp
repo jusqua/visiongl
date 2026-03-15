@@ -3,8 +3,8 @@
 
 #include "vglClImage.h"
 #include "vglContext.h"
-#include "cl2cpp_shaders.h"
 #include "vglConst.h"
+#include "vgl_opencl_kernels.g.h"
 
 
 //ifstream
@@ -32,7 +32,7 @@
 VglClContext cl;
 bool Interop = false;
 
-static const char *vglClErrorMessages[] = { 
+static const char *vglClErrorMessages[] = {
     //case 0:
     "CL_SUCCESS",
     //case -1:
@@ -196,9 +196,9 @@ void vglClCheckError(cl_int error, char* name)
     }
 }
 
-/** 
+/**
    Function obtained from file oclUtils.cpp, distributed in NVIDIA GPU Computing SDK.
- 
+
  * Copyright 1993-2010 NVIDIA Corporation.  All rights reserved.
  *
  * Please refer to the NVIDIA end user license agreement (EULA) associated
@@ -210,19 +210,19 @@ void vglClCheckError(cl_int error, char* name)
 
 const char* oclImageFormatString(cl_uint uiImageFormat)
 {
-    // cl_channel_order 
-    if (uiImageFormat == CL_R) return "CL_R";  
-    if (uiImageFormat == CL_A) return "CL_A";  
-    if (uiImageFormat == CL_RG) return "CL_RG";  
-    if (uiImageFormat == CL_RA) return "CL_RA";  
+    // cl_channel_order
+    if (uiImageFormat == CL_R) return "CL_R";
+    if (uiImageFormat == CL_A) return "CL_A";
+    if (uiImageFormat == CL_RG) return "CL_RG";
+    if (uiImageFormat == CL_RA) return "CL_RA";
     if (uiImageFormat == CL_RGB) return "CL_RGB";
-    if (uiImageFormat == CL_RGBA) return "CL_RGBA";  
-    if (uiImageFormat == CL_BGRA) return "CL_BGRA";  
-    if (uiImageFormat == CL_ARGB) return "CL_ARGB";  
-    if (uiImageFormat == CL_INTENSITY) return "CL_INTENSITY";  
-    if (uiImageFormat == CL_LUMINANCE) return "CL_LUMINANCE";  
+    if (uiImageFormat == CL_RGBA) return "CL_RGBA";
+    if (uiImageFormat == CL_BGRA) return "CL_BGRA";
+    if (uiImageFormat == CL_ARGB) return "CL_ARGB";
+    if (uiImageFormat == CL_INTENSITY) return "CL_INTENSITY";
+    if (uiImageFormat == CL_LUMINANCE) return "CL_LUMINANCE";
 
-    // cl_channel_type 
+    // cl_channel_type
     if (uiImageFormat == CL_SNORM_INT8) return "CL_SNORM_INT8";
     if (uiImageFormat == CL_SNORM_INT16) return "CL_SNORM_INT16";
     if (uiImageFormat == CL_UNORM_INT8) return "CL_UNORM_INT8";
@@ -249,49 +249,49 @@ const char* oclImageFormatString(cl_uint uiImageFormat)
  */
 void vglClPrintSupportedImageFormats()
 {
-    // Determine and show image format support 
+    // Determine and show image format support
     cl_uint uiNumSupportedFormats = 0;
 
     // 2D
-    clGetSupportedImageFormats(cl.context, CL_MEM_READ_ONLY, 
+    clGetSupportedImageFormats(cl.context, CL_MEM_READ_ONLY,
                                CL_MEM_OBJECT_IMAGE2D,
                                0, NULL, &uiNumSupportedFormats);
     cl_image_format* ImageFormats = new cl_image_format[uiNumSupportedFormats];
-    clGetSupportedImageFormats(cl.context, CL_MEM_READ_ONLY, 
-                               CL_MEM_OBJECT_IMAGE2D,   
+    clGetSupportedImageFormats(cl.context, CL_MEM_READ_ONLY,
+                               CL_MEM_OBJECT_IMAGE2D,
                                uiNumSupportedFormats, ImageFormats, NULL);
     printf("  ---------------------------------\n");
-    printf("  2D Image Formats Supported (%u)\n", uiNumSupportedFormats); 
+    printf("  2D Image Formats Supported (%u)\n", uiNumSupportedFormats);
     printf("  ---------------------------------\n");
-    printf("  %-6s%-16s%-22s\n\n", "#", "Channel Order", "Channel Type"); 
-    for(unsigned int i = 0; i < uiNumSupportedFormats; i++) 
-    {  
+    printf("  %-6s%-16s%-22s\n\n", "#", "Channel Order", "Channel Type");
+    for(unsigned int i = 0; i < uiNumSupportedFormats; i++)
+    {
         printf("  %-6u%-16s%-22s\n", (i + 1),
-        oclImageFormatString(ImageFormats[i].image_channel_order), 
+        oclImageFormatString(ImageFormats[i].image_channel_order),
         oclImageFormatString(ImageFormats[i].image_channel_data_type));
     }
-    printf("\n"); 
+    printf("\n");
     delete [] ImageFormats;
 
     // 3D
-    clGetSupportedImageFormats(cl.context, CL_MEM_READ_ONLY, 
-                               CL_MEM_OBJECT_IMAGE3D,   
+    clGetSupportedImageFormats(cl.context, CL_MEM_READ_ONLY,
+                               CL_MEM_OBJECT_IMAGE3D,
                                0, NULL, &uiNumSupportedFormats);
     ImageFormats = new cl_image_format[uiNumSupportedFormats];
-    clGetSupportedImageFormats(cl.context, CL_MEM_READ_ONLY, 
-                               CL_MEM_OBJECT_IMAGE3D,   
+    clGetSupportedImageFormats(cl.context, CL_MEM_READ_ONLY,
+                               CL_MEM_OBJECT_IMAGE3D,
                                uiNumSupportedFormats, ImageFormats, NULL);
     printf("  ---------------------------------\n");
-    printf("  3D Image Formats Supported (%u)\n", uiNumSupportedFormats); 
+    printf("  3D Image Formats Supported (%u)\n", uiNumSupportedFormats);
     printf("  ---------------------------------\n");
-    printf("  %-6s%-16s%-22s\n\n", "#", "Channel Order", "Channel Type"); 
-    for(unsigned int i = 0; i < uiNumSupportedFormats; i++) 
-    {  
+    printf("  %-6s%-16s%-22s\n\n", "#", "Channel Order", "Channel Type");
+    for(unsigned int i = 0; i < uiNumSupportedFormats; i++)
+    {
         printf("  %-6u%-16s%-22s\n", (i + 1),
-        oclImageFormatString(ImageFormats[i].image_channel_order), 
+        oclImageFormatString(ImageFormats[i].image_channel_order),
         oclImageFormatString(ImageFormats[i].image_channel_data_type));
     }
-    printf("\n"); 
+    printf("\n");
     delete [] ImageFormats;
 }
 
@@ -306,7 +306,7 @@ void vglClInit()
     vglClCheckError(err, (char*) "clGetPlatformIDs get number of platforms");
     cl.platformId = (cl_platform_id*)malloc(sizeof(cl_platform_id)*num_platforms);
     err = clGetPlatformIDs(num_platforms, cl.platformId, NULL);
-    vglClCheckError(err, (char*) "clGetPlatformIDs get platforms id");	
+    vglClCheckError(err, (char*) "clGetPlatformIDs get platforms id");
 
     if (num_platforms == 0)
         printf("found no platform for opencl\n\n");
@@ -360,9 +360,9 @@ void vglClInit()
             search = strtok(NULL, " ");
 	}
     }
-    
+
     int hasDisplay = vglHasDisplay();
-	
+
 #ifdef __linux__
     printf("glXGetCurrentContext() = %p\n", glXGetCurrentContext() );
     printf("glXGetCurrentDisplay() = %p\n", glXGetCurrentDisplay() );
@@ -373,7 +373,7 @@ void vglClInit()
     cl_context_properties properties1[] = {
           CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
           CL_GLX_DISPLAY_KHR, (cl_context_properties) glXGetCurrentDisplay(),
-          CL_CONTEXT_PLATFORM, (cl_context_properties) cl.platformId[plat], 
+          CL_CONTEXT_PLATFORM, (cl_context_properties) cl.platformId[plat],
           0 };
     cl_context_properties properties2[] = {
           CL_CONTEXT_PLATFORM, (cl_context_properties) cl.platformId[plat],
@@ -401,7 +401,7 @@ void vglClInit()
 
     printf("%s: %s: VGL_PACK_SIZE_BITS:  %d\n", __FILE__, __FUNCTION__, VGL_PACK_SIZE_BITS);
     printf("%s: %s: VGL_PACK_SIZE_BYTES: %d\n", __FILE__, __FUNCTION__, VGL_PACK_SIZE_BYTES);
-    
+
     err = clGetDeviceInfo(cl.deviceId[id], CL_DEVICE_NAME, msgLen, msg, NULL);
     printf("%s: %s: CL_DEVICE_NAME: %s\n", __FILE__, __FUNCTION__, msg);
     err = clGetDeviceInfo(cl.deviceId[id], CL_DEVICE_VENDOR, msgLen, msg, NULL);
@@ -492,7 +492,7 @@ void vglClUpload(VglImage* img)
         }
         cl_int err;
 
-        if (    !vglIsInContext(img, VGL_RAM_CONTEXT)   && 
+        if (    !vglIsInContext(img, VGL_RAM_CONTEXT)   &&
                 !vglIsInContext(img, VGL_BLANK_CONTEXT)    )
         {
             fprintf(stderr, "vglClUpload: Error: image context = %d not in VGL_RAM_CONTEXT or VGL_BLANK_CONTEXT\n", img->inContext);
@@ -592,7 +592,7 @@ void vglClUpload(VglImage* img)
                 desc.num_mip_levels = 0;
                 desc.num_samples = 0;
                 desc.buffer = NULL;
-            }            
+            }
             img->oclPtr = clCreateImage(cl.context,CL_MEM_READ_WRITE, &format, &desc,NULL,&err);
             vglClCheckError(err, (char*) "clCreateImage");
 */
@@ -629,7 +629,7 @@ void vglClUpload(VglImage* img)
                 clFinish(cl.commandQueue);
             }
 
-   
+
             else if (  ( (img->ndim == 2) || (img->ndim == 3) )  &&  !(img->clForceAsBuf)  )
             {
                 size_t Size3d[3] = {img->getWidth(), img->getHeight(), nFrames};
@@ -730,7 +730,7 @@ void vglGlToCl(VglImage* img)
 
         err_cl = clEnqueueAcquireGLObjects(cl.commandQueue, 1 , (cl_mem*) &img->oclPtr, 0 , NULL, NULL);
         vglClCheckError(err_cl, (char*) "clEnqueueAcquireGLObjects");
-        
+
         vglSetContext(img, VGL_CL_CONTEXT);
     }
 }
@@ -857,7 +857,7 @@ int vglClMpIsZero(VglImage* num_a){
   static cl_kernel kernel = NULL;
   if (kernel == NULL)
   {
-    kernel = clCreateKernel( program, "vglClMpIsZero", &err ); 
+    kernel = clCreateKernel( program, "vglClMpIsZero", &err );
     vglClCheckError(err, (char*) "clCreateKernel" );
   }
 
@@ -892,8 +892,3 @@ int vglClMpIsZero(VglImage* num_a){
 
 
 #endif
-
-
-
-
-

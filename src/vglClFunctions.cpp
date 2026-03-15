@@ -2,9 +2,7 @@
 #include "vglClImage.h"
 #include "vglContext.h"
 #include "vglClFunctions.h"
-#include "cl2cpp_shaders.h"
-#include "cl2cpp_MM.h"
-#include "cl2cpp_BIN.h"
+#include "vgl_opencl_kernels.g.h"
 #include <math.h>
 
 #include <fstream>
