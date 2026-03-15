@@ -7,7 +7,7 @@
 #include "cl2cpp_BIN.h"
 #include "glsl2cpp_shaders.h"
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 #include "vglShape.h"
 #include "vglStrEl.h"
 
@@ -28,10 +28,10 @@ void saveResult(VglImage* out, char* outString, char* outPath, char* outFolder, 
     fprintf(stderr, "%s: %s: Error = %d creating folder %s%s%s\n", __FILE__, __FUNCTION__, retval, outPath, DIRSEP, outFolder);
     exit(1);
   }
-  
+
   sprintf(outFilename, outString, outPath, outFolder);
   vglSaveNdImage((char*) outFilename, out, i_0);
-}  
+}
 
 
 int main(int argc, char *argv[])
@@ -141,7 +141,7 @@ obtained from the image file.\
   }
   // end: Creating ROI
 
-  // This call to vglClForceAsBuf makes vglIn to be treated in OpenCL context as buffer instead of image even if it has 2 or 3 dimensions. 
+  // This call to vglClForceAsBuf makes vglIn to be treated in OpenCL context as buffer instead of image even if it has 2 or 3 dimensions.
   // N-dimensional data must be stored as buffer in order to use vglClNd* functions.
   // Must call vglClForceAsBuf right after vglIn creation, and before creating output images from vglIn in order to propagate the clForceAsBuf property.
   vglClForceAsBuf(vglIn);
@@ -206,7 +206,7 @@ obtained from the image file.\
     fprintf(stderr, "%s: %s: Error: please call vglClForceAsBuf(vglIn). This program requires images to be loaded as OpenCL BUF.\n", __FILE__, __FUNCTION__);
     exit(1);
   }
-  
+
   // Benchmarks:
 
   printf("\n\n");
@@ -448,7 +448,7 @@ obtained from the image file.\
   vglIn->vglShape->printArray(roiPf, VGL_MAX_DIM);
   printf("\n");
 
-  ////////// Dilation 
+  ////////// Dilation
 
 
   //First call to n-dimensional Dilate
@@ -653,7 +653,7 @@ obtained from the image file.\
   vglReshape(vglSwap, vglShape1bit);
 
 
-  ////////// Erosion 
+  ////////// Erosion
 
 
   //First call to n-dimensional Erode
@@ -855,7 +855,7 @@ obtained from the image file.\
   saveResult(vglSwap, outString, outPath, outFolder, i_0);
   vglReshape(vglSwap, vglShape1bit);
 
-  
+
   ////////// Pixelwise
 
 

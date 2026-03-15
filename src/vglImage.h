@@ -45,7 +45,7 @@
 
 
 //VisionGL
-#include <vglConst.h>
+#include "vgl_constants.h"
 #include <vglShape.h>
 
 ////////// VglImage
@@ -115,10 +115,10 @@ class VglImage{
   {
     return (this->getWidthStep() - 1) / VGL_PACK_SIZE_BYTES + 1;
   }
- 
+
   /** Total number of rows
 
-      Get total number of rows. Notice that, in images with more than 2D, may be 
+      Get total number of rows. Notice that, in images with more than 2D, may be
       different of image height
   */
   size_t getTotalRows()
@@ -164,7 +164,7 @@ class VglImage{
     {
       fprintf(stderr, "%s: %s: Error: no pointer to raster image data available.\n", __FILE__, __FUNCTION__);
       return NULL;
-    }     
+    }
   }
 
   int getNChannels()
@@ -377,7 +377,7 @@ void vglInOut_model(VglImage*  dst, VglImage*  dst1);
 	exit(1); \
   } \
 } \
- 
+
 
 
 #endif

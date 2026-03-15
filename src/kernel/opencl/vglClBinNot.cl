@@ -2,7 +2,7 @@
 
   */
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 
 __kernel void vglClBinNot(__read_only image2d_t img_input,
 			  __write_only image2d_t img_output)

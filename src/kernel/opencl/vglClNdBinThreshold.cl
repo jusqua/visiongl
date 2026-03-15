@@ -7,7 +7,7 @@
 // SHAPE out_shape (img_output->vglShape->asVglClShape())
 
 #include "vglClShape.h"
-#include "vglConst.h"
+#include "vgl_constants.h"
 
 __kernel void vglClNdBinThreshold(__global char* img_input,
                                   __global VGL_PACK_CL_SHADER_TYPE* img_output,

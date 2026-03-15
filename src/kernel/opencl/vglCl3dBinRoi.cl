@@ -5,7 +5,7 @@
 
   */
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 
 __kernel void vglCl3dBinRoi(__write_only image3d_t img_output,
 			    int x0, int y0, int z0, int xf, int yf, int zf)
@@ -14,7 +14,7 @@ __kernel void vglCl3dBinRoi(__write_only image3d_t img_output,
     const sampler_t smp = CLK_NORMALIZED_COORDS_FALSE | //Natural coordinates
                           CLK_ADDRESS_CLAMP_TO_EDGE |   //Clamp to next edge
                           CLK_FILTER_NEAREST;           //Don't interpolate
-   
+
     uint4 result = 0;
     for (int bit = 0; bit < VGL_PACK_SIZE_BITS; bit++)
     {
@@ -22,9 +22,9 @@ __kernel void vglCl3dBinRoi(__write_only image3d_t img_output,
       int j_img = VGL_PACK_SIZE_BITS * coords.x + bit;
       int k_img = coords.z;
       unsigned int result_bit = 0;
- 
-      if ( (i_img >= y0) && (i_img <= yf) && 
-           (j_img >= x0) && (j_img <= xf) && 
+
+      if ( (i_img >= y0) && (i_img <= yf) &&
+           (j_img >= x0) && (j_img <= xf) &&
            (k_img >= z0) && (k_img <= zf) )
       {
         result_bit = 1;

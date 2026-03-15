@@ -3,7 +3,7 @@
 
 #include "vglClImage.h"
 #include "vglContext.h"
-#include "vglConst.h"
+#include "vgl_constants.h"
 #include "vgl_opencl_kernels.g.h"
 
 
@@ -619,7 +619,7 @@ void vglClUpload(VglImage* img)
             {
                 if (VGL_PACK_SIZE_BITS > 32)
                 {
-                  fprintf(stderr, "%s: %s: Error: VGL_PACK_SIZE_BITS = %d > 32, incompatible with OpenCL IMG. May spoil resulting images. Use vglClForceAsBuf(vglImage*) or recompile setting #define VGL_PACK_32 in vglConst.h.\n", __FILE__, __FUNCTION__, VGL_PACK_SIZE_BITS);
+                  fprintf(stderr, "%s: %s: Error: VGL_PACK_SIZE_BITS = %d > 32, incompatible with OpenCL IMG. May spoil resulting images. Use vglClForceAsBuf(vglImage*) or recompile setting #define VGL_PACK_32 in vgl_constants.h.\n", __FILE__, __FUNCTION__, VGL_PACK_SIZE_BITS);
                   exit(1);
                 }
 

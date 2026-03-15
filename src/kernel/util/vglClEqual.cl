@@ -4,7 +4,7 @@
 
   */
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 
 __kernel void vglClNdBinEqual(__global VGL_PACK_CL_SHADER_TYPE* img_input1,
 			      __global VGL_PACK_CL_SHADER_TYPE* img_input2,
@@ -119,8 +119,8 @@ __kernel void vglCl3dEqual(__read_only image3d_t img_input1,__read_only image3d_
         output[0] = 1;
     }
 }
-		
-	
+
+
 __kernel void vglClEqual(__read_only image2d_t img_input1,__read_only image2d_t img_input2, __global bool* output)
 {
     if(output[0] == 1) return;

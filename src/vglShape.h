@@ -7,7 +7,7 @@
 #ifndef __VGLSHAPE_H__
 #define __VGLSHAPE_H__
 
-#include <vglConst.h>
+#include "vgl_constants.h"
 
 //CL
 #ifdef __OPENCL__
@@ -30,7 +30,7 @@
 class VglShape{
  public:
   int       ndim;                // 2 if conventional image, 3 if three-dimensional etc
-  int       shape[VGL_MAX_DIM+1];  
+  int       shape[VGL_MAX_DIM+1];
   int       offset[VGL_MAX_DIM+1];
   int       size;
   int       bps;                 // bits per sample
@@ -82,4 +82,3 @@ class VglShape{
 //int getSize();
 
 #endif
-

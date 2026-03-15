@@ -6,7 +6,7 @@
 #include "cl2cpp_ND.h"
 #include "glsl2cpp_shaders.h"
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 #include "vglShape.h"
 #include "vglStrEl.h"
 
@@ -27,10 +27,10 @@ int saveResult(VglImage* out, char* outString, char* outPath, char* outFolder, i
     fprintf(stderr, "%s: %s: Error = %d creating folder %s%s%s\n", __FILE__, __FUNCTION__, retval, outPath, DIRSEP, outFolder);
     exit(1);
   }
-  
+
   sprintf(outFilename, outString, outPath, outFolder);
   vglSaveNdImage((char*) outFilename, out, i_0);
-}  
+}
 
 
 int main(int argc, char *argv[])
@@ -113,7 +113,7 @@ obtained from the image file.\
   VglImage* img = vglLoadNdImage((char*) inFilename, i_0, i_n, shape, ndim);
   vglPrintImageInfo(img);
 
-  // This call to vglClForceAsBuf makes img to be treated in OpenCL context as buffer instead of image even if it has 2 or 3 dimensions. 
+  // This call to vglClForceAsBuf makes img to be treated in OpenCL context as buffer instead of image even if it has 2 or 3 dimensions.
   // N-dimensional data must be stored as buffer in order to use vglClNd* functions.
   // Must call vglClForceAsBuf right after img creation, and before creating out image from img in order to propagate the clForceAsBuf property.
   vglClForceAsBuf(img);

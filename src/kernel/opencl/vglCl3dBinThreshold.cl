@@ -4,7 +4,7 @@
     thresh is float between 0.0 and 1.0.
   */
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 
 __kernel void vglCl3dBinThreshold(__read_only image3d_t img_input,
 			  __write_only image3d_t img_output,
@@ -19,7 +19,7 @@ __kernel void vglCl3dBinThreshold(__read_only image3d_t img_input,
     uint4 result = 0;
     for (int bit = 0; bit < VGL_PACK_SIZE_BITS; bit++)
     {
-      float4 p = read_imagef(  img_input, smp, (int4)( VGL_PACK_SIZE_BITS * coords.x + bit, 
+      float4 p = read_imagef(  img_input, smp, (int4)( VGL_PACK_SIZE_BITS * coords.x + bit,
                                                        coords.y, coords.z, 0 )  );
       uint4 result_bit;
       if (p.x >= thresh)

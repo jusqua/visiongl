@@ -7,13 +7,13 @@
 // SCALAR window_size_x
 // SCALAR window_size_y
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 #include "vglClShape.h"
 
 __kernel void vglClBinDilatePack(__read_only image2d_t img_input,
                              __write_only image2d_t img_output,
-                             __constant float* convolution_window, 
-                             int window_size_x, 
+                             __constant float* convolution_window,
+                             int window_size_x,
                              int window_size_y,
                              __constant VglClShape* img_shape)
 {
@@ -39,7 +39,7 @@ __kernel void vglClBinDilatePack(__read_only image2d_t img_input,
 	{
           int i_img = coords.y - i_w; // In erosion, replace - with +
           int j_img = coords.x;
-          uint4 p; 
+          uint4 p;
           if (j_w < 0)
           {
             p = read_imageui(img_input, smp, (int2)(j_img, i_img));

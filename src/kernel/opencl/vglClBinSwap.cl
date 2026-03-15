@@ -2,7 +2,7 @@
 
   */
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 
 __kernel void vglClBinSwap(__read_only image2d_t img_input,
 			   __write_only image2d_t img_output)
@@ -16,7 +16,7 @@ __kernel void vglClBinSwap(__read_only image2d_t img_input,
     uint4 p = read_imageui(img_input, smp, (int2)(coords.x, coords.y));
     VGL_PACK_CL_SHADER_TYPE result = 0;
     VGL_PACK_CL_SHADER_TYPE mask   = 1;
-    VGL_PACK_CL_SHADER_TYPE input  = p.x;   
+    VGL_PACK_CL_SHADER_TYPE input  = p.x;
     VGL_PACK_OUTPUT_SWAP_MASK
 
     for (int i = 0; i < VGL_PACK_SIZE_BITS; i++)

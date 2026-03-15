@@ -1,5 +1,5 @@
 
-#include <vglConst.h>
+#include "vgl_constants.h"
 #include <vglShape.h>
 
 #ifdef __OPENCL__
@@ -75,7 +75,7 @@ VglShape::VglShape(VglShape* vglShape)
 {
   this->vglCreateShape(vglShape->shape, vglShape->ndim, vglShape->bps);
 }
-  
+
 /** /brief Generic shape constructor.
 
     Receives three parameters:
@@ -87,7 +87,7 @@ VglShape::VglShape(int* shape, int ndim, int bps /*= 8*/)
 {
   this->vglCreateShape(shape, ndim, bps);
 }
-  
+
 /** /brief 1D shape constructor.
 
     1D shapes are internally treated as 2D images. Receives two parameters:
@@ -152,7 +152,7 @@ VglShape::~VglShape()
 
 /** /brief Get index from coordinate array.
 
-    Get index from coordinate array. Calculates value of index by multiplying coordinate values 
+    Get index from coordinate array. Calculates value of index by multiplying coordinate values
     by respective offset, and summing up the results.
  */
 int VglShape::getIndexFromCoord(int* coord)
@@ -167,7 +167,7 @@ int VglShape::getIndexFromCoord(int* coord)
 
 /** /brief Get coordinate array from index.
 
-    Get coordinate array from index. Calculates value of coordinates by dividing index 
+    Get coordinate array from index. Calculates value of coordinates by dividing index
     by respective offset.
  */
 void VglShape::getCoordFromIndex(int index, int* coord)
@@ -197,7 +197,7 @@ int VglShape::getSize()
 
 /** /brief Get number of pixels.
 
-    Get number of pixels of shape. Is the product of all shape array positions, 
+    Get number of pixels of shape. Is the product of all shape array positions,
     not including number of channels.
  */
 int VglShape::getNpixels()
@@ -320,7 +320,7 @@ int VglShape::getLength()
 }
 
 /* WidthIn refers to the width of the internal representation of a 1D array stored as
-   2D image. Textures have a maximum width limited to a few thousand pixels, so, 
+   2D image. Textures have a maximum width limited to a few thousand pixels, so,
    to represent long 1D arrays, they are broken to fit in a 2D texture.
 
    The dimensions of the internal representation are stored inside the shape structure.
@@ -411,6 +411,3 @@ VglClShape* VglShape::asVglClShape()
   return result;
 }
 #endif
-
-
-

@@ -5,7 +5,7 @@
 
   */
 
-#include "vglConst.h"
+#include "vgl_constants.h"
 
 __kernel void vglClBinRoi(__write_only image2d_t img_output,
                           int x0, int y0, int xf, int yf)
@@ -14,14 +14,14 @@ __kernel void vglClBinRoi(__write_only image2d_t img_output,
     const sampler_t smp = CLK_NORMALIZED_COORDS_FALSE | //Natural coordinates
                           CLK_ADDRESS_CLAMP_TO_EDGE |   //Clamp to next edge
                           CLK_FILTER_NEAREST;           //Don't interpolate
-    
+
     uint4 result = 0;
     for (int bit = 0; bit < VGL_PACK_SIZE_BITS; bit++)
     {
       int i_img = coords.y;
       int j_img = VGL_PACK_SIZE_BITS * coords.x + bit;
       unsigned int result_bit = 0;
- 
+
       if ( (i_img >= y0) && (i_img <= yf) && (j_img >= x0) && (j_img <= xf) )
       {
         result_bit = 1;

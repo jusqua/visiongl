@@ -2,12 +2,12 @@
 #ifndef __VGLCLSTREL_H__
 #define __VGLCLSTREL_H__
 
-#include <vglConst.h>
+#include "vgl_constants.h"
 
 
 // OpenCL
 #ifdef __OPENCL_VERSION__
-typedef struct VglClStrEl{ 
+typedef struct VglClStrEl{
   float data[VGL_ARR_CLSTREL_SIZE];
   int ndim;
   int shape[VGL_ARR_SHAPE_SIZE];
@@ -18,7 +18,7 @@ typedef struct VglClStrEl{
 
 // C++
 #ifdef __OPENCL__
-typedef struct VglClStrEl{ 
+typedef struct VglClStrEl{
   cl_float data[VGL_ARR_CLSTREL_SIZE];
   cl_int ndim;
   cl_int shape[VGL_ARR_SHAPE_SIZE];
