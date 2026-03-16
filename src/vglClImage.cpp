@@ -5,23 +5,12 @@
 #include "vglContext.h"
 #include "vgl_constants.h"
 #include "vgl_opencl_kernels.g.h"
-
+#include "legacy_opencv.h"
 
 //ifstream
 #include <fstream>
 //strcmp, strtok
 #include <string.h>
-
-
-//opencv IplImage
-#ifdef __OPENCV__
-  //#undef __SSE2__
-  #include <opencv2/imgproc/types_c.h>
-  #include <opencv2/imgproc/imgproc_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
-
 
 // cl-gl interoperability
 #include <CL/cl_gl.h>

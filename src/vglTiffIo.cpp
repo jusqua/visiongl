@@ -1,6 +1,6 @@
 #ifdef __TIFF__
 
-#include <tiffio.h> 
+#include <tiffio.h>
 #include <vglTiffIo.h>
 #include <vglContext.h>
 
@@ -9,15 +9,7 @@
 //memcpy, strlen
 #include <string.h>
 
-//IplImage, cvLoadImage
-#ifdef __OPENCV__
-  #include <opencv2/highgui/highgui_c.h>
-//  #include <opencv2/imgproc/imgproc_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
-
-
+#include "legacy_opencv.h"
 
 /** \brief Convert depth from tiff's format to ipl's format.
   */
@@ -27,7 +19,7 @@ int convertDepthTiffToVgl(int tiffDepth)
     return IPL_DEPTH_8U;
   else if(tiffDepth == 2)
     return IPL_DEPTH_16U;
-  else 
+  else
     return 0;
 }
 
@@ -85,14 +77,14 @@ void printbin(char* val, int size)
 
 uint32 tif_Width(TIFF* tif)
 {
-  uint32 w; 
+  uint32 w;
   TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
   return w;
 }
 
 uint32 tif_Height(TIFF* tif)
 {
-  uint32 h; 
+  uint32 h;
   TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
   return h;
 }
@@ -129,14 +121,14 @@ tdir_t tif_DirCount(TIFF* tif)
 
 uint16 tif_nChannels(TIFF* tif) // nChannels
 {
-  uint16 spp; 
+  uint16 spp;
   TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
   return spp;
 }
 
 tsize_t tif_BytesPerPixel(TIFF* tif) // depth
 {
-  tsize_t pixelSize; 
+  tsize_t pixelSize;
   uint16 bps;
 
   TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
@@ -177,8 +169,8 @@ int tif_PrintAsc(TIFF* tif, tdata_t raster, char* filename)
       outfile = fopen(filename, "w");
       if (!outfile)
         return 1;
-      
-      fprintf(outfile, "ASCII output of %s\n", filename); 
+
+      fprintf(outfile, "ASCII output of %s\n", filename);
 
       if (raster == NULL)
         return 1;
@@ -206,7 +198,7 @@ int tif_PrintAsc(TIFF* tif, tdata_t raster, char* filename)
           if ((pixel >= min) && (pixel < max)) val = 'R';
           min = max; max = 255;
           if ((pixel >= min) && (pixel <= max)) val = '#';
-          fprintf(outfile, "%c", val);       
+          fprintf(outfile, "%c", val);
         }
         fprintf(outfile, "\n");
       }
@@ -240,7 +232,7 @@ tdata_t tif_Malloc(TIFF* tif)
   if (tif == NULL)
     return NULL;
 
-  return _TIFFmalloc(necessaryMem); 
+  return _TIFFmalloc(necessaryMem);
 }
 
 tdata_t tif_ReadContigStripData(TIFF* tif)
@@ -251,13 +243,13 @@ tdata_t tif_ReadContigStripData(TIFF* tif)
   tsize_t  offset;
   tsize_t  stripSize = TIFFStripSize(tif);
   tstrip_t stripMax = TIFFNumberOfStrips(tif);
-  tstrip_t istrip; 
+  tstrip_t istrip;
 
   if (tif == NULL)
     return NULL;
 
   offset = 0;
-  if (raster != NULL) { 
+  if (raster != NULL) {
     for (istrip = 0; istrip < stripMax; istrip++){
       result = TIFFReadEncodedStrip (tif, istrip, ((char*)raster)+offset, stripSize);
         if (result == -1) {
@@ -288,7 +280,7 @@ tdata_t tif_ReadRGBData(TIFF* tif)
   if (tif == NULL)
     return NULL;
 
-  if (buffer != NULL) { 
+  if (buffer != NULL) {
     printf("Reading raster rgba: w = %d, h = %d, c = %d, tif = %p, buffer = %p, raster = %p\n", w, h, c, tif, buffer, raster);
       result = TIFFReadRGBAImage(tif, w, h, (uint32*)buffer, 0);
       printf("Result = %ld\n", result);
@@ -297,7 +289,7 @@ tdata_t tif_ReadRGBData(TIFF* tif)
       }
       printf("Read ok: result = %ld\n", result);
   }
-  if (raster != NULL) { 
+  if (raster != NULL) {
       for(ih = 0; ih < h; ih++){
         for(iw = 0; iw < w; iw++){
           rgba = buffer[(h-ih-1)*w+iw];
@@ -320,7 +312,7 @@ tdata_t tif_ReadData(TIFF* tif)
 {
   uint16 config;
   uint16 c = tif_nChannels(tif);
-  
+
 
   if (tif == NULL)
     return NULL;
@@ -330,7 +322,7 @@ tdata_t tif_ReadData(TIFF* tif)
   {
     printf("is tiled\n");
     return tif_ReadRGBData(tif);
-  } 
+  }
   else
   {
     if ( (config == PLANARCONFIG_CONTIG) && (c > 1) )
@@ -347,12 +339,12 @@ tdata_t tif_ReadData(TIFF* tif)
 
 /** Function for loading TIFF images.
 
-    Function for loading TIFF images. Supports RGB (8 bits) and 
+    Function for loading TIFF images. Supports RGB (8 bits) and
 grayscale (8 and 16 bits) images, 2D and 3D.
 
   */
 VglImage* vglLoadTiff(char* inFilename)
-{  
+{
   TIFF* tif;
   VglImage* img;
   uint16 pageNumber, numberPages, subfileType;
@@ -362,7 +354,7 @@ VglImage* vglLoadTiff(char* inFilename)
     fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, inFilename);
     return NULL;
   }
-  
+
   int width  = tif_Width(tif);
   int height = tif_Height(tif);
   int is3d = tif_Is3d(tif);
@@ -391,7 +383,7 @@ VglImage* vglLoadTiff(char* inFilename)
     j += bytesPerFrame;
   }while(TIFFReadDirectory(tif));
 
-  TIFFClose(tif); 
+  TIFFClose(tif);
 
   vglSetContext(img, VGL_RAM_CONTEXT);
 
@@ -400,12 +392,12 @@ VglImage* vglLoadTiff(char* inFilename)
 
 /** Function for loading TIFF images.
 
-    Function for loading TIFF images. Supports RGB (8 bits) and 
+    Function for loading TIFF images. Supports RGB (8 bits) and
 grayscale (8 and 16 bits) images, 2D and 3D.
 
   */
 IplImage* iplLoadTiff(char* inFilename)
-{  
+{
   TIFF* tif;
   IplImage* img;
   uint16 pageNumber, numberPages, subfileType;
@@ -415,7 +407,7 @@ IplImage* iplLoadTiff(char* inFilename)
     fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, inFilename);
     return NULL;
   }
-  
+
   int width  = tif_Width(tif);
   int height = tif_Height(tif);
   int is3d = tif_Is3d(tif);
@@ -445,19 +437,19 @@ IplImage* iplLoadTiff(char* inFilename)
     j += bytesPerFrame;
   }while(TIFFReadDirectory(tif));
 
-  TIFFClose(tif); 
+  TIFFClose(tif);
 
   return img;
 }
 
 /** Function for loading TIFF images.
 
-    Function for loading TIFF images. Supports RGB (8 bits) and 
+    Function for loading TIFF images. Supports RGB (8 bits) and
 grayscale (8 and 16 bits) images, 2D and 3D. Alternative version with simpler code.
 
   */
 VglImage* vglLoadTiffAlt(char* inFilename)
-{  
+{
   TIFF* tif;
   VglImage* img;
   uint16 pageNumber, numberPages, subfileType;
@@ -467,7 +459,7 @@ VglImage* vglLoadTiffAlt(char* inFilename)
     fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, inFilename);
     return NULL;
   }
-  
+
   int width  = tif_Width(tif);
   int height = tif_Height(tif);
   int is3d = tif_Is3d(tif);
@@ -510,7 +502,7 @@ VglImage* vglLoadTiffAlt(char* inFilename)
   }
   while(TIFFReadDirectory(tif));
 
-  TIFFClose(tif); 
+  TIFFClose(tif);
 
   vglSetContext(img, VGL_RAM_CONTEXT);
 
@@ -526,31 +518,31 @@ int vglPrintTiffInfo(char* inFilename, char* msg){
     printf("====== vglPrintTiffInfo:\n");
   }
 
-  TIFF* tif = TIFFOpen(inFilename, "r"); 
+  TIFF* tif = TIFFOpen(inFilename, "r");
 
   if (tif == NULL){
     fprintf(stderr, "%s:%s: Error: File %s not found.\n", __FILE__, __FUNCTION__, inFilename);
     return 1;
   }
-  if (tif) { 
-    uint32 w, h; 
+  if (tif) {
+    uint32 w, h;
     uint16 bps, spp, photo, config, pageNumber, numberPages;
     uint32 subfileType;
 
     tdir_t dirCount;
 
     tstrip_t stripMax;
-    tstrip_t istrip; 
+    tstrip_t istrip;
     tsize_t stripSize;
 
-    tsize_t npixels; 
-    tsize_t pixelSize; 
-    
-    tdata_t raster; 
+    tsize_t npixels;
+    tsize_t pixelSize;
+
+    tdata_t raster;
     tsize_t result, offset;
     char* rasterc;
 
-    uint32    iw, ih; 
+    uint32    iw, ih;
     int i;
 
     do{
@@ -579,11 +571,11 @@ int vglPrintTiffInfo(char* inFilename, char* msg){
 
 
 
-    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w); 
-    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h); 
+    TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
+    TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
     TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bps);
     TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &spp);
-    TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photo); 
+    TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photo);
     TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &config);
     TIFFGetField(tif, TIFFTAG_PAGENUMBER, &pageNumber, &numberPages);
     TIFFGetField(tif, TIFFTAG_SUBFILETYPE, &subfileType);
@@ -619,8 +611,8 @@ int vglPrintTiffInfo(char* inFilename, char* msg){
     //raster = tif_ReadData(tif);
     //tif_PrintAsc(tif, raster, (char*)"ascimg.txt");
 
-    TIFFClose(tif); 
-  } 
+    TIFFClose(tif);
+  }
   return 0;
 }
 
@@ -685,7 +677,7 @@ int vglSaveTiff(char* outFilename, VglImage* image)
     TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, image->nChannels);
     TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
     TIFFSetField(out, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-   
+
     TIFFSetField(out, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
     TIFFSetField(out, TIFFTAG_PAGENUMBER, z, image->getLength());
 
@@ -693,10 +685,10 @@ int vglSaveTiff(char* outFilename, VglImage* image)
     {
       TIFFWriteScanline(out, &buff[ (  (z*widthStep*image->getHeight()) + (y*widthStep)  )], y, 0);
     }
-    
+
     TIFFWriteDirectory(out);
   }
- 
+
   TIFFClose(out);
 }
 
@@ -731,7 +723,7 @@ int iplSaveTiff(char* outFilename, IplImage* image)
   {
     TIFFWriteScanline(out, &buff[ (y * widthStep)  ], y, 0);
   }
-    
+
   TIFFWriteDirectory(out);
 
   TIFFClose(out);
@@ -760,7 +752,7 @@ int vglSave4dTiff(char* filename, VglImage* image, int lStart, int lEnd)
   }
 
   return 0;
-}      
+}
 
 
 #endif

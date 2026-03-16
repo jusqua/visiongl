@@ -1,35 +1,10 @@
-/*********************************************************************
-***                                                                ***
-***  Source file iplImage                                          ***
-***                                                                ***
-*********************************************************************/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-//uint8_t, int16_t etc
 #include <stdint.h>
-
-//toupper, tolower
 #include <ctype.h>
 
-#include <vglTiffIo.h>
-
-#ifdef __OPENCV__
-  #include <opencv2/imgproc/types_c.h>
-  #include <opencv2/highgui/highgui_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
-
-#include <iplImage.h>
-
-
-/*********************************************************************
-***  IplImage                                                      ***
-*********************************************************************/
+#include "legacy_opencv.h"
 
 void iplReleaseImage(IplImage** p_ipl)
 {
@@ -47,7 +22,7 @@ void iplReleaseImage(IplImage** p_ipl)
     free(ipl->maskROI);
   if (ipl->tileInfo)
     free(ipl->tileInfo);
-  
+
   *p_ipl = NULL;
 }
 
@@ -430,7 +405,7 @@ void iplCvtColor(IplImage* src, IplImage* dst, int code)
   {
     case CV_BGR2BGRA:
     //case CV_RGB2RGBA: //0
-    case CV_BGRA2BGR: 
+    case CV_BGRA2BGR:
     //case CV_RGBA2RGB: //1
     case CV_BGR2RGBA:
     //case CV_RGB2BGRA: //2
@@ -571,7 +546,7 @@ char* getFileExtensionUppercase(const char* filename)
 
     Skip comments inside PPM/PGM/PBM file.
 
-    Based on code from Along the Pathway blog, Reading/Writing PGM Files in C, Posted 
+    Based on code from Along the Pathway blog, Reading/Writing PGM Files in C, Posted
     on March 4, 2010 by ugurkoltuk. Original version had a bug, not working on big lines.
 
     https://ugurkoltuk.wordpress.com/2010/03/04/an-extreme-simple-pgm-io-api/
@@ -579,7 +554,7 @@ char* getFileExtensionUppercase(const char* filename)
 */
 void skipComments(FILE* fp){
   int ch;
- 
+
   while ((ch = fgetc(fp)) != EOF && isspace(ch))
   {
   }
@@ -692,7 +667,7 @@ IplImage* iplLoadImage(char* filename, int iscolor /*= CV_LOAD_IMAGE_UNCHANGED*/
     exit(1);
 #endif
   }
-  
+
   else
   {
     fprintf(stderr, "%s:%s: Error: extension %s unsupported. You may try to recompile using WITH_OPENCV = 1 or use iplLoadPgm instead.\n", __FILE__, __FUNCTION__, ext);
@@ -776,7 +751,7 @@ IplImage* iplLoadImage(char* filename, int iscolor /*= CV_LOAD_IMAGE_UNCHANGED*/
 }
 
 
-/** Generic function to save image to PGM/PPM file, 1 or 3 channels, 
+/** Generic function to save image to PGM/PPM file, 1 or 3 channels,
 unsigned byte or short, or PBM file. Can be used with ipl or ndarray type of image.
 */
 int iplGenericSavePgm(char* filename, char* buf, int w, int h, int widthStep, int c, int bps){
@@ -879,4 +854,34 @@ int iplSaveImage(char* filename, IplImage* image, int* params /*=0*/)
   }
 
   return result;
+}
+
+void cvReleaseImage(IplImage** p_ipl)
+{
+  iplReleaseImage(p_ipl);
+}
+
+IplImage* cvCreateImage(CvSize size, int depth, int channels)
+{
+  return iplCreateImage(size, depth, channels);
+}
+
+IplImage* cvCopy(IplImage* src, IplImage* dst)
+{
+  return iplCopy(src, dst);
+}
+
+void cvCvtColor(IplImage* src, IplImage* dst, int code)
+{
+  iplCvtColor(src, dst, code);
+}
+
+IplImage* cvLoadImage(char* filename, int iscolor /*= CV_LOAD_IMAGE_UNCHANGED*/)
+{
+  return iplLoadImage(filename, iscolor);
+}
+
+int cvSaveImage(char* filename, IplImage* image, int* params /*= 0*/)
+{
+  return iplSaveImage(filename, image, params);
 }

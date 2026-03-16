@@ -9,18 +9,10 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-//IplImage, cvLoadImage
-#ifdef __OPENCV__
-  #include <opencv2/highgui/highgui_c.h>
-  #include <opencv2/imgproc/imgproc_c.h>
-#else
-  #include "vglOpencv.h"
-#endif
-
 #include "vglContext.h"
 #include "vglImage.h"
 #include "vglLoadShader.h"
-#include "iplImage.h"
+#include "legacy_opencv.h"
 
 //vglDilateSq3, vglErodeSq3
 #include "vgl_opengl_kernels.g.h"
@@ -493,11 +485,7 @@ void vglSaveIplImage(char* filename, IplImage* ipl, int* params /*= 0*/)
   }
   else
   {
-#ifdef __OPENCV__
-    cvSaveImage(filename, ipl);
-#else
     iplSaveImage(filename, ipl);
-#endif
   }
 }
 
@@ -523,11 +511,7 @@ void vglSave3dImage(char* filename, VglImage* image, int lStart, int lEnd)
   IplImage* ipl = cvCreateImage(cvSize(image->getWidth(), image->getHeight()), image->depth, image->nChannels);
   ipl->imageData = temp_image;
 
-#ifdef __OPENCV__
-  cvSaveImage(temp_filename, ipl);
-#else
   iplSaveImage(temp_filename, ipl);
-#endif
 
   int c = image->getHeight()*image->getWidth()*d*image->nChannels;
   for(int i = lStart+1; i <= lEnd; i++)
@@ -535,11 +519,7 @@ void vglSave3dImage(char* filename, VglImage* image, int lStart, int lEnd)
     memcpy(temp_image,((char*)image->ndarray)+c,image->getHeight()*image->getWidth()*image->nChannels*d);
     ipl->imageData = temp_image;
     sprintf(temp_filename, filename, i);
-#ifdef __OPENCV__
-    cvSaveImage(temp_filename, ipl);
-#else
     iplSaveImage(temp_filename, ipl);
-#endif
     c += image->getHeight()*image->getWidth()*image->nChannels*d;
   }
   cvReleaseImage(&ipl);
@@ -1148,12 +1128,7 @@ void vglDownloadPGM(VglImage* image){
  */
 VglImage* vglLoadImage(char* filename, int iscolor /*= -1*/, int has_mipmap /*= 0*/)
 {
-#ifdef __OPENCV__
-  IplImage* ipl = cvLoadImage(filename, iscolor);
-#else
   IplImage* ipl = iplLoadImage(filename, iscolor);
-#endif
-
   VglImage* img;
 
   if (!ipl){
@@ -1200,12 +1175,7 @@ VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap /
   char* tempFilename = (char*)malloc(strlen(filename) + 256);
   sprintf(tempFilename, filename, lStart);
 
-#ifdef __OPENCV__
-  IplImage* ipl = cvLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#else
   IplImage* ipl = iplLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#endif
-
   if (!ipl){
     fprintf(stderr, "%s: %s: Error loading image %s\n", __FILE__, __FUNCTION__, tempFilename);
     return 0;
@@ -1248,12 +1218,7 @@ VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap /
   {
     sprintf(tempFilename,filename,i);
 
-#ifdef __OPENCV__
-    ipl = cvLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#else
     ipl = iplLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#endif
-
     if (!ipl){
       fprintf(stderr, "%s: %s: Error loading image %s\n", __FILE__, __FUNCTION__, tempFilename);
       vglReleaseImage(&img);
@@ -1281,12 +1246,7 @@ VglImage* vglLoadNdImage(char* filename, int lStart, int lEnd, int* shape, int n
   char* tempFilename = (char*)malloc(strlen(filename) + 256);
   sprintf(tempFilename, filename, lStart);
 
-#ifdef __OPENCV__
-  IplImage* ipl = cvLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#else
   IplImage* ipl = iplLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#endif
-
   if (!ipl){
     fprintf(stderr, "%s: %s: Error loading image %s\n", __FILE__, __FUNCTION__, tempFilename);
     return 0;
@@ -1339,12 +1299,7 @@ VglImage* vglLoadNdImage(char* filename, int lStart, int lEnd, int* shape, int n
   {
     sprintf(tempFilename,filename,i);
 
-#ifdef __OPENCV__
-    ipl = cvLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#else
     ipl = iplLoadImage(tempFilename, CV_LOAD_IMAGE_UNCHANGED);
-#endif
-
     if (!ipl){
       fprintf(stderr, "%s: %s: Error loading image %s\n", __FILE__, __FUNCTION__, tempFilename);
       vglReleaseImage(&img);

@@ -14,14 +14,7 @@
 #include "vglSimpleBGModel.h"
 #include "vgl_opengl_kernels.g.h"
 #include "vglContext.h"
-
-//opencv IplImage
-#ifdef __OPENCV__
-  #undef __SSE2__
-  #include <opencv2/core/types_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
+#include "legacy_opencv.h"
 
 #define max(a, b) (a > b ? a : b)
 #define min(a, b) (a < b ? a : b)

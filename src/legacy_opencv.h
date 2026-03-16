@@ -1,60 +1,43 @@
-/*********************************************************************
-***                                                                ***
-***  Header file vglOpencv                                         ***
-***                                                                ***
-*********************************************************************/
-
-#ifndef __VGLOPENCV_H__
-#define __VGLOPENCV_H__
-
-#ifndef __OPENCV__
-
-/*********************************************************************
-***  IplImage                                                      ***
-*********************************************************************/
+#ifndef LEGACY_OPENCV
+#define LEGACY_OPENCV
 
 enum
 {
-    CV_BGR2BGRA    =0,
-    CV_RGB2RGBA    =CV_BGR2BGRA,
+    CV_BGR2BGRA    = 0,
+    CV_RGB2RGBA    = CV_BGR2BGRA,
 
-    CV_BGRA2BGR    =1,
-    CV_RGBA2RGB    =CV_BGRA2BGR,
+    CV_BGRA2BGR    = 1,
+    CV_RGBA2RGB    = CV_BGRA2BGR,
 
-    CV_BGR2RGBA    =2,
-    CV_RGB2BGRA    =CV_BGR2RGBA,
+    CV_BGR2RGBA    = 2,
+    CV_RGB2BGRA    = CV_BGR2RGBA,
 
-    CV_RGBA2BGR    =3,
-    CV_BGRA2RGB    =CV_RGBA2BGR,
+    CV_RGBA2BGR    = 3,
+    CV_BGRA2RGB    = CV_RGBA2BGR,
 
-    CV_BGR2RGB     =4,
-    CV_RGB2BGR     =CV_BGR2RGB,
+    CV_BGR2RGB     = 4,
+    CV_RGB2BGR     = CV_BGR2RGB,
 
-    CV_BGRA2RGBA   =5,
-    CV_RGBA2BGRA   =CV_BGRA2RGBA,
+    CV_BGRA2RGBA   = 5,
+    CV_RGBA2BGRA   = CV_BGRA2RGBA,
 
-    CV_BGR2GRAY    =6,
-    CV_RGB2GRAY    =7,
-    CV_GRAY2BGR    =8,
-    CV_GRAY2RGB    =CV_GRAY2BGR,
-    CV_GRAY2BGRA   =9,
-    CV_GRAY2RGBA   =CV_GRAY2BGRA,
-    CV_BGRA2GRAY   =10,
-    CV_RGBA2GRAY   =11,
+    CV_BGR2GRAY    = 6,
+    CV_RGB2GRAY    = 7,
+    CV_GRAY2BGR    = 8,
+    CV_GRAY2RGB    = CV_GRAY2BGR,
+    CV_GRAY2BGRA   = 9,
+    CV_GRAY2RGBA   = CV_GRAY2BGRA,
+    CV_BGRA2GRAY   = 10,
+    CV_RGBA2GRAY   = 11,
 };
 
 enum
 {
-/* as is */
-    CV_LOAD_IMAGE_UNCHANGED  =-1,
-/* gray */
-    CV_LOAD_IMAGE_GRAYSCALE  =0,
-/* BGR */
-    CV_LOAD_IMAGE_COLOR      =1,
-/* any depth, ? */
-//    CV_LOAD_IMAGE_ANYDEPTH   =2,
-/* ?, any color */
-//    CV_LOAD_IMAGE_ANYCOLOR   =4
+    CV_LOAD_IMAGE_UNCHANGED = -1, /* as is */
+    CV_LOAD_IMAGE_GRAYSCALE = 0,  /* gray */
+    CV_LOAD_IMAGE_COLOR     = 1,  /* BGR */
+//  CV_LOAD_IMAGE_ANYDEPTH  = 2,  /* any depth */
+//  CV_LOAD_IMAGE_ANYCOLOR  = 4   /* any color */
 };
 
 /*
@@ -108,11 +91,6 @@ typedef struct _IplImage
 }
 IplImage;
 
-
-/*********************************************************************
-***  CvSize                                                        ***
-*********************************************************************/
-
 typedef struct CvSize
 {
     int width;
@@ -133,13 +111,23 @@ inline CvSize cvGetSize(IplImage* ipl)
   return cvSize(ipl->width, ipl->height);
 }
 
-/*********************************************************************
-***  Function prototypes                                           ***
-*********************************************************************/
+int iplFindBitsPerSample(int depth);
+int iplFindWidthStep(int depth, int width, int channels = 1);
+
+void iplReleaseImage(IplImage** p_ipl);
+IplImage* iplCreateImage(CvSize size, int depth, int channels);
+IplImage* iplCopy(IplImage* src, IplImage* dst);
+void iplCvtColor(IplImage* src, IplImage* dst, int code);
+
+IplImage* iplLoadPgm(char* filename);
+IplImage* iplLoadImage(char* filename, int iscolor = CV_LOAD_IMAGE_UNCHANGED);
+
+int iplGenericSavePgm(char* filename, char* buf, int w, int h, int widthStep, int c, int b);
+int iplSavePgm(char* filename, IplImage* ipl);
+int iplSaveImage(char* filename, IplImage* image, int* params = 0);
 
 CvSize cvSize(int width, int height);
 CvSize cvGetSize(IplImage* ipl);
-
 
 void cvReleaseImage(IplImage** p_ipl);
 IplImage* cvCreateImage(CvSize size, int depth, int channels);
@@ -148,7 +136,4 @@ void cvCvtColor(IplImage* src, IplImage* dst, int code);
 IplImage* cvLoadImage(char* filename, int iscolor = CV_LOAD_IMAGE_UNCHANGED);
 int cvSaveImage(char* filename, IplImage* image, int* params = 0);
 
-
-#endif
-
-#endif
+#endif // LEGACY_OPENCV

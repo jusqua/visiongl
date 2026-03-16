@@ -10,13 +10,7 @@
 #ifdef __TIFF__
 
 #include <vglImage.h>
-
-//IplImage
-#ifdef __OPENCV__
-  #include <opencv2/core/types_c.h>
-#else
-  #include <vglOpencv.h>
-#endif
+#include "legacy_opencv.h"
 
 VglImage* vglLoadTiff(char* inFilename);
 IplImage* iplLoadTiff(char* inFilename);

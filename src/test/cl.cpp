@@ -6,7 +6,7 @@
 #include "vglClImage.h"
 #include "vglClFunctions.h"
 #include "vglContext.h"
-#include "iplImage.h"
+#include "legacy_opencv.h"
 
 #include "vglTest.h"
 
@@ -32,7 +32,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   //////////////////// 2D
-    
+
   //Arrange
   vglClUploadForce(im2d);
 
@@ -45,7 +45,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglCheckContext(im2d_2, VGL_RAM_CONTEXT);
   vglClUploadForce(im2d_2);
@@ -59,7 +59,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglCheckContext(im2d_2, VGL_RAM_CONTEXT);
   imageData = im2d_2->getImageData();
@@ -80,7 +80,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_NEQ_I(1, eqi, msg);
 
   //////////////////// 2D BIN
-    
+
   int x0 = 0;
   int y0 = 0;
   int x1 = im2d->getWidth();
@@ -101,7 +101,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   vglClBinSwap(vglRoi, vglSwap);
   vglCheckContext(vglSwap, VGL_RAM_CONTEXT);
   iplSavePgm("/tmp/testcl_roi.pbm", vglSwap->ipl);
-  
+
   vglClBinNot(vglThresh, vglNot);
   vglClBinSwap(vglNot, vglSwap);
   vglCheckContext(vglSwap, VGL_RAM_CONTEXT);
@@ -112,7 +112,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
 
 
   ////////////////////
-    
+
   //Arrange
   vglClBinMax(vglRoi, vglNot, vglResult);
 
@@ -126,7 +126,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglClBinCopy(vglNot, vglResult);
   vglClBinMax(vglRoi, vglResult, vglResult);
@@ -141,7 +141,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglClBinMin(vglRoi, vglNot, vglResult);
 
@@ -155,7 +155,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglClBinCopy(vglNot, vglResult);
   vglClBinMin(vglRoi, vglResult, vglResult);
@@ -170,7 +170,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglClBinSub(vglRoi, vglThresh, vglResult);
 
@@ -185,7 +185,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
 
 
   //////////////////// 3D
-    
+
   //Arrange
   VglImage* im3d_2 = vglCreateImage(im3d);
   vglCl3dCopy(im3d, im3d_2);
@@ -199,7 +199,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglClUploadForce(im3d);
 
@@ -212,7 +212,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglCheckContext(im3d_2, VGL_RAM_CONTEXT);
   vglClUploadForce(im3d_2);
@@ -226,7 +226,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_EQ_I(1, eqi, msg);
 
   ////////////////////
-    
+
   //Arrange
   vglDownload(im3d_2);
   imageData = im3d_2->getImageData();
@@ -246,7 +246,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   sprintf(msg, "vglEqual: comparison of 2 different 3d images");
   ASSERT_NEQ_I(1, eqi, msg);
 
-  
+
 
   exit(0);
 
@@ -260,7 +260,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   int iBpsMax = 4;
 
   ASSERT_SECTION_START((char*) "VglShape");
-  
+
   for (int nCh = 1; nCh <= 4; nCh++)
   {
     //Act
@@ -299,7 +299,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
         int getNFrames = vglShapeNd.getNFrames();
 
         vglShapeNd.print();
-	
+
         //Assert
         sprintf(msg, "VglShape %dd, bps = %d, nCh = %d: NFrames", nDim, bps[iBps], nCh);
         ASSERT_EQ_I(nFrames, getNFrames, msg);
@@ -323,7 +323,7 @@ void testVglCl(VglImage* im2d, VglImage* im3d)
   ASSERT_PRINT_MSG(msg);
   sprintf(msg, "VGL_PACK_SIZE_BYTES = %d", VGL_PACK_SIZE_BYTES);
   ASSERT_PRINT_MSG(msg);
-  
+
   int iBps = 0;
   int nCh = 1;
   shape[0] = nCh;

@@ -10,15 +10,6 @@
 //extern void* __builtin_memchr(const void*__s, int __a, unsigned int __n);
 #include <stdarg.h>
 
-//opencv IplImage
-#ifdef __OPENCV__
-  #undef __SSE2__
-  #include <opencv2/imgproc/types_c.h>
-  #include <opencv2/highgui/highgui_c.h>
-#else
-  #include "vglOpencv.h"
-#endif
-
 //GL
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -31,9 +22,12 @@
 //assert
 #include <assert.h>
 
+
 //VisionGL
 #include "vgl_constants.h"
 #include "vglShape.h"
+
+#include "legacy_opencv.h"
 
 class VglImage{
  public:
