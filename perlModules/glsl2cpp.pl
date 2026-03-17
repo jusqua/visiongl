@@ -645,13 +645,16 @@ $topMsg = "
 ";
 open HEAD, ">>", "$output.h";
 print HEAD $topMsg;
-print HEAD "#include \"vglImage.h\"\n";
+print HEAD "
+#include \"vgl_image.h\"\n
+#include \"vgl_opengl_context.h\"
+";
 close HEAD;
 open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
-#include \"vglImage.h\"
-#include \"vglLoadShader.h\"
+#include \"vgl_image.h\"
+#include \"vgl_opengl_context.h\"
 #include \"vglContext.h\"\n
 #include <iostream>
 ";

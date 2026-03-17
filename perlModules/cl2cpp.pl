@@ -995,18 +995,16 @@ $topMsg = "
 ";
 open HEAD, ">>", "$output.h";
 print HEAD $topMsg;
-print HEAD "#include \"vglImage.h\"
-
+print HEAD "
+#include \"vgl_image.h\"
 #include \"vglShape.h\"
-
 #include \"vglStrEl.h\"
-
 ";
 close HEAD;
 open CPP, ">>", "$output.cpp";
 print CPP $topMsg;
 print CPP "
-#include \"vglImage.h\"
+#include \"vgl_image.h\"
 #include \"vglClImage.h\"
 #include \"vglContext.h\"
 

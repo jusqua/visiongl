@@ -7,9 +7,7 @@
 #ifndef __VGLSTREL_H__
 #define __VGLSTREL_H__
 
-#include <vglImage.h>
-#include <vglShape.h>
-#include <vglClStrEl.h>
+#include "vglShape.h"
 
 //CL
 #ifdef __OPENCL__

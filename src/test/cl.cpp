@@ -1,7 +1,4 @@
 
-#include "vglImage.h"
-
-#include "cl2cpp_shaders.h"
 #include "cl2cpp_BIN.h"
 #include "vglClImage.h"
 #include "vglClFunctions.h"

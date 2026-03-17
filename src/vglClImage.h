@@ -12,9 +12,9 @@
 
 #ifdef __OPENCL__
 
-#include <CL/cl.h>
+vgl_imageinclude <CL/cl.h>
 
-#include "vglImage.h"
+#include "vgl_image.h"
 
 struct VglClContext
 {

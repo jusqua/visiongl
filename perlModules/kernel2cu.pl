@@ -607,13 +607,16 @@ $topMsg = "
 open HEAD, ">>", "$output.h";
 print HEAD $topMsg;
 open HEAD, ">>", "$output.h";
-print HEAD "#include \"vglImage.h\"\n";
+print HEAD "
+#include \"vgl_image.h\"\n
+#include \"vgl_opengl_context.h\"
+";
 close HEAD;
 open CUDA, ">>", "$output.cu";
 print CUDA $topMsg;
 print CUDA "
-#include \"vglImage.h\"
-#include \"vglLoadShader.h\"
+#include \"vgl_image.h\"
+#include \"vgl_opengl_context.h\"
 #include \"vglContext.h\"\n
 #include <iostream>
 

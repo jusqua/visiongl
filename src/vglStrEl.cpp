@@ -1,7 +1,8 @@
+#include <stdlib.h>
 
-#include <vglStrEl.h>
-#include <vglShape.h>
-#include <vglClStrEl.h>
+#include "vglStrEl.h"
+#include "vglClStrEl.h"
+#include "vglShape.h"
 
 /** /brief Common code for structuring element construction.
 
@@ -32,7 +33,7 @@ VglStrEl::VglStrEl(float* data, VglShape* vglShape)
 
 /** /brief Constructs elementary cubic structuring element.
 
-    Constructs elementary cubic structuring element. Can be an elementary cross, cube or 
+    Constructs elementary cubic structuring element. Can be an elementary cross, cube or
     gaussian. Size is 3^ndim.
 
     Receives two parameters:
@@ -103,7 +104,7 @@ VglStrEl::VglStrEl(int type, int ndim)
           else
 	  {
             val *= .25;
-	  }        
+	  }
 	}
         data[i] = val;
       }
@@ -211,7 +212,7 @@ int VglStrEl::getSize()
 
 /** /brief Get number of pixels.
 
-    Get number of pixels of shape. Is the product of all shape array positions, 
+    Get number of pixels of shape. Is the product of all shape array positions,
     not including number of channels.
  */
 int VglStrEl::getNpixels()
@@ -268,7 +269,7 @@ VglClStrEl* VglStrEl::asVglClStrEl()
 
   result->ndim = this->vglShape->getNdim();
   result->size = this->vglShape->getSize();
-  
+
   for (int i = 0; i <= VGL_MAX_DIM; i++)
   {
     result->shape[i] = shape->shape[i];
@@ -282,4 +283,3 @@ VglClStrEl* VglStrEl::asVglClStrEl()
   return result;
 }
 #endif
-

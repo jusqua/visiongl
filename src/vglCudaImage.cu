@@ -1,14 +1,11 @@
-
-//fprintf
-#include <iostream>
-
 #include "vglCudaImage.h"
 #include "vglContext.h"
-//#include "vglImage.h"
+#include "vgl_image.h"
 
 //cuda
 //#include <cutil.h>
 #include <cuda_gl_interop.h>
+#include "vgl_opengl_context.h"
 
 /** vglCudaAllocPbo
 
@@ -27,7 +24,7 @@ int vglCudaAllocPbo(VglImage* img){
     glGenBuffers(1, &img->cudaPbo);
     if (!img->cudaPbo){
       fprintf(stderr, "vglCudaAllocPbo: Error: unable to generate PBO in file '%s' in line %i.\n",
-                __FILE__, __LINE__); 
+                __FILE__, __LINE__);
       return 0;
     }
 
@@ -48,7 +45,7 @@ int vglCudaAllocPbo(VglImage* img){
 
 /** vglCudaFreePbo
 
-    Release PBO (Pixel Buffer Object) memory after 
+    Release PBO (Pixel Buffer Object) memory after
     reading data from cuda context.
 
     Returns 1 in case of success and 0 in case of failure.
@@ -64,7 +61,7 @@ int vglCudaFreePbo(VglImage* img){
 
 /** vglCudaMapPbo
 
-    Map PBO (Pixel Buffer Object) to cuda context 
+    Map PBO (Pixel Buffer Object) to cuda context
     after vglCudaAllocPbo
 
     Returns 1 in case of success and 0 in case of failure.
@@ -77,11 +74,11 @@ int vglCudaMapPbo(VglImage* img){
   vglCudaAllocPbo(img);
 
   if (img->cudaPtr == NULL){
-    cudaErr = cudaGLRegisterBufferObject(img->cudaPbo); 
+    cudaErr = cudaGLRegisterBufferObject(img->cudaPbo);
     if (dbg) printf("chk215 cudaError = %d\n", cudaErr);
     if (cudaErr != cudaSuccess){
       fprintf(stderr, "Cuda error in file '%s' in line %i : %s.\n",
-              __FILE__, __LINE__, cudaGetErrorString( cudaErr) ); 
+              __FILE__, __LINE__, cudaGetErrorString( cudaErr) );
       return 0;
     }
 
@@ -89,7 +86,7 @@ int vglCudaMapPbo(VglImage* img){
     if (dbg) printf("chk220 cudaError = %d\n", cudaErr);
     if (cudaErr != cudaSuccess){
       fprintf(stderr, "Cuda error in file '%s' in line %i : %s.\n",
-              __FILE__, __LINE__, cudaGetErrorString( cudaErr) ); 
+              __FILE__, __LINE__, cudaGetErrorString( cudaErr) );
       return 0;
     }
   }
@@ -113,7 +110,7 @@ int vglCudaUnmapPbo(VglImage* img){
     if (dbg) printf("chk225 cudaError = %d\n", cudaErr);
     if (cudaErr != cudaSuccess){
       fprintf(stderr, "Cuda error in file '%s' in line %i : %s.\n",
-              __FILE__, __LINE__, cudaGetErrorString( cudaErr) ); 
+              __FILE__, __LINE__, cudaGetErrorString( cudaErr) );
       return 0;
     }
 
@@ -121,7 +118,7 @@ int vglCudaUnmapPbo(VglImage* img){
     if (dbg) printf("chk230 cudaError = %d\n", cudaErr);
     if (cudaErr != cudaSuccess){
       fprintf(stderr, "Cuda error in file '%s' in line %i : %s.\n",
-              __FILE__, __LINE__, cudaGetErrorString( cudaErr) ); 
+              __FILE__, __LINE__, cudaGetErrorString( cudaErr) );
       return 0;
     }
 
@@ -201,7 +198,7 @@ int vglGlToCuda(VglImage* img){
   // FBO -> PBO (2ms)
   // glBufferData(w*h*3) <-> glReadPixels(GL_RGB)
   // glBufferData(w*h*4) <-> glReadPixels(GL_RGBA)
-  // If not done like this, will give "OpenGL Error: invalid operation" 
+  // If not done like this, will give "OpenGL Error: invalid operation"
   //    after glReadPixels
   //GLvoid* lixo = (GLvoid*)malloc(640*480*4);
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, img->fbo);
@@ -241,7 +238,7 @@ int vglGlToCuda(VglImage* img){
 */
 int vglCudaToGl(VglImage* img){
   int dbg = 0;
- 
+
   if (dbg)
     printf("vglCudaToGl: started, cudaPbo = %d.\n", img->cudaPbo);
 
@@ -265,7 +262,3 @@ int vglCudaToGl(VglImage* img){
 
   return 1;
 }
-
-
-
-

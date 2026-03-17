@@ -2,8 +2,6 @@
 
 //fprintf, stderr
 #include <stdio.h>
-//printf, stdout
-#include <iostream>
 
 #ifdef __CUDA__
 #include "vglCudaImage.h"
@@ -14,7 +12,9 @@
 #endif
 
 #include "vglContext.h"
-#include "vglImage.h"
+// FIX: vgl_opengl_context and vglContext cyclic dependency
+#include "vgl_opengl_context.h"
+#include "vgl_image.h"
 
 #define DEBUG_VGLCONTEXT 0
 
@@ -34,8 +34,8 @@ int vglAddContext(VglImage* img, int context){
   return img->inContext;
 }
 
-/*  Call after processing or creating image. Context must be unique. 
-    After creating, use VGL_BLANK_CONTEXT    
+/*  Call after processing or creating image. Context must be unique.
+    After creating, use VGL_BLANK_CONTEXT
 
     Return 0 in case of error. Resulting context if successful.
  */
@@ -141,7 +141,7 @@ int vglCheckContext(VglImage* img, int context){
 #ifdef __OPENCL__
       else
       if (vglIsInContext(img, VGL_CL_CONTEXT)){
-        vglClDownload(img);        
+        vglClDownload(img);
         //if (!ok){
         //  fprintf(stderr, "vglCheckContext: error transfering from cuda to gl\n");
 	//}
@@ -193,7 +193,7 @@ int vglCheckContext(VglImage* img, int context){
         if (vglIsInContext(img, VGL_RAM_CONTEXT) || vglIsInContext(img, VGL_BLANK_CONTEXT)){
           vglClUpload(img);
           //if (!ok){
-          //  fprintf(stderr, "vglCheckContext: Error: unable to transfer from ram to cl\n");  
+          //  fprintf(stderr, "vglCheckContext: Error: unable to transfer from ram to cl\n");
          //}
         }
         else{
@@ -253,6 +253,3 @@ void vglPrintContext(int context, char* msg){
 void vglPrintContext(VglImage* img, char* msg){
   vglPrintContext(img->inContext, msg);
 }
-
-
-

@@ -2,7 +2,9 @@
 #define VGL_CUSTOM_OPENCL_KERNELS_H
 #pragma once
 
-#include "vglImage.h"
+#include <CL/cl.h>
+
+#include "vgl_image.h"
 #include "vglStrEl.h"
 
 int* vglClHistogram(VglImage* img_input);

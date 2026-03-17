@@ -2,7 +2,7 @@
 #define VGL_NAMED_WINDOW_H
 #pragma once
 
-#include "vglImage.h"
+#include "vgl_image.h"
 
 class VglNamedWindow  {
 public:

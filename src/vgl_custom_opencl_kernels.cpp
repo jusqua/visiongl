@@ -1,4 +1,4 @@
-#include "vglImage.h"
+#include "vgl_image.h"
 #include "vglContext.h"
 #include "vgl_custom_opencl_kernels.h"
 #include "vgl_opencl_kernels.g.h"
