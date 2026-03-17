@@ -1,29 +1,15 @@
-#ifdef __DCMTK__
+#include <dcmtk/dcmimgle/dcmimage.h>
+#include <dcmtk/dcmjpeg/djdecode.h>
+#include <dcmtk/dcmjpeg/djencode.h>
+#include <dcmtk/dcmjpeg/djrplol.h>
+#include <dcmtk/dcmjpeg/djrploss.h>
+#include <dcmtk/ofstd/ofcmdln.h>
+#include <dcmtk/dcmdata/dcdeftag.h>
+#include <dcmtk/dcmdata/dcfilefo.h>
+#include <dcmtk/dcmdata/dcuid.h>
 
-#include <vglDcmtkIo.h>
-#include "vgl_context_utils.h"
-#include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
-
-#define INCLUDE_CSTDLIB
-#define INCLUDE_CSTDIO
-#define INCLUDE_CSTRING
-
-#ifdef HAVE_GUSI_H
-#include <GUSI.h>
-#endif
-
-#include "dcmtk/dcmdata/dctk.h"          /* for various dcmdata headers */
-#include "dcmtk/dcmdata/dcrledrg.h"      /* for DcmRLEDecoderRegistration */
-#include "dcmtk/dcmimgle/dcmimage.h"     /* for DicomImage */
-#include "dcmtk/dcmimage/diregist.h"     /* include to support color images */
-
-#include "dcmtk/dcmjpeg/djdecode.h"      /* for dcmjpeg decoders */
-#include "dcmtk/dcmjpeg/djencode.h"      /* for dcmjpeg encoders */
-#include "dcmtk/dcmjpeg/djrplol.h"       /* for DJ_RPLossless */
-#include "dcmtk/dcmjpeg/djrploss.h"      /* for DJ_RPLossy */
-#include "dcmtk/dcmjpeg/dipijpeg.h"      /* for dcmimage JPEG plugin */
-#include "dcmtk/ofstd/ofcmdln.h"         /* for OFCmdUnsignedInt */
-
+#include "vgl_image.h"
+#include "vgl_io.h"
 
 /** \brief Convert depth from dcm's format to vgl's format.
   */
@@ -222,11 +208,6 @@ int vglDcmtkSaveDicom(char* opt_ofname, VglImage* imagevgl, int compress)
 #define OFFIS_CONSOLE_APPLICATION "dcmcjpeg"
 
     static OFLogger dcmcjpegLogger = OFLog::getLogger("dcmtk.apps." OFFIS_CONSOLE_APPLICATION);
-
-#ifdef HAVE_GUSI_H
-    GUSISetup(GUSIwithSIOUXSockets);
-    GUSISetup(GUSIwithInternetSockets);
-#endif
 
     E_FileReadMode opt_readMode = ERM_autoDetect; // default: fileformat or dataset
     /* Other values to opt_readMode:
@@ -511,5 +492,3 @@ int vglDcmtkSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, i
 
   return 0;
 }
-
-#endif

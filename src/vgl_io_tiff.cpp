@@ -1,15 +1,9 @@
-#ifdef __TIFF__
-
-#include <tiffio.h>
-#include <vglTiffIo.h>
-#include "vgl_context_utils.h"
-
-//malloc_usable_size
-#include <malloc.h>
-//memcpy, strlen
 #include <string.h>
+#include <tiffio.h>
 
-#include "legacy_opencv.h"
+#include "vgl_io.h"
+#include "vgl_image.h"
+#include "vgl_context_utils.h"
 
 /** \brief Convert depth from tiff's format to ipl's format.
   */
@@ -265,8 +259,6 @@ tdata_t tif_ReadRGBData(TIFF* tif)
 {
   int* buffer = (int*)tif_Malloc(tif);
   char* raster = (char*)tif_Malloc(tif);
-  printf("sizeof(raster) = %ld\n", malloc_usable_size(raster));
-  printf("sizeof(buffer) = %ld\n", malloc_usable_size(buffer));
 
   int rgba;
 
@@ -753,6 +745,3 @@ int vglSave4dTiff(char* filename, VglImage* image, int lStart, int lEnd)
 
   return 0;
 }
-
-
-#endif

@@ -1,19 +1,17 @@
-#ifdef __GDCM__
+#include <stdio.h>
 
-#include <vglGdcmIo.h>
-#include "vgl_context_utils.h"
-#include <gdcmImageReader.h>
-#include <gdcmImage.h>
-#include <gdcmWriter.h>
-#include <gdcmAttribute.h>
-#include <gdcmImageWriter.h>
-#include <gdcmImageChangeTransferSyntax.h>
-#include "gdcmImageChangeTransferSyntax.h"
-#include "gdcmImageChangePhotometricInterpretation.h"
-#include "gdcmPhotometricInterpretation.h"
+#include <gdcm/gdcmImageReader.h>
+#include <gdcm/gdcmImage.h>
+#include <gdcm/gdcmWriter.h>
+#include <gdcm/gdcmAttribute.h>
+#include <gdcm/gdcmImageWriter.h>
+#include <gdcm/gdcmImageChangeTransferSyntax.h>
+#include <gdcm/gdcmImageChangeTransferSyntax.h>
+#include <gdcm/gdcmImageChangePhotometricInterpretation.h>
+#include <gdcm/gdcmPhotometricInterpretation.h>
 
-#include <iostream>
-#include <fstream>
+#include "vgl_io.h"
+#include "vgl_image.h"
 
 /** \brief Convert depth from dcm's format to vgl's format.
   */
@@ -222,7 +220,7 @@ int vglGdcmSaveDicom(char* outFilename, VglImage* imagevgl, int compress)
     change.SetInput( *image );
     bool b = change.Change();
     if(!b)
-      std::cerr << "Could not change the Transfer Syntax" << std::endl;
+      printf("Could not change the Transfer Syntax\n");
   }
 
   gdcm::DataElement pixeldata(gdcm::Tag(0x7fe0,0x0010));
@@ -238,7 +236,7 @@ int vglGdcmSaveDicom(char* outFilename, VglImage* imagevgl, int compress)
     change.SetInput( *image );
     bool b = change.Change();
     if(!b)
-      std::cerr << "Could not change the Transfer Syntax" << std::endl;
+        printf("Could not change the Transfer Syntax\n");
    }
 
   gdcm::PhotometricInterpretation PI;
@@ -263,7 +261,7 @@ int vglGdcmSaveDicom(char* outFilename, VglImage* imagevgl, int compress)
       bool b = change.Change();
       if( !b )
       {
-	std::cerr << "Could not change the Transfer Syntax" << std::endl;
+          printf("Could not change the Transfer Syntax\n");
 	return 1;
       }
     }
@@ -384,5 +382,3 @@ int vglGdcmSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, in
 
   return 0;
 }
-
-#endif
