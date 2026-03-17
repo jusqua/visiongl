@@ -9,6 +9,8 @@
 // extern void* __builtin_memchr(const void*__s, int __a, unsigned int __n);
 #include <stdlib.h>
 #include <GL/glew.h>
+#include <CL/cl.h>
+
 #include "vgl_constants.h"
 #include "vglShape.h"
 #include "legacy_opencv.h"
@@ -26,14 +28,10 @@ class VglImage{
   int       has_mipmap;
   GLuint    fbo;
   GLuint    tex;
-#ifdef __CUDA__
   void*     cudaPtr;
   GLuint    cudaPbo;
-#endif
-#ifdef __OPENCL__
   cl_mem    oclPtr;
   int       clForceAsBuf;
-#endif
   int       inContext;
   char*     filename;
 

@@ -1,7 +1,7 @@
 #include "vgl_custom_opengl_kernels.h"
 #include "vgl_opengl_kernels.g.h"
 #include "vgl_opengl_context.h"
-#include "vgl_context_utils.h"
+#include "vgl_context.h"
 
 /** Copy data from src texture to dst texture
  */

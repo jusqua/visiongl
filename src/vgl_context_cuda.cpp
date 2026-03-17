@@ -1,10 +1,7 @@
-#include "vglCudaImage.h"
-#include "vgl_context_utils.h"
-#include "vgl_image.h"
-
-//cuda
-//#include <cutil.h>
 #include <cuda_gl_interop.h>
+
+#include "vgl_context.h"
+#include "vgl_image.h"
 #include "vgl_opengl_context.h"
 
 /** vglCudaAllocPbo

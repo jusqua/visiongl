@@ -3,7 +3,7 @@
 
 #include "vgl_io.h"
 #include "vgl_image.h"
-#include "vgl_context_utils.h"
+#include "vgl_context.h"
 
 /** \brief Convert depth from tiff's format to ipl's format.
   */

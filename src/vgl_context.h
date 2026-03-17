@@ -1,9 +1,10 @@
-#ifndef VGL_OPENGL_CONTEXT_H
-#define VGL_OPENGL_CONTEXT_H
+#ifndef VGL_CONTEXT_H
+#define VGL_CONTEXT_H
 #pragma once
 
 #include <assert.h>
 #include <GL/glew.h>
+#include <CL/cl.h>
 
 #include "vgl_image.h"
 
@@ -69,16 +70,6 @@
   } \
 } \
 
-int vglInit();
-int vglInit(int w, int h);
-int vglHasDisplay();
-void vglUpload(VglImage* image, int swapRGB = 0);
-void vglDownload(VglImage* image);
-void vglDownloadPPM(VglImage* image);
-void vglDownloadPGM(VglImage* image);
-void vglDownloadFBO(VglImage* image);
-void vglDownloadFaster(VglImage* image/*, VglImage* buf*/);
-
 GLuint vglShaderTypeIsOk(GLuint type);
 GLuint vglShaderCreateIsOk(GLuint shader);
 GLuint vglShaderCompileIsOk(GLuint shader);
@@ -90,4 +81,52 @@ GLuint vglSingleShaderLoad(GLuint ShaderType, char* filename);
 GLuint vglShaderLoad(GLuint ShaderType, char* filename);
 GLuint vglProgramLoad(char* v_filename, char* f_filename);
 
-#endif // VGL_OPENGL_CONTEXT_H
+int vglInit();
+int vglInit(int w, int h);
+int vglHasDisplay();
+void vglUpload(VglImage* image, int swapRGB = 0);
+void vglDownload(VglImage* image);
+void vglDownloadPPM(VglImage* image);
+void vglDownloadPGM(VglImage* image);
+void vglDownloadFBO(VglImage* image);
+void vglDownloadFaster(VglImage* image/*, VglImage* buf*/);
+
+int vglCudaToGl(VglImage* img);
+int vglGlToCuda(VglImage* img);
+int vglCudaAlloc(VglImage* img);
+int vglCudaAllocPbo(VglImage* img);
+int vglCudaFree(VglImage* img);
+int vglCudaFreePbo(VglImage* img);
+int vglCudaMapPbo(VglImage* img);
+int vglCudaUnmapPbo(VglImage* img);
+
+struct VglClContext
+{
+	cl_platform_id* platformId;
+	cl_device_id* deviceId;
+	cl_context context;
+	cl_command_queue commandQueue;
+};
+
+void vglClInteropSetTrue(void);
+void vglClInteropSetFalse(void);
+void vglClPrintContext(void);
+void vglClCheckError(cl_int error, char* name);
+void vglClInit();
+void vglClFlush();
+void vglClBuildDebug(cl_int err, cl_program program);
+void vglClUploadForce(VglImage* img);
+void vglClDownloadForce(VglImage* img);
+void vglClUpload(VglImage* img);
+void vglClDownload(VglImage* img);
+void vglClUploadInterop(VglImage* img);
+void vglClDownloadInterop(VglImage* img);
+void vglClToGl(VglImage* img);
+void vglGlToCl(VglImage* img);
+void vglClAlloc(VglImage* img);
+
+// TODO: Bad function definition, find another way to make easier context switching
+int vglCheckContext(VglImage* img, int context);
+// int vglCheckContextForOutput(VglImage* img, int context); // NOTE: Seems unused
+
+#endif // VGL_CONTEXT_H

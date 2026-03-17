@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-#include "vgl_opengl_context.h"
+#include "vgl_context.h"
 
 /** Initialize GLUT and create output window with default size (1280, 960).
   */

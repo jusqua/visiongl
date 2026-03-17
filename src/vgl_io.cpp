@@ -11,7 +11,7 @@
 
 #include "vgl_io.h"
 #include "vgl_image.h"
-#include "vgl_context_utils.h"
+#include "vgl_context.h"
 
 /** Save images with any dimension to disk
 

@@ -1,19 +1,15 @@
+#include <fstream>
+#include <string.h>
 
-#ifdef __OPENCL__
-
-#include "vglClImage.h"
-#include "vgl_context_utils.h"
+#include "vgl_context.h"
 #include "vgl_constants.h"
 #include "vgl_opencl_kernels.g.h"
 #include "legacy_opencv.h"
 
-//ifstream
-#include <fstream>
-//strcmp, strtok
-#include <string.h>
 
 // cl-gl interoperability
 #include <CL/cl_gl.h>
+// TODO: remove X11 dependency
 #ifdef __linux__
     #include <GL/glx.h>
 #endif
@@ -878,6 +874,3 @@ int vglClMpIsZero(VglImage* num_a){
 
   return isZero;
 }
-
-
-#endif
