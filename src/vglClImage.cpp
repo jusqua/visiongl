@@ -2,7 +2,7 @@
 #ifdef __OPENCL__
 
 #include "vglClImage.h"
-#include "vglContext.h"
+#include "vgl_context_utils.h"
 #include "vgl_constants.h"
 #include "vgl_opencl_kernels.g.h"
 #include "legacy_opencv.h"

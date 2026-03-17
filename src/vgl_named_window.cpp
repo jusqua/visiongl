@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-#include "vglContext.h"
+#include "vgl_context_utils.h"
 #include "vgl_named_window.h"
 
 /** \brief Refresh all output images.

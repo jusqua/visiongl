@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "vglContext.h"
 #include "vgl_image.h"
 #include "legacy_opencv.h"
 
@@ -731,4 +730,44 @@ void vglClForceAsBuf(VglImage*  img)
 #else
   fprintf(stderr, "%s: %s: OpenCL not supported. Please recompile setting WITH_OPENCL to true in the Makefile.\n", __FILE__, __FUNCTION__);
 #endif
+}
+
+/*  Call after copy. Context must be unique.
+
+    Return 0 in case of error. Resulting context if successful.
+ */
+int vglAddContext(VglImage* img, int context){
+  if (!vglIsContextUnique(context)){
+    fprintf(stderr, "vglAddContext: Error: context = %d is not unique or invalid\n", context);
+    return 0;
+  }
+  img->inContext = img->inContext | context;
+  return img->inContext;
+}
+
+/*  Call after processing or creating image. Context must be unique.
+    After creating, use VGL_BLANK_CONTEXT
+
+    Return 0 in case of error. Resulting context if successful.
+ */
+int vglSetContext(VglImage* img, int context){
+  if (!vglIsContextUnique(context) && context != 0){
+    fprintf(stderr, "vglSetContext: Error: context = %d is not unique\n", context);
+    return 0;
+  }
+  img->inContext = context;
+  return img->inContext;
+}
+
+void vglPrintContext(int context, char* msg){
+  if (msg) printf("%s", msg);
+  printf("(");
+  ( context & VGL_RAM_CONTEXT ? printf("RAM ") : printf("    ") );
+  ( context & VGL_GL_CONTEXT ? printf("GL ") : printf("   ") );
+  ( context & VGL_CUDA_CONTEXT ? printf("CUDA") : printf("    ") );
+  printf(") (%d)\n", context);
+}
+
+void vglPrintContext(VglImage* img, char* msg){
+  vglPrintContext(img->inContext, msg);
 }

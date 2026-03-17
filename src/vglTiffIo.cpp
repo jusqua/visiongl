@@ -2,7 +2,7 @@
 
 #include <tiffio.h>
 #include <vglTiffIo.h>
-#include <vglContext.h>
+#include "vgl_context_utils.h"
 
 //malloc_usable_size
 #include <malloc.h>

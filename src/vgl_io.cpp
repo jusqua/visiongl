@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "vgl_io.h"
-#include "vglContext.h"
+#include "vgl_context_utils.h"
 
 /** Save images with any dimension to disk
 

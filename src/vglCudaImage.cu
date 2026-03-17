@@ -1,5 +1,5 @@
 #include "vglCudaImage.h"
-#include "vglContext.h"
+#include "vgl_context_utils.h"
 #include "vgl_image.h"
 
 //cuda

@@ -13,7 +13,7 @@
 
 #include "vglSimpleBGModel.h"
 #include "vgl_opengl_kernels.g.h"
-#include "vglContext.h"
+#include "vgl_context_utils.h"
 #include "legacy_opencv.h"
 
 #define max(a, b) (a > b ? a : b)
