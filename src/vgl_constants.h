@@ -22,11 +22,6 @@
 #define VGL_SHAPE_D3        3
 #define VGL_SHAPE_D4        4
 
-#define VGL_SHAPE_NCHANNELS VGL_SHAPE_D0
-#define VGL_SHAPE_WIDTH     VGL_SHAPE_D1
-#define VGL_SHAPE_HEIGHT    VGL_SHAPE_D2
-#define VGL_SHAPE_LENGTH    VGL_SHAPE_D3
-
 #if defined(WIN32) || defined(_WIN32)
   #define DIRSEP "\\"
   #define MKDIR  "md"
