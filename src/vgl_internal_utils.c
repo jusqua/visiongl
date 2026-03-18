@@ -24,22 +24,22 @@ void vgl_panic(const char* format, ...) {
 
 void vgl_log(vgl_log_kind_t level, const char* format, ...) {
     switch (level) {
-        case VGL_LOG_INFO: {
-            if (VGL_LOG_LEVEL >= VGL_LOG_LEVEL_INFO) return;
-            fprintf(stderr, "[INFO]  ");
-        } break;
-        case VGL_LOG_WARN: {
-            if (VGL_LOG_LEVEL >= VGL_LOG_LEVEL_WARN) return;
-            fprintf(stderr, "[WARN]  ");
-        } break;
-        case VGL_LOG_ERROR: {
-            if (VGL_LOG_LEVEL >= VGL_LOG_LEVEL_ERROR) return;
-            fprintf(stderr, "[ERROR] ");
-        } break;
-        default:
-            vgl_panic("Invalid log level");
-            return;
-        break;
+    case VGL_LOG_INFO: {
+        if (VGL_LOG_LEVEL >= VGL_LOG_LEVEL_INFO) return;
+        fprintf(stderr, "[INFO]  ");
+    } break;
+    case VGL_LOG_WARN: {
+        if (VGL_LOG_LEVEL >= VGL_LOG_LEVEL_WARN) return;
+        fprintf(stderr, "[WARN]  ");
+    } break;
+    case VGL_LOG_ERROR: {
+        if (VGL_LOG_LEVEL >= VGL_LOG_LEVEL_ERROR) return;
+        fprintf(stderr, "[ERROR] ");
+    } break;
+    default:
+        vgl_panic("Invalid log kind");
+        return;
+    break;
     }
 
     va_list args;
