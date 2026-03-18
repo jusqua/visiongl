@@ -1,0 +1,32 @@
+#ifndef VGL_PROBE_H
+#define VGL_PROBE_H
+#pragma once
+
+#include "vgl_shape.h"
+
+//! Probe types for window operations
+typedef enum {
+    VGL_PROBE_CUBE,
+    VGL_PROBE_CROSS,
+    VGL_PROBE_GAUSS,
+    VGL_PROBE_MEAN,
+} vgl_probe_kind_t;
+
+//! Probe element for window operations
+typedef struct {
+    vgl_shape_t*  shape;    //!< Pointer to the shape of the probe
+    float*        data;     //!< Pointer to the data of the probe, size of the data is defined in shape
+} vgl_probe_t;
+
+//! Create probe by taking ownership of shape and data
+vgl_probe_t* vgl_probe_wrap(vgl_shape_t* shape, float* data);
+//! Create probe from data
+vgl_probe_t* vgl_probe_create(vgl_shape_t* shape, float* data);
+//! Create probe identical to another probe
+vgl_probe_t* vgl_probe_clone(vgl_probe_t* probe);
+//! Create probe from a probe kind and dimensions
+vgl_probe_t* vgl_probe_from_kind(vgl_probe_kind_t kind, int dims);
+//! Release probe from memory
+void vgl_probe_release(vgl_probe_t* probe);
+
+#endif // VGL_PROBE_H
