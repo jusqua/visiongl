@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <limits.h>
 #include <stdlib.h>
 
@@ -6,79 +5,84 @@
 #include "vgl_constants.h"
 #include "vgl_shape.h"
 
-uint8_t vgl_find_bps(uint8_t depth)
+uint8_t vgl_find_bps(int depth)
 {
   return depth & 255;
 }
 
 uint64_t vgl_find_width_step(uint8_t bps, uint64_t width, uint64_t channels)
 {
-    assert(channels > 0);
-    assert(width > 0);
-    assert(bps > 0);
+    if (bps != 1 || bps % CHAR_BIT != 0)
+        vgl_panic("bps must be 1 or a multiple of %d", CHAR_BIT);
+    if (channels == 0)
+        vgl_panic("channels must be greater than 0");
+    if (width == 0)
+        vgl_panic("width must be greater than 0");
 
-    if (bps == 1) {
+    if (bps == 1)
         return (width - 1) / VGL_PACK_SIZE_BITS + 1;
-    }
-    else if (bps % CHAR_BIT) {
-        vgl_panic("bps is not 1 or multiple of %d", bps, CHAR_BIT);
-    }
     return (bps / CHAR_BIT) * channels * width;
 }
 
-vgl_shape_t* vgl_shape_create(uint64_t extent[VGL_SHAPE_DATA_LENGTH], uint8_t dims, uint8_t bps)
+void vgl_shape_init(vgl_shape_t* shape, uint64_t *extent, uint8_t dims, uint8_t bps)
 {
-    assert(extent != NULL);
-    assert(dims > 0);
-    assert(bps > 0);
+    if (extent == nullptr)
+        vgl_panic("extent must not be NULL");
+    if (dims == 0)
+        vgl_panic("dims must be > 0");
+    if (bps != 1 || bps % CHAR_BIT != 0)
+        vgl_panic("bps must be 1 or a multiple of %d", CHAR_BIT);
 
-    if ((bps == 1) && (extent[0] != 1)) {
-        vgl_panic("Multi channel is not allowed when bps is 1", extent[0]);
-    }
+    shape->extent = malloc(sizeof(uint64_t) * (dims + 1));
+    shape->offset = malloc(sizeof(uint64_t) * (dims + 1));
+    shape->dims = dims;
+    shape->bps = bps;
+    shape->size = 1;
 
-    auto new_shape = (vgl_shape_t*)malloc(sizeof(vgl_shape_t));
-    if (new_shape == NULL) {
-        vgl_panic("Failed to allocate memory for vgl_shape_t");
-    }
-
-    new_shape->dims = dims;
-    new_shape->bps = bps;
-    new_shape->size = 1;
-
-    auto channels = extent[0];
+    auto channels = bps == 1 ? 1 : extent[0];
     auto width = extent[1];
     for (auto i = 0; i <= VGL_MAX_DIM; i++) {
         if (i <= dims) {
-            new_shape->extent[i] = extent[i];
+            shape->extent[i] = extent[i];
             if(i == 0) {
-                new_shape->offset[i] = 1;
+                shape->offset[i] = 1;
             } else if (i == 2) {
-                new_shape->offset[i] = vgl_find_width_step(bps, width, channels);
+                shape->offset[i] = vgl_find_width_step(bps, width, channels);
             } else {
-                new_shape->offset[i] = extent[i - 1] * new_shape->offset[i - 1];
+                shape->offset[i] = extent[i - 1] * shape->offset[i - 1];
             }
         } else {
-            new_shape->extent[i] = 1;
-            new_shape->offset[i] = 0;
+            shape->extent[i] = 1;
+            shape->offset[i] = 0;
         }
     }
 
-    new_shape->size *= new_shape->extent[dims] * new_shape->offset[dims];
-
-    return new_shape;
+    shape->size *= shape->extent[dims] * shape->offset[dims];
 }
 
-vgl_shape_t* vgl_shape_clone(vgl_shape_t* shape) {
-    return vgl_shape_create(shape->extent, shape->dims, shape->bps);
+void vgl_shape_init_similar(vgl_shape_t* shape, const vgl_shape_t* source)
+{
+    if (shape == nullptr || source == nullptr)
+        vgl_panic("shape and source must not be NULL");
+
+    vgl_shape_init(shape, source->extent, source->dims, source->bps);
 }
 
-void vgl_shape_release(vgl_shape_t* shape) {
-    free(shape);
-    shape = nullptr;
+void vgl_shape_deinit(vgl_shape_t* shape)
+{
+    if (shape == nullptr)
+        vgl_panic("probe must not be NULL");
+
+    free(shape->extent);
+    free(shape->offset);
+    shape->extent = nullptr;
+    shape->offset = nullptr;
 }
 
-uint64_t vgl_shape_index_from_coordinate(vgl_shape_t* shape, uint64_t* coordinate) {
-    assert(shape != NULL && coordinate != NULL);
+uint64_t vgl_shape_index_from_coordinate(const vgl_shape_t* shape, const uint64_t* coordinate)
+{
+    if (shape == nullptr || coordinate == nullptr)
+        vgl_panic("shape and coordinate must not be NULL");
 
     uint64_t result = 0;
     for (auto d = 0; d <= shape->dims; ++d)
@@ -86,8 +90,10 @@ uint64_t vgl_shape_index_from_coordinate(vgl_shape_t* shape, uint64_t* coordinat
     return result;
 }
 
-void vgl_shape_coordinate_from_index(vgl_shape_t* shape, uint64_t* coordinate, uint64_t index) {
-    assert(shape != NULL && coordinate != NULL);
+void vgl_shape_coordinate_from_index(const vgl_shape_t* shape, uint64_t* coordinate, uint64_t index)
+{
+    if (shape == nullptr || coordinate == nullptr)
+        vgl_panic("shape and coordinate must not be NULL");
 
     uint8_t ndim = shape->dims;
     uint64_t* raw_shape = shape->extent;
@@ -101,14 +107,18 @@ void vgl_shape_coordinate_from_index(vgl_shape_t* shape, uint64_t* coordinate, u
     }
 }
 
-uint64_t vgl_shape_pixels(vgl_shape_t* shape) {
-    assert(shape != NULL);
+uint64_t vgl_shape_pixels(const vgl_shape_t* shape)
+{
+    if (shape == nullptr)
+        vgl_panic("shape must not be NULL");
+
     return shape->size / shape->extent[0];
 }
 
-uint64_t vgl_shape_frames(vgl_shape_t* shape)
+uint64_t vgl_shape_frames(const vgl_shape_t* shape)
 {
-    assert(shape != NULL);
+    if (shape == nullptr)
+        vgl_panic("shape must not be NULL");
 
     uint64_t frames = 1;
     for (auto i = 3; i <= shape->dims; ++i)
@@ -116,24 +126,32 @@ uint64_t vgl_shape_frames(vgl_shape_t* shape)
     return frames;
 }
 
-uint64_t vgl_shape_dimension(vgl_shape_t* shape, uint8_t dim)
+uint64_t vgl_shape_dimension(const vgl_shape_t* shape, uint8_t dim)
 {
-    assert(shape != NULL && dim <= shape->dims);
+    if (shape == nullptr)
+        vgl_panic("shape must not be NULL");
+    if (dim == 0 || dim > shape->dims)
+        vgl_panic("dim must be between 1 and shape->dims");
+
     return shape->extent[dim];
 }
 
-uint64_t vgl_shape_channels(vgl_shape_t* shape) {
+uint64_t vgl_shape_channels(const vgl_shape_t* shape)
+{
     return vgl_shape_dimension(shape, 0);
 }
 
-uint64_t vgl_shape_width(vgl_shape_t* shape) {
+uint64_t vgl_shape_width(const vgl_shape_t* shape)
+{
     return vgl_shape_dimension(shape, 1);
 }
 
-uint64_t vgl_shape_height(vgl_shape_t* shape) {
+uint64_t vgl_shape_height(const vgl_shape_t* shape)
+{
     return vgl_shape_dimension(shape, 2);
 }
 
-uint64_t vgl_shape_length(vgl_shape_t* shape) {
+uint64_t vgl_shape_length(const vgl_shape_t* shape)
+{
     return vgl_shape_dimension(shape, 3);
 }
