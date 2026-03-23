@@ -2,210 +2,74 @@
 #define VGL_IMAGE_H
 #pragma once
 
-// NOTE: Seems unused
-// #define __is_pod(type) 1
-// #define __is_empty(type) 1
-// #define __has_trivial_destructor(type) 1
-// extern void* __builtin_memchr(const void*__s, int __a, unsigned int __n);
-#include <stdlib.h>
-#include <GL/glew.h>
-#include <CL/cl.h>
+#include <stdint.h>
 
-#include "vgl_constants.h"
-#include "vglShape.h"
-#include "legacy_opencv.h"
+#include "vgl_shape.h"
 
-// TODO: Remodel VglImage to remove device context dependencies and opencv legacy image substructure
-class VglImage{
- public:
-  IplImage* ipl;
-  void*     ndarray;
-  int       ndim;                // 2 if conventional image, 3 if three-dimensional etc
-  int       shape[2*VGL_MAX_DIM];  // shape[0] = width, shape[1] = height, shape[2] = number of frames etc
-  VglShape* vglShape;
-  int       depth;
-  int       nChannels;
-  int       has_mipmap;
-  GLuint    fbo;
-  GLuint    tex;
-  void*     cudaPtr;
-  GLuint    cudaPbo;
-  cl_mem    oclPtr;
-  int       clForceAsBuf;
-  int       inContext;
-  char*     filename;
+/// Color space kind enumeration
+typedef enum {
+    VGL_COLOR_SPACE_INVALID = -1,    ///< Invalid color space kind
+    VGL_COLOR_SPACE_BINARY,          ///< Binary color space (1 bit per sample)
+    VGL_COLOR_SPACE_GRAYSCALE,       ///< Grayscale color space (8 bits per sample)
+    VGL_COLOR_SPACE_GRAYSCALE_ALPHA, ///< Grayscale with alpha color space (16 bits per sample)
+    VGL_COLOR_SPACE_RGB,             ///< RGB color space (24 bits per sample)
+    VGL_COLOR_SPACE_RGB_ALPHA,       ///< RGB with alpha color space (32 bits per sample)
+    __VGL_COLOR_SPACE_KIND_COUNT,
+} vgl_color_space_kind_e;
 
-  size_t getBitsPerSample()
-  {
-    return this->depth & 255;
-  }
+/// Image host context structure
+typedef struct {
+    uint8_t* data;
+} vgl_image_host_context_t;
 
-  /** widthStep in bytes
+/// Image context kind enumeration
+typedef enum {
+    VGL_IMAGE_CONTEXT_HOST,
+    __VGL_IMAGE_CONTEXT_KIND_COUNT
+} vgl_image_context_kind_e;
 
-   */
-  int getWidthStep()
-  {
-    int widthStep;
-    /*if (this->ipl) // TODO: fix this
-    {
-      widthStep = this->ipl->widthStep;
-    }
-    else*/
-    {
-      int bps = this->getBitsPerSample();
-      if (bps == 1)
-      {
-        widthStep = (this->getWidthIn() - 1) / 8 + 1;
-      }
-      else if (bps < 8)
-      {
-        fprintf(stderr, "%s:%s: Error: bits per pixel = %d < 8 and != 1. Image depth may be wrong.\n", __FILE__, __FUNCTION__, bps);
-        exit(1);
-      }
-      else
-      {
-        widthStep = (bps / 8) * this->getNChannels() * this->getWidthIn();
-      }
-    }
-    return widthStep;
-  }
+/// Image context union
+typedef union {
+    vgl_image_host_context_t   host;
+} vgl_image_context_u;
 
-  /** widthStep in words
+/// Image structure
+typedef struct {
+    vgl_shape_t              shape;   ///< Shape of the image
+    vgl_image_context_kind_e kind;    ///< Context kind of the image
+    vgl_image_context_u      context; ///< Context data of the image
+} vgl_image_t;
 
-   */
-  int getWidthStepWords()
-  {
-    return (this->getWidthStep() - 1) / VGL_PACK_SIZE_BYTES + 1;
-  }
+/// Returns the number of bits per sample for a given color space kind
+uint8_t vgl_bps_from_color_space_kind(vgl_color_space_kind_e kind);
+/// Returns the color space kind for a given number of bits per sample
+vgl_color_space_kind_e vgl_color_space_kind_from_bps(uint8_t bps);
 
-  /** Total number of rows
+/// Initializes an image with the given shape
+void vgl_image_init(vgl_image_t* image, const vgl_shape_t* shape);
+/// Initializes a 2D image with the given width, height
+void vgl_image_init_2d(vgl_image_t* image, uint64_t width, uint64_t height, vgl_color_space_kind_e color_space);
+/// Initializes a 3D image with the given width, height, depth
+void vgl_image_init_3d(vgl_image_t* image, uint64_t width, uint64_t height, uint64_t depth, vgl_color_space_kind_e color_space);
+/// Initializes an image similar to the given source image
+void vgl_image_init_similar(vgl_image_t* image, const vgl_image_t* source);
+/// Deinitializes an image
+void vgl_image_deinit(vgl_image_t* image);
 
-      Get total number of rows. Notice that, in images with more than 2D, may be
-      different of image height
-  */
-  size_t getTotalRows()
-  {
-    return this->vglShape->getHeightIn() * this->vglShape->getNFrames();
-  }
+/// Converts an image from its color space to RGB with alpha
+void vgl_image_color_space_to_rgb_alpha(vgl_image_t* image);
+/// Converts an image from its color space to RGB
+void vgl_image_color_space_to_rgb(vgl_image_t* image);
+/// Converts an image from its color space to grayscale with alpha
+void vgl_image_color_space_to_grayscale_alpha(vgl_image_t* image);
+/// Converts an image from its color space to grayscale
+void vgl_image_color_space_to_grayscale(vgl_image_t* image);
+/// Converts an image from its color space to binary
+void vgl_image_color_space_to_binary(vgl_image_t* image);
 
-  /** Get row size in bytes
-
-      This is the same as widthStep and can be eliminated.
-  */
-  size_t getRowSizeInBytes()
-  {
-      int bps = this->getBitsPerSample();
-      if (bps == 1)
-      {
-        return this->getWidthStep();
-      }
-      else if (bps < 8)
-      {
-        fprintf(stderr, "%s:%s: Error: bits per pixel = %d < 8 and != 1. Image depth may be wrong.\n", __FILE__, __FUNCTION__, bps);
-        exit(1);
-      }
-      return this->getWidthStep();
-  }
-
-  size_t getTotalSizeInBytes()
-  {
-    return this->getTotalRows() * this->getRowSizeInBytes();
-  }
-
-  char* getImageData()
-  {
-    if (this->ndarray)
-    {
-      return (char*) this->ndarray;
-    }
-    else if (this->ipl)
-    {
-      return (char*) this->ipl->imageData;
-    }
-    else
-    {
-      fprintf(stderr, "%s: %s: Error: no pointer to raster image data available.\n", __FILE__, __FUNCTION__);
-      return NULL;
-    }
-  }
-
-  int getNChannels()
-  {
-    return this->vglShape->shape[VGL_SHAPE_NCHANNELS];
-  }
-
-  int getWidth()
-  {
-    return this->vglShape->getWidth();
-  }
-
-  int getHeight()
-  {
-    return this->vglShape->getHeight();
-  }
-
-  int getLength()
-  {
-    return this->vglShape->getLength();
-  }
-
-  int getWidthIn()
-  {
-    return this->vglShape->getWidthIn();
-  }
-
-  int getHeightIn()
-  {
-    return this->vglShape->getHeightIn();
-  }
-
-  int getNFrames()
-  {
-    return this->vglShape->getNFrames();
-  }
-};
-
-// VglImage* vglCopyCreateImage(VglImage* img_in); // NOTE: Seems unused
-VglImage* vglCreateImage(VglImage* img_in);
-VglImage* vglCopyCreateImage(IplImage* img_in, int ndim = 2, int has_mipmap = 0);
-VglImage* vglCreateImage(IplImage* img_in, int ndim = 2, int has_mipmap = 0);
-VglImage* vglCreateImage(int* shape, int depth, int ndim = 2, int has_mipmap = 0);
-VglImage* vglCreateImage(VglShape* vglShape, int depth, int has_mipmap = 0);
-VglImage* vglCreateImage(CvSize size, int depth = IPL_DEPTH_8U, int nChannels = 3, int ndim = 2, int has_mipmap = 0);
-VglImage* vglCreate3dImage(CvSize size, int depth, int nChannels, int nlength, int has_mipmap = 0);
-VglImage* vglCreateNdImage(int ndim, int* shape, int depth, int has_mipmap = 0);
-VglImage* vglCloneImage(IplImage* img_in, int ndim = 2, int has_mipmap = 0);
-void vglReleaseImage(VglImage** p_image);
-void vglReplaceIpl(VglImage* image, IplImage* new_ipl);
-int vglReshape(VglImage* img, VglShape* newShape);
-void vglNdarray3To4Channels(VglImage* img);
-void vglNdarray4To3Channels(VglImage* img);
-void vglIpl3To4Channels(VglImage* img);
-void vglIpl4To3Channels(VglImage* img);
-void vglImage3To4Channels(VglImage* img);
-void vglImage4To3Channels(VglImage* img);
-void vglPrintImageData(VglImage* image, char* msg = NULL, char* format = (char*) "%c");
-void iplPrintImageData(IplImage* image, char* msg = NULL, char* format = (char*) "%c");
-void vglPrintImageInfo(VglImage* image, char* msg = NULL);
-void iplPrintImageInfo(IplImage* ipl, char* msg = NULL);
-
-// TODO: Remove context macros and use enums to define context definitions
-#define VGL_BLANK_CONTEXT 0
-#define VGL_RAM_CONTEXT 1
-#define VGL_GL_CONTEXT 2
-#define VGL_CUDA_CONTEXT 4
-#define VGL_CL_CONTEXT 8
-
-#define vglIsContextValid(x) ( (x>=1) && (x<=15) )
-#define vglIsContextUnique(x) ( (x==0) || (x==1) || (x==2) || (x==4) || (x==8) )
-#define vglIsInContext(img, x) ( (img)->inContext & (x) || ((img)->inContext==0 && x==0))
-
-int vglAddContext(VglImage* img, int context);
-int vglSetContext(VglImage* img, int context);
-void vglPrintContext(int context, char* msg = NULL);
-void vglPrintContext(VglImage* img, char* msg = NULL);
-
-// OpenCL
-void vglClForceAsBuf(VglImage*  img);
+/// Resamples an image to the given bits per sample by converting to a different color space
+void vgl_image_resample(vgl_image_t* image, uint8_t bps);
+/// Reshapes an image to the given shape
+void vgl_image_reshape(vgl_image_t* image, const vgl_shape_t* source);
 
 #endif // VGL_IMAGE_H
