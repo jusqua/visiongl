@@ -23,7 +23,7 @@ void vgl_probe_init_similar(vgl_probe_t* probe, const vgl_probe_t* source)
     vgl_probe_init(probe, &source->shape);
 }
 
-void vgl_probe_init_from_kind(vgl_probe_t* probe, vgl_probe_kind_t kind, int dims)
+void vgl_probe_init_from_kind(vgl_probe_t* probe, vgl_probe_kind_e kind, int dims)
 {
     if (probe == nullptr)
         vgl_panic("probe must not be NULL");
