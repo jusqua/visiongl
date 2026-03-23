@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -12,6 +13,8 @@
 #   endif // NDEBUG
 #endif // VGL_LOG_LEVEL
 
+static_assert(VGL_LOG_LEVEL >= VGL_LOG_LEVEL_NO_LOG && VGL_LOG_LEVEL < __VGL_LOG_LEVEL_COUNT);
+
 void vgl_panic(const char* format, ...) {
     va_list args;
     va_start(args, format);
@@ -22,7 +25,7 @@ void vgl_panic(const char* format, ...) {
     abort();
 }
 
-void vgl_log(vgl_log_kind_t level, const char* format, ...) {
+void vgl_log(vgl_log_kind_e level, const char* format, ...) {
     switch (level) {
     case VGL_LOG_INFO: {
         if (VGL_LOG_LEVEL >= VGL_LOG_LEVEL_INFO) return;
