@@ -25,6 +25,11 @@ void vgl_shape_init_similar(vgl_shape_t* shape, const vgl_shape_t* source);
 /// Deinitialize shape internal attributes from memory
 void vgl_shape_deinit(vgl_shape_t* shape);
 
+/// Changes the shape to match a new shape if the source shape has the same data size
+void vgl_shape_reshape(vgl_shape_t* shape, const vgl_shape_t* source);
+/// Changes the shape bits per sample
+void vgl_shape_resample(vgl_shape_t* shape, uint8_t bps);
+
 /// Get index from coordinate array
 uint64_t vgl_shape_index_from_coordinate(const vgl_shape_t* shape, const uint64_t* coordinate);
 /// Get coordinate from index

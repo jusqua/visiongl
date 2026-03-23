@@ -1,5 +1,7 @@
 #include <limits.h>
+#include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "vgl_internal_utils.h"
 #include "vgl_constants.h"
@@ -24,6 +26,17 @@ uint64_t vgl_find_width_step(uint8_t bps, uint64_t width, uint64_t channels)
     return (bps / CHAR_BIT) * channels * width;
 }
 
+void vgl_compute_offset_from_extent(uint64_t* offset, const uint64_t* extent, uint8_t dims, uint8_t bps)
+{
+    offset[0] = 1;
+    for (auto i = 1; i <= dims; i++) {
+        if (i == 2)
+            offset[i] = vgl_find_width_step(bps, extent[0], extent[1]);
+        else
+            offset[i] = extent[i - 1] * offset[i - 1];
+    }
+}
+
 void vgl_shape_init(vgl_shape_t* shape, uint64_t *extent, uint8_t dims, uint8_t bps)
 {
     if (extent == nullptr)
@@ -39,25 +52,10 @@ void vgl_shape_init(vgl_shape_t* shape, uint64_t *extent, uint8_t dims, uint8_t 
     shape->bps = bps;
     shape->size = 1;
 
-    auto channels = bps == 1 ? 1 : extent[0];
-    auto width = extent[1];
-    for (auto i = 0; i <= VGL_MAX_DIM; i++) {
-        if (i <= dims) {
-            shape->extent[i] = extent[i];
-            if(i == 0) {
-                shape->offset[i] = 1;
-            } else if (i == 2) {
-                shape->offset[i] = vgl_find_width_step(bps, width, channels);
-            } else {
-                shape->offset[i] = extent[i - 1] * shape->offset[i - 1];
-            }
-        } else {
-            shape->extent[i] = 1;
-            shape->offset[i] = 0;
-        }
-    }
-
-    shape->size *= shape->extent[dims] * shape->offset[dims];
+    shape->extent[0] = bps == 1 ? 1 : bps / CHAR_BIT;
+    memcpy(shape->extent + 1, extent + 1, sizeof(uint64_t) * dims);
+    vgl_compute_offset_from_extent(shape->extent, shape->offset, shape->dims, bps);
+    shape->size *= shape->extent[shape->dims] * shape->offset[shape->dims];
 }
 
 void vgl_shape_init_similar(vgl_shape_t* shape, const vgl_shape_t* source)
@@ -77,6 +75,35 @@ void vgl_shape_deinit(vgl_shape_t* shape)
     free(shape->offset);
     shape->extent = nullptr;
     shape->offset = nullptr;
+}
+
+void vgl_shape_reshape(vgl_shape_t* shape, const vgl_shape_t* source)
+{
+    if (shape == nullptr || source == nullptr)
+        vgl_panic("shape and source must not be NULL");
+
+    if (shape->dims == source->dims) {
+        memcpy(shape->extent, source->extent, sizeof(uint64_t) * (shape->dims + 1));
+        memcpy(shape->offset, source->offset, sizeof(uint64_t) * (shape->dims + 1));
+        shape->size = source->size;
+        shape->bps = source->bps;
+        return;
+    }
+
+    vgl_shape_deinit(shape);
+    vgl_shape_init_similar(shape, source);
+}
+
+void vgl_shape_resample(vgl_shape_t* shape, uint8_t bps)
+{
+    if (shape == nullptr)
+        vgl_panic("shape and source must not be NULL");
+    if (bps != 1 || bps % CHAR_BIT != 0)
+        vgl_panic("bps must be 1 or a multiple of %d", CHAR_BIT);
+
+    shape->extent[0] = bps == 1 ? 1 : bps / CHAR_BIT;
+    vgl_compute_offset_from_extent(shape->extent, shape->offset, shape->dims, bps);
+    shape->size *= shape->extent[shape->dims] * shape->offset[shape->dims];
 }
 
 uint64_t vgl_shape_index_from_coordinate(const vgl_shape_t* shape, const uint64_t* coordinate)
