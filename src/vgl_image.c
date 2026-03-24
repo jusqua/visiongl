@@ -113,7 +113,7 @@ void vgl_image_color_space_to_rgb_alpha(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size * 3;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i / 3];
             free(data);
         } break;
@@ -121,7 +121,7 @@ void vgl_image_color_space_to_rgb_alpha(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size * 3 / 2;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i * 2 / 3];
             free(data);
         } break;
@@ -129,7 +129,7 @@ void vgl_image_color_space_to_rgb_alpha(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size * 3 / 4;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i * 4 / 3];
             free(data);
         } break;
@@ -157,7 +157,7 @@ void vgl_image_color_space_to_rgb(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size * 3;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i / 3];
             free(data);
         } break;
@@ -165,7 +165,7 @@ void vgl_image_color_space_to_rgb(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size * 3 / 2;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i * 2 / 3];
             free(data);
         } break;
@@ -173,7 +173,7 @@ void vgl_image_color_space_to_rgb(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size * 3 / 4;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i * 4 / 3];
             free(data);
         } break;
@@ -201,7 +201,7 @@ void vgl_image_color_space_to_grayscale_alpha(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size * 2;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = i % 2 == 0 ? data[i / 2] : 255;
             free(data);
         } break;
@@ -209,7 +209,7 @@ void vgl_image_color_space_to_grayscale_alpha(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size * 2 / 3;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = i % 2 == 0 ? data[i * 3] + data[i * 3 + 1] + data[i * 3 + 2] : 255;
             free(data);
         } break;
@@ -217,7 +217,7 @@ void vgl_image_color_space_to_grayscale_alpha(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size / 2;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = i % 2 == 0 ? data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2] : data[i * 4 + 3];
             free(data);
         } break;
@@ -245,7 +245,7 @@ void vgl_image_color_space_to_grayscale(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size / 2;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i * 2];
             free(data);
         } break;
@@ -253,7 +253,7 @@ void vgl_image_color_space_to_grayscale(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size / 3;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i * 3] + data[i * 3 + 1] + data[i * 3 + 2];
             free(data);
         } break;
@@ -261,7 +261,7 @@ void vgl_image_color_space_to_grayscale(vgl_image_t* image)
             auto data = image->context.host.data;
             auto new_size = image->shape.size / 4;
             image->context.host.data = malloc(new_size);
-            for (size_t i = 0; i < new_size; ++i)
+            for (uint64_t i = 0; i < new_size; ++i)
                 image->context.host.data[i] = data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2];
             free(data);
         } break;

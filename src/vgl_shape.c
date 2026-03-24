@@ -29,7 +29,7 @@ uint64_t vgl_find_width_step(uint8_t bps, uint64_t width, uint64_t channels)
 void vgl_compute_offset_from_extent(uint64_t* offset, const uint64_t* extent, uint8_t dims, uint8_t bps)
 {
     offset[0] = 1;
-    for (auto i = 1; i <= dims; i++) {
+    for (uint8_t i = 1; i <= dims; i++) {
         if (i == 2)
             offset[i] = vgl_find_width_step(bps, extent[0], extent[1]);
         else
@@ -112,7 +112,7 @@ uint64_t vgl_shape_index_from_coordinate(const vgl_shape_t* shape, const uint64_
         vgl_panic("shape and coordinate must not be NULL");
 
     uint64_t result = 0;
-    for (auto d = 0; d <= shape->dims; ++d)
+    for (uint8_t d = 0; d <= shape->dims; ++d)
         result += shape->offset[d] * coordinate[d];
     return result;
 }
@@ -123,11 +123,10 @@ void vgl_shape_coordinate_from_index(const vgl_shape_t* shape, uint64_t* coordin
         vgl_panic("shape and coordinate must not be NULL");
 
     uint8_t ndim = shape->dims;
-    uint64_t* raw_shape = shape->extent;
     uint64_t* offset = shape->offset;
     uint64_t ires = index;
     uint64_t idim;
-    for (auto d = ndim; d >= 0; --d) {
+    for (uint8_t d = ndim; d >= 0; --d) {
         idim = ires / offset[d];
         ires = ires - idim * offset[d];
         coordinate[d] = idim;
@@ -148,7 +147,7 @@ uint64_t vgl_shape_frames(const vgl_shape_t* shape)
         vgl_panic("shape must not be NULL");
 
     uint64_t frames = 1;
-    for (auto i = 3; i <= shape->dims; ++i)
+    for (uint8_t i = 3; i <= shape->dims; ++i)
         frames *= shape->extent[i];
     return frames;
 }
