@@ -39,7 +39,7 @@ void vgl_compute_offset_from_extent(uint64_t* offset, const uint64_t* extent, ui
 
 void vgl_shape_init(vgl_shape_t* shape, uint64_t *extent, uint8_t dims, uint8_t bps)
 {
-    if (extent == nullptr)
+    if (extent == NULL)
         vgl_panic("extent must not be NULL");
     if (dims == 0)
         vgl_panic("dims must be > 0");
@@ -60,7 +60,7 @@ void vgl_shape_init(vgl_shape_t* shape, uint64_t *extent, uint8_t dims, uint8_t 
 
 void vgl_shape_init_similar(vgl_shape_t* shape, const vgl_shape_t* source)
 {
-    if (shape == nullptr || source == nullptr)
+    if (shape == NULL || source == NULL)
         vgl_panic("shape and source must not be NULL");
 
     vgl_shape_init(shape, source->extent, source->dims, source->bps);
@@ -68,18 +68,18 @@ void vgl_shape_init_similar(vgl_shape_t* shape, const vgl_shape_t* source)
 
 void vgl_shape_deinit(vgl_shape_t* shape)
 {
-    if (shape == nullptr)
+    if (shape == NULL)
         vgl_panic("probe must not be NULL");
 
     free(shape->extent);
     free(shape->offset);
-    shape->extent = nullptr;
-    shape->offset = nullptr;
+    shape->extent = NULL;
+    shape->offset = NULL;
 }
 
 void vgl_shape_reshape(vgl_shape_t* shape, const vgl_shape_t* source)
 {
-    if (shape == nullptr || source == nullptr)
+    if (shape == NULL || source == NULL)
         vgl_panic("shape and source must not be NULL");
 
     if (shape->dims == source->dims) {
@@ -96,7 +96,7 @@ void vgl_shape_reshape(vgl_shape_t* shape, const vgl_shape_t* source)
 
 void vgl_shape_resample(vgl_shape_t* shape, uint8_t bps)
 {
-    if (shape == nullptr)
+    if (shape == NULL)
         vgl_panic("shape and source must not be NULL");
     if (bps != 1 || bps % CHAR_BIT != 0)
         vgl_panic("bps must be 1 or a multiple of %d", CHAR_BIT);
@@ -108,7 +108,7 @@ void vgl_shape_resample(vgl_shape_t* shape, uint8_t bps)
 
 uint64_t vgl_shape_index_from_coordinate(const vgl_shape_t* shape, const uint64_t* coordinate)
 {
-    if (shape == nullptr || coordinate == nullptr)
+    if (shape == NULL || coordinate == NULL)
         vgl_panic("shape and coordinate must not be NULL");
 
     uint64_t result = 0;
@@ -119,7 +119,7 @@ uint64_t vgl_shape_index_from_coordinate(const vgl_shape_t* shape, const uint64_
 
 void vgl_shape_coordinate_from_index(const vgl_shape_t* shape, uint64_t* coordinate, uint64_t index)
 {
-    if (shape == nullptr || coordinate == nullptr)
+    if (shape == NULL || coordinate == NULL)
         vgl_panic("shape and coordinate must not be NULL");
 
     uint8_t ndim = shape->dims;
@@ -135,7 +135,7 @@ void vgl_shape_coordinate_from_index(const vgl_shape_t* shape, uint64_t* coordin
 
 uint64_t vgl_shape_pixels(const vgl_shape_t* shape)
 {
-    if (shape == nullptr)
+    if (shape == NULL)
         vgl_panic("shape must not be NULL");
 
     return shape->size / shape->extent[0];
@@ -143,7 +143,7 @@ uint64_t vgl_shape_pixels(const vgl_shape_t* shape)
 
 uint64_t vgl_shape_frames(const vgl_shape_t* shape)
 {
-    if (shape == nullptr)
+    if (shape == NULL)
         vgl_panic("shape must not be NULL");
 
     uint64_t frames = 1;
@@ -154,7 +154,7 @@ uint64_t vgl_shape_frames(const vgl_shape_t* shape)
 
 uint64_t vgl_shape_dimension(const vgl_shape_t* shape, uint8_t dim)
 {
-    if (shape == nullptr)
+    if (shape == NULL)
         vgl_panic("shape must not be NULL");
     if (dim == 0 || dim > shape->dims)
         vgl_panic("dim must be between 1 and shape->dims");

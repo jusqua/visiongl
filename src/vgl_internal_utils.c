@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -13,7 +12,7 @@
 #   endif // NDEBUG
 #endif // VGL_LOG_LEVEL
 
-static_assert(VGL_LOG_LEVEL >= VGL_LOG_LEVEL_NO_LOG && VGL_LOG_LEVEL < __VGL_LOG_LEVEL_COUNT);
+_Static_assert(VGL_LOG_LEVEL >= VGL_LOG_LEVEL_NO_LOG && VGL_LOG_LEVEL < __VGL_LOG_LEVEL_COUNT, "Invalid log level");
 
 void vgl_panic(const char* format, ...) {
     va_list args;

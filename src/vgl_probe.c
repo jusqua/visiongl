@@ -8,7 +8,7 @@
 
 void vgl_probe_init(vgl_probe_t* probe, const vgl_shape_t* shape)
 {
-    if (probe == nullptr || shape == nullptr)
+    if (probe == NULL || shape == NULL)
         vgl_panic("probe and shape must not be NULL");
 
     vgl_shape_init_similar(&probe->shape, shape);
@@ -17,7 +17,7 @@ void vgl_probe_init(vgl_probe_t* probe, const vgl_shape_t* shape)
 
 void vgl_probe_init_similar(vgl_probe_t* probe, const vgl_probe_t* source)
 {
-    if (probe == nullptr || source == nullptr)
+    if (probe == NULL || source == NULL)
         vgl_panic("probe and source must not be NULL");
 
     vgl_probe_init(probe, &source->shape);
@@ -25,27 +25,27 @@ void vgl_probe_init_similar(vgl_probe_t* probe, const vgl_probe_t* source)
 
 void vgl_probe_init_from_kind(vgl_probe_t* probe, vgl_probe_kind_e kind, int dims)
 {
-    if (probe == nullptr)
+    if (probe == NULL)
         vgl_panic("probe must not be NULL");
     if (kind < 0 || kind >= __VGL_PROBE_KIND_COUNT)
         vgl_panic("kind must be a valid probe kind");
     if (dims == 0)
         vgl_panic("dims must be greater than 0");
 
-    auto extent = (uint64_t*)malloc(sizeof(uint64_t) * (dims + 1));
+    uint64_t* extent = malloc(sizeof(uint64_t) * (dims + 1));
     extent[0] = 1; for (uint8_t i = 1; i <= dims; i++) extent[i] = 3;
     vgl_shape_init(&probe->shape, extent, dims, CHAR_BIT);
     free(extent);
     probe->data = (float*)malloc(sizeof(float) * probe->shape.size);
 
-    auto shape = &probe->shape;
-    auto size = shape->size;
-    auto data = probe->data;
+    vgl_shape_t* shape = &probe->shape;
+    size_t size = shape->size;
+    float* data = probe->data;
 
     switch(kind) {
     case(VGL_PROBE_CROSS): {
-        auto index = 0;
-        auto coordinates = (uint64_t*)calloc(dims + 1, sizeof(uint64_t));
+        size_t index = 0;
+        uint64_t* coordinates = calloc(dims + 1, sizeof(uint64_t));
         for (uint64_t i = 0; i < size; ++i)
             data[i] = 0.0f;
 
@@ -69,11 +69,11 @@ void vgl_probe_init_from_kind(vgl_probe_t* probe, vgl_probe_kind_e kind, int dim
         free(coordinates);
     } break;
     case(VGL_PROBE_GAUSS): {
-        auto index = 0;
-        auto coordinates = (uint64_t*)calloc(dims + 1, sizeof(uint64_t));
+        size_t index = 0;
+        uint64_t* coordinates = calloc(dims + 1, sizeof(uint64_t));
         for (uint64_t i = 0; i < size; i++)
         {
-            auto val = 1.0f;
+            float val = 1.0f;
             vgl_shape_coordinate_from_index(shape, coordinates, index);
             for (uint8_t d = 1; d <= dims; ++d) {
                 if (coordinates[d] == 1) val *= .5;
@@ -99,7 +99,7 @@ void vgl_probe_init_from_kind(vgl_probe_t* probe, vgl_probe_kind_e kind, int dim
 
 void vgl_probe_deinit(vgl_probe_t* probe)
 {
-    if (probe == nullptr)
+    if (probe == NULL)
         vgl_panic("probe must not be NULL");
 
     vgl_shape_deinit(&probe->shape);
