@@ -4,15 +4,15 @@
 
 #include <stdint.h>
 
-/// Color space kind enumeration
+/// Pixel format kind enumeration
 typedef enum {
     VGL_FORMAT_UNKNOWN = -1,
-    VGL_FORMAT_GRAY_BYTE,  ///< Gray color space, byte data type
-    VGL_FORMAT_GRAY_FLOAT, ///< Gray color space, float data type
-    VGL_FORMAT_RGB_BYTE,   ///< RGB color space, byte data type
-    VGL_FORMAT_RGB_FLOAT,  ///< RGB color space, float data type
-    VGL_FORMAT_RGBA_BYTE,  ///< RGBA color space, byte data type
-    VGL_FORMAT_RGBA_FLOAT, ///< RGBA color space, float data type
+    VGL_FORMAT_GRAY8, ///< Gray color space, byte data type
+    VGL_FORMAT_GRAYF, ///< Gray color space, float data type
+    VGL_FORMAT_RGB8,  ///< RGB color space, byte data type
+    VGL_FORMAT_RGBF,  ///< RGB color space, float data type
+    VGL_FORMAT_RGBA8, ///< RGBA color space, byte data type
+    VGL_FORMAT_RGBAF, ///< RGBA color space, float data type
     __VGL_FORMAT_KIND_LENGTH
 } vgl_format_kind_e;
 

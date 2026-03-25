@@ -18,14 +18,14 @@ uint32_t vgl_channels_from_format(vgl_format_kind_e format)
 {
     switch (format)
     {
-        case VGL_FORMAT_GRAY_BYTE:
-        case VGL_FORMAT_GRAY_FLOAT:
+        case VGL_FORMAT_GRAY8:
+        case VGL_FORMAT_GRAYF:
             return 1;
-        case VGL_FORMAT_RGB_BYTE:
-        case VGL_FORMAT_RGB_FLOAT:
+        case VGL_FORMAT_RGB8:
+        case VGL_FORMAT_RGBF:
             return 3;
-        case VGL_FORMAT_RGBA_BYTE:
-        case VGL_FORMAT_RGBA_FLOAT:
+        case VGL_FORMAT_RGBA8:
+        case VGL_FORMAT_RGBAF:
             return 4;
         default:
             return 0;
@@ -37,13 +37,13 @@ uint32_t vgl_bps_from_format(vgl_format_kind_e format)
     uint32_t channels = vgl_channels_from_format(format);
     switch (format)
     {
-        case VGL_FORMAT_GRAY_BYTE:
-        case VGL_FORMAT_RGB_BYTE:
-        case VGL_FORMAT_RGBA_BYTE:
+        case VGL_FORMAT_GRAY8:
+        case VGL_FORMAT_RGB8:
+        case VGL_FORMAT_RGBA8:
             return channels;
-        case VGL_FORMAT_GRAY_FLOAT:
-        case VGL_FORMAT_RGB_FLOAT:
-        case VGL_FORMAT_RGBA_FLOAT:
+        case VGL_FORMAT_GRAYF:
+        case VGL_FORMAT_RGBF:
+        case VGL_FORMAT_RGBAF:
             return channels * sizeof(float);
         default:
             return 0;

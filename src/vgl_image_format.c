@@ -2,7 +2,7 @@
 
 #include "vgl_image.h"
 
-#define CONVERT_TO_BYTE(value)  ((uint8_t)((value) * 255.0f))
+#define CONVERT_TO_UINT8(value) ((uint8_t)((value) * 255.0f))
 #define CONVERT_TO_FLOAT(value) ((float)(value) / 255.0f)
 
 typedef struct {
@@ -12,39 +12,39 @@ typedef struct {
 typedef void (*pack_fn)(pixel_t* dst, const void* src);
 typedef void (*unpack_fn)(void* dst, const pixel_t* src);
 
-static void pack_gray_byte(pixel_t* dst, const void* src);
-static void pack_gray_float(pixel_t* dst, const void* src);
-static void pack_rgb_byte(pixel_t* dst, const void* src);
-static void pack_rgb_float(pixel_t* dst, const void* src);
-static void pack_rgba_byte(pixel_t* dst, const void* src);
-static void pack_rgba_float(pixel_t* dst, const void* src);
+static void pack_gray8(pixel_t* dst, const void* src);
+static void pack_grayf(pixel_t* dst, const void* src);
+static void pack_rgb8(pixel_t* dst, const void* src);
+static void pack_rgbf(pixel_t* dst, const void* src);
+static void pack_rgba8(pixel_t* dst, const void* src);
+static void pack_rgbaf(pixel_t* dst, const void* src);
 
-static void unpack_gray_byte(void* dst, const pixel_t* src);
-static void unpack_gray_float(void* dst, const pixel_t* src);
-static void unpack_rgb_byte(void* dst, const pixel_t* src);
-static void unpack_rgb_float(void* dst, const pixel_t* src);
-static void unpack_rgba_byte(void* dst, const pixel_t* src);
-static void unpack_rgba_float(void* dst, const pixel_t* src);
+static void unpack_gray8(void* dst, const pixel_t* src);
+static void unpack_grayf(void* dst, const pixel_t* src);
+static void unpack_rgb8(void* dst, const pixel_t* src);
+static void unpack_rgbf(void* dst, const pixel_t* src);
+static void unpack_rgba8(void* dst, const pixel_t* src);
+static void unpack_rgbaf(void* dst, const pixel_t* src);
 
 static pack_fn pack[] = {
-    [VGL_FORMAT_GRAY_BYTE] = pack_gray_byte,
-    [VGL_FORMAT_GRAY_FLOAT] = pack_gray_float,
-    [VGL_FORMAT_RGB_BYTE] = pack_rgb_byte,
-    [VGL_FORMAT_RGB_FLOAT] = pack_rgb_float,
-    [VGL_FORMAT_RGBA_BYTE] = pack_rgba_byte,
-    [VGL_FORMAT_RGBA_FLOAT] = pack_rgba_float,
+    [VGL_FORMAT_GRAY8] = pack_gray8,
+    [VGL_FORMAT_GRAYF] = pack_grayf,
+    [VGL_FORMAT_RGB8] = pack_rgb8,
+    [VGL_FORMAT_RGBF] = pack_rgbf,
+    [VGL_FORMAT_RGBA8] = pack_rgba8,
+    [VGL_FORMAT_RGBAF] = pack_rgbaf,
 };
 
 static unpack_fn unpack[] = {
-    [VGL_FORMAT_GRAY_BYTE] = unpack_gray_byte,
-    [VGL_FORMAT_GRAY_FLOAT] = unpack_gray_float,
-    [VGL_FORMAT_RGB_BYTE] = unpack_rgb_byte,
-    [VGL_FORMAT_RGB_FLOAT] = unpack_rgb_float,
-    [VGL_FORMAT_RGBA_BYTE] = unpack_rgba_byte,
-    [VGL_FORMAT_RGBA_FLOAT] = unpack_rgba_float,
+    [VGL_FORMAT_GRAY8] = unpack_gray8,
+    [VGL_FORMAT_GRAYF] = unpack_grayf,
+    [VGL_FORMAT_RGB8] = unpack_rgb8,
+    [VGL_FORMAT_RGBF] = unpack_rgbf,
+    [VGL_FORMAT_RGBA8] = unpack_rgba8,
+    [VGL_FORMAT_RGBAF] = unpack_rgbaf,
 };
 
-static void pack_gray_byte(pixel_t* pixel, const void* raw)
+static void pack_gray8(pixel_t* pixel, const void* raw)
 {
     float gray = CONVERT_TO_FLOAT(*(uint8_t*)raw);
     pixel->r = gray;
@@ -53,7 +53,7 @@ static void pack_gray_byte(pixel_t* pixel, const void* raw)
     pixel->a = 1.0f;
 }
 
-static void pack_gray_float(pixel_t* pixel, const void* raw)
+static void pack_grayf(pixel_t* pixel, const void* raw)
 {
     float gray = *(float*)raw;
     pixel->r = gray;
@@ -62,7 +62,7 @@ static void pack_gray_float(pixel_t* pixel, const void* raw)
     pixel->a = 1.0f;
 }
 
-static void pack_rgb_byte(pixel_t* pixel, const void* raw)
+static void pack_rgb8(pixel_t* pixel, const void* raw)
 {
     const uint8_t* ptr = raw;
     pixel->r = CONVERT_TO_FLOAT(ptr[0]);
@@ -71,7 +71,7 @@ static void pack_rgb_byte(pixel_t* pixel, const void* raw)
     pixel->a = 1.0f;
 }
 
-static void pack_rgb_float(pixel_t* pixel, const void* raw)
+static void pack_rgbf(pixel_t* pixel, const void* raw)
 {
     const float* ptr = raw;
     pixel->r = ptr[0];
@@ -80,7 +80,7 @@ static void pack_rgb_float(pixel_t* pixel, const void* raw)
     pixel->a = 1.0f;
 }
 
-static void pack_rgba_byte(pixel_t* pixel, const void* raw)
+static void pack_rgba8(pixel_t* pixel, const void* raw)
 {
     const uint8_t* ptr = raw;
     pixel->r = CONVERT_TO_FLOAT(ptr[0]);
@@ -89,7 +89,7 @@ static void pack_rgba_byte(pixel_t* pixel, const void* raw)
     pixel->a = CONVERT_TO_FLOAT(ptr[3]);
 }
 
-static void pack_rgba_float(pixel_t* pixel, const void* raw)
+static void pack_rgbaf(pixel_t* pixel, const void* raw)
 {
     const float* ptr = raw;
     pixel->r = ptr[0];
@@ -98,27 +98,27 @@ static void pack_rgba_float(pixel_t* pixel, const void* raw)
     pixel->a = ptr[3];
 }
 
-static void unpack_gray_byte(void* raw, const pixel_t* pixel)
+static void unpack_gray8(void* raw, const pixel_t* pixel)
 {
     uint8_t* ptr = raw;
-    *ptr = CONVERT_TO_BYTE(pixel->r);
+    *ptr = CONVERT_TO_UINT8(pixel->r);
 }
 
-static void unpack_gray_float(void* raw, const pixel_t* pixel)
+static void unpack_grayf(void* raw, const pixel_t* pixel)
 {
     float* ptr = raw;
     *ptr = pixel->r;
 }
 
-static void unpack_rgb_byte(void* raw, const pixel_t* pixel)
+static void unpack_rgb8(void* raw, const pixel_t* pixel)
 {
     uint8_t* ptr = raw;
-    *ptr = CONVERT_TO_BYTE(pixel->r);
-    *(ptr + 1) = CONVERT_TO_BYTE(pixel->g);
-    *(ptr + 2) = CONVERT_TO_BYTE(pixel->b);
+    *ptr = CONVERT_TO_UINT8(pixel->r);
+    *(ptr + 1) = CONVERT_TO_UINT8(pixel->g);
+    *(ptr + 2) = CONVERT_TO_UINT8(pixel->b);
 }
 
-static void unpack_rgb_float(void* raw, const pixel_t* pixel)
+static void unpack_rgbf(void* raw, const pixel_t* pixel)
 {
     float* ptr = raw;
     *ptr = pixel->r;
@@ -126,16 +126,16 @@ static void unpack_rgb_float(void* raw, const pixel_t* pixel)
     *(ptr + 2) = pixel->b;
 }
 
-static void unpack_rgba_byte(void* raw, const pixel_t* pixel)
+static void unpack_rgba8(void* raw, const pixel_t* pixel)
 {
     uint8_t* ptr = raw;
-    *ptr = CONVERT_TO_BYTE(pixel->r);
-    *(ptr + 1) = CONVERT_TO_BYTE(pixel->g);
-    *(ptr + 2) = CONVERT_TO_BYTE(pixel->b);
-    *(ptr + 3) = CONVERT_TO_BYTE(pixel->a);
+    *ptr = CONVERT_TO_UINT8(pixel->r);
+    *(ptr + 1) = CONVERT_TO_UINT8(pixel->g);
+    *(ptr + 2) = CONVERT_TO_UINT8(pixel->b);
+    *(ptr + 3) = CONVERT_TO_UINT8(pixel->a);
 }
 
-static void unpack_rgba_float(void* raw, const pixel_t* pixel)
+static void unpack_rgbaf(void* raw, const pixel_t* pixel)
 {
     float* ptr = raw;
     *ptr = pixel->r;
