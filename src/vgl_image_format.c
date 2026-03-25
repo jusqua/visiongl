@@ -159,8 +159,8 @@ int vgl_image_convert(vgl_image_t* image, vgl_format_kind_e target)
 
     pixel_t pixel = {0};
     for (uint64_t i = 0; i < image->count; ++i) {
-        pack[current](&pixel, image->data + i * image->bps);
-        unpack[target](new_image.data + i * new_image.bps, &pixel);
+        pack[current](&pixel, (uint8_t*)image->data + i * image->bps);
+        unpack[target]((uint8_t*)new_image.data + i * new_image.bps, &pixel);
     }
 
     if (!vgl_image_move(image, &new_image))
