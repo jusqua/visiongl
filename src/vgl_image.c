@@ -1,347 +1,187 @@
-#include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "vgl_image.h"
-#include "vgl_internal_utils.h"
-#include "vgl_shape.h"
 
-uint8_t vgl_bps_from_color_space_kind(vgl_color_space_kind_e kind)
+static void compute_shape(const uint64_t* extent, uint64_t* offset, uint64_t* length, uint64_t* count, uint32_t dims, uint32_t bps)
 {
-    switch (kind)
+    offset[0] = 1;
+    for (uint32_t i = 1; i < dims; ++i)
+        offset[i] = extent[i - 1] * offset[i - 1];
+    *count = extent[dims - 1] * offset[dims - 1];
+    *length = *count * bps;
+}
+
+uint32_t vgl_channels_from_format(vgl_format_kind_e format)
+{
+    switch (format)
     {
-        case VGL_COLOR_SPACE_BINARY:
+        case VGL_FORMAT_GRAY_BYTE:
+        case VGL_FORMAT_GRAY_FLOAT:
             return 1;
-        case VGL_COLOR_SPACE_GRAYSCALE:
-            return CHAR_BIT;
-        case VGL_COLOR_SPACE_GRAYSCALE_ALPHA:
-            return 2 * CHAR_BIT;
-        case VGL_COLOR_SPACE_RGB:
-            return 3 * CHAR_BIT;
-        case VGL_COLOR_SPACE_RGB_ALPHA:
-            return 4 * CHAR_BIT;
+        case VGL_FORMAT_RGB_BYTE:
+        case VGL_FORMAT_RGB_FLOAT:
+            return 3;
+        case VGL_FORMAT_RGBA_BYTE:
+        case VGL_FORMAT_RGBA_FLOAT:
+            return 4;
         default:
             return 0;
     }
 }
 
-vgl_color_space_kind_e vgl_color_space_kind_from_bps(uint8_t bps)
+uint32_t vgl_bps_from_format(vgl_format_kind_e format)
 {
-    switch (bps)
+    uint32_t channels = vgl_channels_from_format(format);
+    switch (format)
     {
-        case 1:
-            return VGL_COLOR_SPACE_BINARY;
-        case CHAR_BIT:
-            return VGL_COLOR_SPACE_GRAYSCALE;
-        case 2 * CHAR_BIT:
-            return VGL_COLOR_SPACE_GRAYSCALE_ALPHA;
-        case 3 * CHAR_BIT:
-            return VGL_COLOR_SPACE_RGB;
-        case 4 * CHAR_BIT:
-            return VGL_COLOR_SPACE_RGB_ALPHA;
+        case VGL_FORMAT_GRAY_BYTE:
+        case VGL_FORMAT_RGB_BYTE:
+        case VGL_FORMAT_RGBA_BYTE:
+            return channels;
+        case VGL_FORMAT_GRAY_FLOAT:
+        case VGL_FORMAT_RGB_FLOAT:
+        case VGL_FORMAT_RGBA_FLOAT:
+            return channels * sizeof(float);
         default:
-            return VGL_COLOR_SPACE_INVALID;
+            return 0;
     }
 }
 
-void vgl_image_init(vgl_image_t* image, const vgl_shape_t* shape)
+int vgl_image_init(vgl_image_t* image, uint64_t* extent, uint32_t dims, vgl_format_kind_e format)
 {
-    if (image == NULL || shape == NULL)
-        vgl_panic("image and shape must not be NULL");
+    if (image == NULL || extent == NULL)
+        return 0;
 
-    vgl_shape_init_similar(&image->shape, shape);
-    image->kind = VGL_IMAGE_CONTEXT_HOST;
-    image->context.host.data = malloc(shape->size * shape->bps / CHAR_BIT);
+    image->dims = dims;
+    image->format = format;
+    image->context = VGL_CONTEXT_HOST;
+
+    image->channels = vgl_channels_from_format(format);
+    image->bps = vgl_bps_from_format(format);
+
+    image->extent = malloc(dims * sizeof(uint64_t));
+    if (image->extent == NULL)
+        goto error_malloc_extent;
+    image->offset = malloc(dims * sizeof(uint64_t));
+    if (image->offset == NULL)
+        goto error_malloc_offset;
+
+    memcpy(image->extent, extent, dims * sizeof(uint64_t));
+    compute_shape(extent, image->offset, &image->length, &image->count, dims, image->bps);
+
+    image->data = malloc(image->length);
+    if (image->data == NULL)
+        goto error_malloc_data;
+
+    return 1;
+
+error_malloc_data:
+    free(image->offset);
+error_malloc_offset:
+    free(image->extent);
+error_malloc_extent:
+    return 0;
 }
 
-void vgl_image_init_2d(vgl_image_t* image, uint64_t width, uint64_t height, vgl_color_space_kind_e color_space)
+int vgl_image_move(vgl_image_t* dst, vgl_image_t* src)
 {
-    if (image == NULL)
-        vgl_panic("image must not be NULL");
-    if (width == 0 || height == 0)
-        vgl_panic("width and height must be greater than 0");
+    if (dst == NULL || src == NULL)
+        return 0;
 
-    uint8_t bps = vgl_bps_from_color_space_kind(color_space);
-    vgl_shape_init(&image->shape, (uint64_t[]){bps / CHAR_BIT, width, height}, 2, bps);
-    image->kind = VGL_IMAGE_CONTEXT_HOST;
-    image->context.host.data = malloc(image->shape.size * bps / CHAR_BIT);
+    vgl_image_deinit(dst);
+
+    dst->dims = src->dims;
+    dst->format = src->format;
+    dst->context = src->context;
+    dst->channels = src->channels;
+    dst->bps = src->bps;
+    dst->length = src->length;
+    dst->count = src->count;
+    dst->offset = src->offset;
+    dst->extent = src->extent;
+    dst->data = src->data;
+
+    src->extent = NULL;
+    src->offset = NULL;
+    src->data = NULL;
+
+    return 1;
 }
 
-void vgl_image_init_3d(vgl_image_t* image, uint64_t width, uint64_t height, uint64_t depth, vgl_color_space_kind_e color_space)
+int vgl_image_init_2d(vgl_image_t* image, uint64_t width, uint64_t height, vgl_format_kind_e format)
 {
-    if (image == NULL)
-        vgl_panic("image must not be NULL");
-    if (width == 0 || height == 0 || depth == 0)
-        vgl_panic("width, height, and depth must be greater than 0");
-
-    uint8_t bps = vgl_bps_from_color_space_kind(color_space);
-    vgl_shape_init(&image->shape, (uint64_t[]){bps / CHAR_BIT, width, height, depth}, 3, bps);
-    image->kind = VGL_IMAGE_CONTEXT_HOST;
-    image->context.host.data = malloc(image->shape.size * bps / CHAR_BIT);
+    return vgl_image_init(image, (uint64_t[]){width, height}, 2, format);
 }
 
-void vgl_image_init_similar(vgl_image_t* image, const vgl_image_t* source)
+int vgl_image_init_3d(vgl_image_t* image, uint64_t width, uint64_t height, uint64_t depth, vgl_format_kind_e format)
 {
-    if (image == NULL || source == NULL)
-        vgl_panic("image and source must not be NULL");
-
-    vgl_image_init(image, &source->shape);
+    return vgl_image_init(image, (uint64_t[]){width, height, depth}, 3, format);
 }
 
-void vgl_image_deinit(vgl_image_t* image)
+int vgl_image_init_similar(vgl_image_t* image, const vgl_image_t* source)
 {
-    if (image == NULL)
-        vgl_panic("image must not be NULL");
-
-    vgl_shape_deinit(&image->shape);
-    free(image->context.host.data);
+    return vgl_image_init(image, source->extent, source->dims, source->format);
 }
 
-void vgl_image_color_space_to_rgb_alpha(vgl_image_t* image)
+int vgl_image_deinit(vgl_image_t* image)
 {
-    vgl_color_space_kind_e kind = vgl_color_space_kind_from_bps(image->shape.bps);
-    if (kind == VGL_COLOR_SPACE_RGB_ALPHA)
+    if (image == NULL) return 0;
+
+    if (image->extent != NULL)
+        free(image->extent);
+    if (image->offset != NULL)
+        free(image->offset);
+    if (image->data != NULL)
+        free(image->data);
+
+    image->extent = NULL;
+    image->offset = NULL;
+    image->data = NULL;
+
+    return 1;
+}
+
+int vgl_image_reshape(vgl_image_t* image, const uint64_t* target, uint32_t dims)
+{
+    if (image == NULL || target == NULL || dims == 0)
+        return 0;
+
+    uint64_t* offset = malloc(dims * sizeof(uint64_t));
+    if (offset == NULL)
+        goto error_malloc_offset;
+
+    uint64_t length = 0;
+    uint64_t count = 0;
+    compute_shape(target, offset, &length, &count, dims, image->bps);
+    if (image->length != length || image->count != count)
+        goto error_shape_does_not_match;
+
+    if (image->dims != dims)
     {
-        vgl_log(VGL_LOG_INFO, "bps already matches, no conversion needed");
-        return;
+        uint64_t* extent = malloc(dims * sizeof(uint64_t));
+        if (extent == NULL)
+            goto error_malloc_extent;
+        if (image->extent != NULL)
+            free(image->extent);
+        image->extent = extent;
     }
 
-    switch (kind)
-    {
-        case VGL_COLOR_SPACE_BINARY: break;
-        case VGL_COLOR_SPACE_GRAYSCALE: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size * 3;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i / 3];
-            free(data);
-        } break;
-        case VGL_COLOR_SPACE_GRAYSCALE_ALPHA: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size * 3 / 2;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i * 2 / 3];
-            free(data);
-        } break;
-        case VGL_COLOR_SPACE_RGB_ALPHA: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size * 3 / 4;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i * 4 / 3];
-            free(data);
-        } break;
-        default:
-            vgl_panic("unsupported color space kind for binary conversion");
-            break;
-    }
+    if (image->offset != NULL)
+        free(image->offset);
+    image->offset = offset;
 
-    vgl_shape_resample(&image->shape, vgl_bps_from_color_space_kind(VGL_COLOR_SPACE_RGB_ALPHA));
-}
+    memcpy(image->extent, target, dims * sizeof(uint64_t));
+    image->count = count;
+    image->length = length;
 
-void vgl_image_color_space_to_rgb(vgl_image_t* image)
-{
-    vgl_color_space_kind_e kind = vgl_color_space_kind_from_bps(image->shape.bps);
-    if (kind == VGL_COLOR_SPACE_RGB)
-    {
-        vgl_log(VGL_LOG_INFO, "bps already matches, no conversion needed");
-        return;
-    }
+    return 1;
 
-    switch (kind)
-    {
-        case VGL_COLOR_SPACE_BINARY: break;
-        case VGL_COLOR_SPACE_GRAYSCALE: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size * 3;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i / 3];
-            free(data);
-        } break;
-        case VGL_COLOR_SPACE_GRAYSCALE_ALPHA: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size * 3 / 2;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i * 2 / 3];
-            free(data);
-        } break;
-        case VGL_COLOR_SPACE_RGB_ALPHA: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size * 3 / 4;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i * 4 / 3];
-            free(data);
-        } break;
-        default:
-            vgl_panic("unsupported color space kind for binary conversion");
-            break;
-    }
-
-    vgl_shape_resample(&image->shape, vgl_bps_from_color_space_kind(VGL_COLOR_SPACE_RGB));
-}
-
-void vgl_image_color_space_to_grayscale_alpha(vgl_image_t* image)
-{
-    vgl_color_space_kind_e kind = vgl_color_space_kind_from_bps(image->shape.bps);
-    if (kind == VGL_COLOR_SPACE_GRAYSCALE_ALPHA)
-    {
-        vgl_log(VGL_LOG_INFO, "bps already matches, no conversion needed");
-        return;
-    }
-
-    switch (kind)
-    {
-        case VGL_COLOR_SPACE_BINARY: break;
-        case VGL_COLOR_SPACE_GRAYSCALE: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size * 2;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = i % 2 == 0 ? data[i / 2] : 255;
-            free(data);
-        } break;
-        case VGL_COLOR_SPACE_RGB: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size * 2 / 3;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = i % 2 == 0 ? data[i * 3] + data[i * 3 + 1] + data[i * 3 + 2] : 255;
-            free(data);
-        } break;
-        case VGL_COLOR_SPACE_RGB_ALPHA: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size / 2;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = i % 2 == 0 ? data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2] : data[i * 4 + 3];
-            free(data);
-        } break;
-        default:
-            vgl_panic("unsupported color space kind for binary conversion");
-            break;
-    }
-
-    vgl_shape_resample(&image->shape, vgl_bps_from_color_space_kind(VGL_COLOR_SPACE_GRAYSCALE_ALPHA));
-}
-
-void vgl_image_color_space_to_grayscale(vgl_image_t* image)
-{
-    vgl_color_space_kind_e kind = vgl_color_space_kind_from_bps(image->shape.bps);
-    if (kind == VGL_COLOR_SPACE_GRAYSCALE)
-    {
-        vgl_log(VGL_LOG_INFO, "bps already matches, no conversion needed");
-        return;
-    }
-
-    switch (kind)
-    {
-        case VGL_COLOR_SPACE_BINARY: break;
-        case VGL_COLOR_SPACE_GRAYSCALE_ALPHA: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size / 2;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i * 2];
-            free(data);
-        } break;
-        case VGL_COLOR_SPACE_RGB: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size / 3;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i * 3] + data[i * 3 + 1] + data[i * 3 + 2];
-            free(data);
-        } break;
-        case VGL_COLOR_SPACE_RGB_ALPHA: {
-            uint8_t* data = image->context.host.data;
-            size_t new_size = image->shape.size / 4;
-            image->context.host.data = malloc(new_size);
-            for (uint64_t i = 0; i < new_size; ++i)
-                image->context.host.data[i] = data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2];
-            free(data);
-        } break;
-        default:
-            vgl_panic("unsupported color space kind for binary conversion");
-            break;
-    }
-
-    vgl_shape_resample(&image->shape, vgl_bps_from_color_space_kind(VGL_COLOR_SPACE_GRAYSCALE));
-}
-
-void vgl_image_color_space_to_binary(vgl_image_t* image)
-{
-    vgl_color_space_kind_e kind = vgl_color_space_kind_from_bps(image->shape.bps);
-    if (kind == VGL_COLOR_SPACE_BINARY)
-    {
-        vgl_log(VGL_LOG_INFO, "bps already matches, no conversion needed");
-        return;
-    }
-
-    switch (kind)
-    {
-        case VGL_COLOR_SPACE_GRAYSCALE: break;
-        case VGL_COLOR_SPACE_GRAYSCALE_ALPHA:
-        case VGL_COLOR_SPACE_RGB:
-        case VGL_COLOR_SPACE_RGB_ALPHA:
-            vgl_image_color_space_to_grayscale(image);
-            break;
-        default:
-            vgl_panic("unsupported color space kind");
-            return;
-    }
-
-    for (size_t i = 0; i < image->shape.size; i++)
-        image->context.host.data[i] = image->context.host.data[i] > 128 ? 255 : 0;
-
-    vgl_shape_resample(&image->shape, vgl_bps_from_color_space_kind(VGL_COLOR_SPACE_BINARY));
-}
-
-void vgl_image_resample(vgl_image_t* image, uint8_t bps)
-{
-    if (bps != 1 || bps % CHAR_BIT != 0)
-        vgl_panic("bps must be 1 or a multiple of %d", CHAR_BIT);
-
-    if (image->shape.bps > bps)
-        vgl_log(VGL_LOG_WARN, "image->bps is larger than the target bps, data may be lost");
-
-    switch (vgl_color_space_kind_from_bps(bps))
-    {
-        case VGL_COLOR_SPACE_BINARY: {
-            vgl_image_color_space_to_binary(image);
-        } break;
-        case VGL_COLOR_SPACE_GRAYSCALE: {
-            vgl_image_color_space_to_grayscale(image);
-        } break;
-        case VGL_COLOR_SPACE_GRAYSCALE_ALPHA: {
-            vgl_image_color_space_to_grayscale_alpha(image);
-        } break;
-        case VGL_COLOR_SPACE_RGB: {
-            vgl_image_color_space_to_rgb(image);
-        } break;
-        case VGL_COLOR_SPACE_RGB_ALPHA: {
-            vgl_image_color_space_to_rgb_alpha(image);
-        } break;
-        default:
-            vgl_panic("unsupported color space kind");
-    }
-}
-
-void vgl_image_reshape(vgl_image_t* image, const vgl_shape_t* source)
-{
-    if (image == NULL || source == NULL)
-        vgl_panic("image and source must not be NULL");
-
-    if (image->shape.size / image->shape.bps != source->size / source->bps)
-        vgl_panic("shape size changes must match bps changes");
-
-    if (image->shape.bps != source->bps)
-        vgl_image_resample(image, source->bps);
-
-    vgl_shape_reshape(&image->shape, source);
+error_malloc_extent:
+error_shape_does_not_match:
+    free(offset);
+error_malloc_offset:
+    return 0;
 }

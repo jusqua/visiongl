@@ -4,72 +4,58 @@
 
 #include <stdint.h>
 
-#include "vgl_shape.h"
-
 /// Color space kind enumeration
 typedef enum {
-    VGL_COLOR_SPACE_INVALID = -1,    ///< Invalid color space kind
-    VGL_COLOR_SPACE_BINARY,          ///< Binary color space (1 bit per sample)
-    VGL_COLOR_SPACE_GRAYSCALE,       ///< Grayscale color space (8 bits per sample)
-    VGL_COLOR_SPACE_GRAYSCALE_ALPHA, ///< Grayscale with alpha color space (16 bits per sample)
-    VGL_COLOR_SPACE_RGB,             ///< RGB color space (24 bits per sample)
-    VGL_COLOR_SPACE_RGB_ALPHA,       ///< RGB with alpha color space (32 bits per sample)
-    __VGL_COLOR_SPACE_KIND_COUNT,
-} vgl_color_space_kind_e;
-
-/// Image host context structure
-typedef struct {
-    uint8_t* data;
-} vgl_image_host_context_t;
+    VGL_FORMAT_UNKNOWN = -1,
+    VGL_FORMAT_GRAY_BYTE,  ///< Gray color space, byte data type
+    VGL_FORMAT_GRAY_FLOAT, ///< Gray color space, float data type
+    VGL_FORMAT_RGB_BYTE,   ///< RGB color space, byte data type
+    VGL_FORMAT_RGB_FLOAT,  ///< RGB color space, float data type
+    VGL_FORMAT_RGBA_BYTE,  ///< RGBA color space, byte data type
+    VGL_FORMAT_RGBA_FLOAT, ///< RGBA color space, float data type
+    __VGL_FORMAT_KIND_LENGTH
+} vgl_format_kind_e;
 
 /// Image context kind enumeration
 typedef enum {
-    VGL_IMAGE_CONTEXT_HOST,
-    __VGL_IMAGE_CONTEXT_KIND_COUNT
-} vgl_image_context_kind_e;
-
-/// Image context union
-typedef union {
-    vgl_image_host_context_t   host;
-} vgl_image_context_u;
+    VGL_CONTEXT_HOST,
+} vgl_context_kind_e;
 
 /// Image structure
 typedef struct {
-    vgl_shape_t              shape;   ///< Shape of the image
-    vgl_image_context_kind_e kind;    ///< Context kind of the image
-    vgl_image_context_u      context; ///< Context data of the image
+    vgl_context_kind_e context;  ///< Image context kind
+    vgl_format_kind_e  format;   ///< Pixel format kind
+    uint32_t           channels; ///< Pixel channel count
+    uint32_t           bps;      ///< Bytes per pixel sample
+    uint32_t           dims;     ///< Number of image dimensions
+    uint64_t*          extent;   ///< Data extent of each dimension
+    uint64_t*          offset;   ///< Data position offset between dimensions
+    uint64_t           length;   ///< Data byte count
+    uint64_t           count;    ///< Data element count
+    void*              data;     ///< Pointer to the image data
 } vgl_image_t;
 
-/// Returns the number of bits per sample for a given color space kind
-uint8_t vgl_bps_from_color_space_kind(vgl_color_space_kind_e kind);
-/// Returns the color space kind for a given number of bits per sample
-vgl_color_space_kind_e vgl_color_space_kind_from_bps(uint8_t bps);
+/// Returns the number of channels for the given format, returns 0 on failure
+uint32_t vgl_channels_from_format(vgl_format_kind_e format);
+/// Returns the number of bytes per pixel sample for the given format, returns 0 on failure
+uint32_t vgl_bps_from_format(vgl_format_kind_e format);
 
-/// Initializes an image with the given shape
-void vgl_image_init(vgl_image_t* image, const vgl_shape_t* shape);
-/// Initializes a 2D image with the given width, height
-void vgl_image_init_2d(vgl_image_t* image, uint64_t width, uint64_t height, vgl_color_space_kind_e color_space);
-/// Initializes a 3D image with the given width, height, depth
-void vgl_image_init_3d(vgl_image_t* image, uint64_t width, uint64_t height, uint64_t depth, vgl_color_space_kind_e color_space);
-/// Initializes an image similar to the given source image
-void vgl_image_init_similar(vgl_image_t* image, const vgl_image_t* source);
-/// Deinitializes an image
-void vgl_image_deinit(vgl_image_t* image);
+/// Initializes an image with the given shape, returns 0 on failure
+int vgl_image_init(vgl_image_t* image, uint64_t* extent, uint32_t dims, vgl_format_kind_e format);
+/// Moves the contents of the source image to the destination image, leaving the source image empty, returns 0 on failure
+int vgl_image_move(vgl_image_t* dst, vgl_image_t* src);
+/// Initializes a 2D image with the given width and height, returns 0 on failure
+int vgl_image_init_2d(vgl_image_t* image, uint64_t width, uint64_t height, vgl_format_kind_e format);
+/// Initializes a 3D image with the given width, height, and depth, returns 0 on failure
+int vgl_image_init_3d(vgl_image_t* image, uint64_t width, uint64_t height, uint64_t depth, vgl_format_kind_e format);
+/// Initializes an image similar to the given image, returns 0 on failure
+int vgl_image_init_similar(vgl_image_t* image, const vgl_image_t* source);
+/// Deinitializes an image, returns 0 on failure
+int vgl_image_deinit(vgl_image_t* image);
 
-/// Converts an image from its color space to RGB with alpha
-void vgl_image_color_space_to_rgb_alpha(vgl_image_t* image);
-/// Converts an image from its color space to RGB
-void vgl_image_color_space_to_rgb(vgl_image_t* image);
-/// Converts an image from its color space to grayscale with alpha
-void vgl_image_color_space_to_grayscale_alpha(vgl_image_t* image);
-/// Converts an image from its color space to grayscale
-void vgl_image_color_space_to_grayscale(vgl_image_t* image);
-/// Converts an image from its color space to binary
-void vgl_image_color_space_to_binary(vgl_image_t* image);
-
-/// Resamples an image to the given bits per sample by converting to a different color space
-void vgl_image_resample(vgl_image_t* image, uint8_t bps);
-/// Reshapes an image to the given shape
-void vgl_image_reshape(vgl_image_t* image, const vgl_shape_t* source);
+/// Converts an image to the given format, and returns 0 on failure
+int vgl_image_convert(vgl_image_t* image, vgl_format_kind_e format);
+/// Reshapes an image to the given extent if matches the image length, and returns 0 on failure
+int vgl_image_reshape(vgl_image_t* image, const uint64_t* target, uint32_t dims);
 
 #endif // VGL_IMAGE_H
