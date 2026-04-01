@@ -1,46 +1,32 @@
-#ifndef VGL_IO_H
-#define VGL_IO_H
-#pragma once
+#ifndef VGL_IMAGE_IO_H
+#define VGL_IMAGE_IO_H
 
 #include "vgl_image.h"
 
-void vglSaveImage(char* filename, VglImage* image);
-void vglSaveIplImage(char* filename, IplImage* image, int* params = 0);
-void vglSave3dImage(char* filename, VglImage* image, int lStart, int lEnd = -1);
-void vglSaveNdImage(char* filename, VglImage* image, int lStart, int lEnd = -1);
-VglImage* vglLoadImage(char* filename, int iscolor = -1, int has_mipmap = 0); // -1 = CV_LOAD_IMAGE_UNCHANGED
-VglImage* vglLoad3dImage(char* filename, int lStart, int lEnd, bool has_mipmap = 0);
-VglImage* vglLoadNdImage(char* filename, int lStart, int lEnd, int* shape, int ndim, bool has_mipmap = 0);
-// int SavePPM(char* filename, int w, int h, void* savebuf); // NOTE: Seems unused
-// int vglSavePPM(char* filename, VglImage* img); // NOTE: Seems unused
-int vglSavePgm(char* filename, VglImage* img);
-VglImage* vglLoadPgm(char* filename);
+#ifndef MAX_IO_BUFFER_SIZE
+#   define MAX_IO_BUFFER_SIZE 256
+#endif // MAX_IO_BUFFER_SIZE
+_Static_assert(
+    MAX_IO_BUFFER_SIZE >= 256,
+    "MAX_IO_BUFFER_SIZE is too low"
+);
 
-VglImage* vglDcmtkLoadDicom(char* inFilename);
-VglImage*  vglDcmtkLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mipmap = 0);
-int vglDcmtkSaveDicom(char* outFilename, VglImage* imagevgl, int compress);
-int vglDcmtkSaveDicomUncompressed(char* outFilename, VglImage* imagevgl);
-int vglDcmtkSaveDicomCompressed(char* outFilename, VglImage* imagevgl);
-int vglDcmtkSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, int compress = 0);
-int convertDepthDcmtkToVgl(int dcmDepth);
-int convertDepthVglToDcmtk(int vglDepth);
+#ifndef MAX_IO_CURSOR_ROLLBACK_SIZE
+#   define MAX_IO_CURSOR_ROLLBACK_SIZE 32
+#endif // MAX_IO_CURSOR_ROLLBACK_SIZE
+_Static_assert(
+    MAX_IO_CURSOR_ROLLBACK_SIZE >= 32 && MAX_IO_CURSOR_ROLLBACK_SIZE < MAX_IO_BUFFER_SIZE / 2,
+    "MAX_IO_CURSOR_ROLLBACK_SIZE must be lower than MAX_IO_BUFFER_SIZE / 2"
+);
 
-VglImage* vglGdcmLoadDicom(char* inFilename);
-VglImage*  vglGdcmLoad4dDicom(char* filename, int lStart, int lEnd, bool has_mipmap = 0);
-int vglGdcmSaveDicom(char* outFilename, VglImage* imagevgl, int compress);
-int vglGdcmSaveDicomUncompressed(char* outFilename, VglImage* imagevgl);
-int vglGdcmSaveDicomCompressed(char* outFilename, VglImage* imagevgl);
-int vglGdcmSave4dDicom(char* filename, VglImage* image, int lStart, int lEnd, int compress = 0);
-int convertDepthGdcmToVgl(int dcmDepth);
-int convertDepthVglToGdcm(int vglDepth);
+/// IO module operations
+typedef struct {
+    const char* exts;                                ///< File valid extensions
+    int (*verify)(void* fd);                         ///< Verify if file is valid
+    int (*load)(void* fd, vgl_image_t* image);       ///< Load image data from file descriptor
+    int (*save)(void* fd, const vgl_image_t* image); ///< Save image data to file descriptor
+} io_module_t;
 
-VglImage* vglLoadTiff(char* inFilename);
-IplImage* iplLoadTiff(char* inFilename);
-VglImage* vglLoadTiffAlt(char* inFilename);
-VglImage* vglLoad4dTiff(char* filename, int lStart, int lEnd, bool has_mipmap = 0);
-int vglSaveTiff(char* outFilename, VglImage* image);
-int iplSaveTiff(char* outFilename, IplImage* image);
-int vglSave4dTiff(char* filename, VglImage* image, int lStart, int lEnd);
-int vglPrintTiffInfo(char* inFilename, char* msg = NULL);
+int register_io_module(io_module_t* module);
 
-#endif // VGL_IO_H
+#endif // VGL_IMAGE_IO_H

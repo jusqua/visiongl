@@ -53,6 +53,11 @@ int vgl_image_init_similar(vgl_image_t* image, const vgl_image_t* source);
 /// Deinitializes an image, returns 0 on failure
 int vgl_image_deinit(vgl_image_t* image);
 
+/// Loads an image from the given file, returns 0 on failure
+int vgl_image_load(vgl_image_t* image, const char* filename);
+/// Saves an image to the given file, returns 0 on failure
+int vgl_image_save(const vgl_image_t* image, const char* filename);
+
 /// Converts an image to the given format, and returns 0 on failure
 int vgl_image_convert(vgl_image_t* image, vgl_format_kind_e format);
 /// Reshapes an image to the given extent if matches the image length, and returns 0 on failure
