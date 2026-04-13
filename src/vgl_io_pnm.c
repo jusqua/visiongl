@@ -1,6 +1,4 @@
 #include <ctype.h>
-#include <malloc.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -13,7 +11,6 @@ typedef enum {
     PNM_RGB_ASCII = '3',
     PNM_GRAY_BINARY = '5',
     PNM_RGB_BINARY = '6',
-    __PNM_KIND_LENGTH,
 } pnm_kind_e;
 
 static int pnm_verify(void* fd);
