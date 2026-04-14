@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "vgl_image.h"
+#include "visiongl.h"
 #include "vgl_io.h"
 
 typedef struct io_module_node {

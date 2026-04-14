@@ -1,7 +1,7 @@
 #ifndef VGL_IMAGE_IO_H
 #define VGL_IMAGE_IO_H
 
-#include "vgl_image.h"
+#include "visiongl.h"
 
 #ifndef MAX_IO_BUFFER_SIZE
 #   define MAX_IO_BUFFER_SIZE 256

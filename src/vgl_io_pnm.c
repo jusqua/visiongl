@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "vgl_image.h"
+#include "visiongl.h"
 #include "vgl_io.h"
 
 typedef enum {

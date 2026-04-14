@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "vgl_image.h"
+#include "visiongl.h"
 #include "vgl_io.h"
 
 // Based on https://en.wikipedia.org/wiki/BMP_file_format

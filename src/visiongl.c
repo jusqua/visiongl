@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "vgl_image.h"
+#include "visiongl.h"
 
 static void compute_shape(const uint64_t* extent, uint64_t* offset, uint64_t* length, uint64_t* count, uint32_t dims, uint32_t bps)
 {

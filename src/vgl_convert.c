@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#include "vgl_image.h"
+#include "visiongl.h"
 
 #define CONVERT_TO_UINT8(value) ((uint8_t)((value) * 255.0f))
 #define CONVERT_TO_FLOAT(value) ((float)(value) / 255.0f)
